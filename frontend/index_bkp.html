@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Lab Automation Framework</title>
+    
+    <!-- External Dependencies -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/topology.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-title">Network Lab Automation</h1>
+                <p class="login-subtitle">Sign in to your account</p>
+            </div>
+            
+            <div class="login-form">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="username" class="form-input" placeholder="Enter username" value="admin">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter password" value="admin">
+                </div>
+                
+                <button id="loginBtn" class="btn btn-primary" style="width: 100%;">
+                    <span id="loginText">Sign In</span>
+                    <span id="loginSpinner" class="loading-spinner hidden"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="app hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-network-wired"></i>
+                    <span class="logo-text">Network Lab</span>
+                </div>
+                <button id="sidebarToggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="#" class="nav-link active" data-page="dashboard">
+                        <i class="fas fa-chart-line nav-icon"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="topology">
+                        <i class="fas fa-project-diagram nav-icon"></i>
+                        <span class="nav-text">Topology Builder</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="devices">
+                        <i class="fas fa-server nav-icon"></i>
+                        <span class="nav-text">Device Management</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="inventory">
+                        <i class="fas fa-clipboard-list nav-icon"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="provisioning">
+                        <i class="fas fa-cogs nav-icon"></i>
+                        <span class="nav-text">Provisioning</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="telemetry">
+                        <i class="fas fa-chart-area nav-icon"></i>
+                        <span class="nav-text">Telemetry</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="reports">
+                        <i class="fas fa-file-alt nav-icon"></i>
+                        <span class="nav-text">Reports</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <div class="username">Admin User</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+                <button id="logoutBtn" class="logout-btn" title="Logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1 id="pageTitle" class="page-title">Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-outline btn-icon" title="Notifications">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="btn btn-outline btn-icon" title="Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Page Content -->
+            <div class="content">
+                <!-- Dashboard Page -->
+                <div id="dashboardPage" class="page">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon primary">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalDevices">0</h3>
+                                <p>Total Devices</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon success">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="activeDevices">0</h3>
+                                <p>Active Devices</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon warning">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="inactiveDevices">0</h3>
+                                <p>Inactive Devices</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon danger">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="totalReports">0</h3>
+                                <p>Reports Generated</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Recent Devices</h3>
+                                <button class="btn btn-outline btn-sm">View All</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-container">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Device</th>
+                                                <th>Type</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recentDevicesTable">
+                                            <!-- Populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">System Health</h3>
+                                <span class="badge badge-success">All Systems Operational</span>
+                            </div>
+                            <div class="card-body">
+                                <div id="systemHealth" class="health-metrics">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topology Builder Page -->
+                <div id="topologyPage" class="page hidden">
+                    <div class="topology-container">
+                        <div class="device-palette">
+                            <div class="palette-header">
+                                <h3 class="palette-title">Device Library</h3>
+                                <div class="device-library">
+                                    <div class="device-item" draggable="true" data-device-type="router">
+                                        <div class="device-icon">
+                                            <i class="fas fa-network-wired"></i>
+                                        </div>
+                                        <div class="device-name">Router</div>
+                                    </div>
+                                    <div class="device-item" draggable="true" data-device-type="switch">
+                                        <div class="device-icon">
+                                            <i class="fas fa-project-diagram"></i>
+                                        </div>
+                                        <div class="device-name">Switch</div>
+                                    </div>
+                                    <div class="device-item" draggable="true" data-device-type="server">
+                                        <div class="device-icon">
+                                            <i class="fas fa-server"></i>
+                                        </div>
+                                        <div class="device-name">Server</div>
+                                    </div>
+                                    <div class="device-item" draggable="true" data-device-type="wireless">
+                                        <div class="device-icon">
+                                            <i class="fas fa-wifi"></i>
+                                        </div>
+                                        <div class="device-name">Wireless AP</div>
+                                    </div>
+                                    <div class="device-item" draggable="true" data-device-type="firewall">
+                                        <div class="device-icon">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </div>
+                                        <div class="device-name">Firewall</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tools-section">
+                                <h4 class="section-title">Tools</h4>
+                                <button id="selectTool" class="btn btn-outline tool-btn active">
+                                    <i class="fas fa-mouse-pointer"></i>
+                                    <span>Select</span>
+                                </button>
+                                <button id="connectTool" class="btn btn-outline tool-btn">
+                                    <i class="fas fa-link"></i>
+                                    <span>Connect</span>
+                                </button>
+                                <button id="clearCanvas" class="btn btn-danger tool-btn">
+                                    <i class="fas fa-trash"></i>
+                                    <span>Clear All</span>
+                                </button>
+                            </div>
+                            
+                            <div class="properties-panel">
+                                <h4 class="section-title">Properties</h4>
+                                <div id="deviceProperties">
+                                    <p class="text-muted">Select a device to view properties</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="canvas-container">
+                            <div class="canvas-header">
+                                <div class="canvas-status">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span id="canvasStatus">Drag devices from the library to get started</span>
+                                </div>
+                                <div class="canvas-actions">
+                                    <button class="btn btn-outline btn-sm" id="saveTopology">
+                                        <i class="fas fa-save"></i>
+                                        Save
+                                    </button>
+                                    <button class="btn btn-outline btn-sm" id="exportTopology">
+                                        <i class="fas fa-download"></i>
+                                        Export
+                                    </button>
+                                </div>
+                            </div>
+                            <div id="topologyCanvas" class="canvas"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Device Management Page -->
+                <div id="devicesPage" class="page hidden">
+                    <div class="page-header">
+                        <h2>Device Management</h2>
+                        <button id="addDeviceBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add Device
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Device</th>
+                                            <th>Type</th>
+                                            <th>IP Address</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="devicesTable">
+                                        <!-- Populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Page -->
+                <div id="inventoryPage" class="page hidden">
+                    <div class="page-header">
+                        <h2>Network Inventory</h2>
+                        <button id="scanAllDevices" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                            Scan All Devices
+                        </button>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Device Inventory</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="inventoryContent">
+                                <p>Loading inventory data...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Provisioning Page -->
+                <div id="provisioningPage" class="page hidden">
+                    <div class="page-header">
+                        <h2>Device Provisioning</h2>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            New Template
+                        </button>
+                    </div>
+                    
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Configuration Templates</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Configuration templates management will be implemented here.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Provisioning Tasks</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Active and completed provisioning tasks will be shown here.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Telemetry Page -->
+                <div id="telemetryPage" class="page hidden">
+                    <div class="page-header">
+                        <h2>Telemetry & Monitoring</h2>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-chart-line"></i>
+                            View Analytics
+                        </button>
+                    </div>
+                    
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Real-time Monitoring</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Real-time device monitoring and telemetry data will be displayed here.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Performance Metrics</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Performance charts and metrics will be shown here.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Page -->
+                <div id="reportsPage" class="page hidden">
+                    <div class="page-header">
+                        <h2>Reports & Analytics</h2>
+                        <button id="generateReportBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Generate Report
+                        </button>
+                    </div>
+                    
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Available Reports</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="report-types">
+                                    <div class="report-type-card">
+                                        <i class="fas fa-chart-bar text-blue"></i>
+                                        <h4>Network Inventory</h4>
+                                        <p>Complete device and hardware inventory</p>
+                                    </div>
+                                    <div class="report-type-card">
+                                        <i class="fas fa-chart-line text-green"></i>
+                                        <h4>Performance Report</h4>
+                                        <p>Network performance analysis</p>
+                                    </div>
+                                    <div class="report-type-card">
+                                        <i class="fas fa-network-wired text-purple"></i>
+                                        <h4>Connectivity Report</h4>
+                                        <p>Network topology and connections</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Recent Reports</h3>
+                            </div>
+                            <div class="card-body">
+                                <div id="recentReportsList">
+                                    <p>Loading recent reports...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Add Device Modal -->
+    <div id="addDeviceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Device</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Device Name *</label>
+                    <input type="text" id="deviceName" class="form-input" placeholder="Enter device name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Device Type *</label>
+                    <select id="deviceType" class="form-select">
+                        <option value="router">Router</option>
+                        <option value="switch">Switch</option>
+                        <option value="server">Server</option>
+                        <option value="wireless">Wireless AP</option>
+                        <option value="firewall">Firewall</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">IP Address *</label>
+                    <input type="text" id="deviceIP" class="form-input" placeholder="192.168.1.1">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="deviceUsername" class="form-input" placeholder="admin">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="devicePassword" class="form-input" placeholder="••••••••">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline modal-close">Cancel</button>
+                <button id="saveDeviceBtn" class="btn btn-primary">Add Device</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+    <script src="assets/js/devices.js"></script>
+    <script src="assets/js/topology.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

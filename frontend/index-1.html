@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Lab Automation Framework</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --background-color: #f8fafc;
+            --surface-color: #ffffff;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Layout */
+        .app {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--surface-color);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+            transition: width 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 80px;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--background-color);
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            margin: 0 16px 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background: var(--background-color);
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar.collapsed .nav-text {
+            display: none;
+        }
+
+        .user-info {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 12px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .username {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .user-role {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: var(--background-color);
+            color: var(--danger-color);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--surface-color);
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--text-secondary);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--background-color);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Tables */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table th {
+            background: var(--background-color);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .table tr:hover {
+            background: var(--background-color);
+        }
+
+        /* Status badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+        @media (max-width: 768px) {
+            .grid-cols-2,
+            .grid-cols-3,
+            .grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Stat cards */
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.primary {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+
+        .stat-icon.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .stat-icon.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .stat-icon.danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .stat-content h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 4px;
+        }
+
+        .stat-content p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.875rem;
+        }
+
+        /* Topology Builder Styles */
+        .topology-container {
+            display: flex;
+            height: calc(100vh - 140px);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .device-palette {
+            width: 300px;
+            background: var(--surface-color);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .palette-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .palette-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .device-library {
+            display: grid;
+            gap: 12px;
+        }
+
+        .device-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: grab;
+            transition: all 0.2s;
+            background: var(--surface-color);
+        }
+
+        .device-item:hover {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.05);
+            transform: translateY(-1px);
+        }
+
+        .device-item:active {
+            cursor: grabbing;
+        }
+
+        .device-icon {
+            width: 32px;
+            height: 32px;
+            margin-right: 12px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .device-name {
+            font-weight: 500;
+        }
+
+        .tools-section {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .tool-btn {
+            width: 100%;
+            margin-bottom: 8px;
+            justify-content: flex-start;
+        }
+
+        .tool-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .properties-panel {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            background: var(--surface-color);
+        }
+
+        .canvas-header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--surface-color);
+            padding: 12px 16px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            z-index: 10;
+        }
+
+        .canvas {
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+            cursor: crosshair;
+        }
+
+        .canvas.drag-over {
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        .network-device {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: var(--surface-color);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: move;
+            transition: all 0.2s;
+            box-shadow: var(--shadow);
+        }
+
+        .network-device:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .network-device.selected {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .network-device .device-icon {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .network-device .device-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: var(--primary-color);
+            transform-origin: left center;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .connection-line:hover {
+            background: var(--danger-color);
+            height: 3px;
+        }
+
+        .connection-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        /* Login styles */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            background: var(--surface-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface-color);
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Utilities */
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-4 { gap: 16px; }
+        .mb-4 { margin-bottom: 16px; }
+        .mt-4 { margin-top: 16px; }
+        .text-center { text-align: center; }
+        .font-bold { font-weight: 700; }
+        .text-sm { font-size: 0.875rem; }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1 class="login-title">Network Lab Automation</h1>
+                <p class="login-subtitle">Sign in to your account</p>
+            </div>
+            
+            <div id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="username" class="form-input" placeholder="Enter username" value="admin">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter password" value="admin">
+                </div>
+                
+                <button id="loginBtn" class="btn btn-primary" style="width: 100%;">
+                    <span id="loginText">Sign In</span>
+                    <span id="loginSpinner" class="loading-spinner hidden"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="app hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">Network Lab</div>
+                <button id="sidebarToggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="#" class="nav-link active" data-page="dashboard">
+                        <i class="fas fa-chart-line nav-icon"></i>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="topology">
+                        <i class="fas fa-project-diagram nav-icon"></i>
+                        <span class="nav-text">Topology Builder</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="devices">
+                        <i class="fas fa-server nav-icon"></i>
+                        <span class="nav-text">Device Management</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="inventory">
+                        <i class="fas fa-clipboard-list nav-icon"></i>
+                        <span class="nav-text">Inventory</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="provisioning">
+                        <i class="fas fa-cogs nav-icon"></i>
+                        <span class="nav-text">Provisioning</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="telemetry">
+                        <i class="fas fa-chart-area nav-icon"></i>
+                        <span class="nav-text">Telemetry</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="reports">
+                        <i class="fas fa-file-alt nav-icon"></i>
+                        <span class="nav-text">Reports</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <div class="username">Admin User</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1 id="pageTitle" class="page-title">Dashboard</h1>
+            </header>
+            
+            <div class="content">
+                <!-- Dashboard Page -->
+                <div id="dashboardPage" class="page">
+                    <div class="grid grid-cols-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-card">
+                                    <div class="stat-icon primary">
+                                        <i class="fas fa-server"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3 id="totalDevices">12</h3>
+                                        <p>Total Devices</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-card">
+                                    <div class="stat-icon success">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3 id="activeDevices">8</h3>
+                                        <p>Active Devices</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-card">
+                                    <div class="stat-icon warning">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3 id="inactiveDevices">4</h3>
+                                        <p>Inactive Devices</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-card">
+                                    <div class="stat-icon danger">
+                                        <i class="fas fa-file-alt"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3 id="totalReports">24</h3>
+                                        <p>Reports Generated</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Recent Devices</h3>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Device</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentDevicesTable">
+                                        <!-- Populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">System Health</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div class="flex items-center justify-between">
+                                        <span>CPU Usage</span>
+                                        <span class="badge badge-success">23%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span>Memory Usage</span>
+                                        <span class="badge badge-warning">67%</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span>Network Traffic</span>
+                                        <span class="badge badge-success">Normal</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span>Disk Usage</span>
+                                        <span class="badge badge-danger">89%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topology Builder Page -->
+                <div id="topologyPage" class="page hidden">
+                    <div class="topology-container">
+                        <div class="device-palette">
+                            <div class="palette-header">
+                                <h3 class="palette-title">Device Library</h3>
+                                <div class="device-library">
+                                    <div class="device-item" draggable="true" data-device-type="router">
+                                        <div class="device-icon">
+                                            <i class="fas fa-network-wired"></i>
+                                        </div>
+                                        <div class="device-name">Router</div>
+                                    </div>
+                                    <div class="device-item" draggable="true" data-device-type="switch">
+                                        <div class="device-icon">
+                                            <i class="fas fa-project-diagram"></i>
+                                        </div>
+                                        <div class="device-name">Switch</div>
+                                    </div>
+                                    <div class="device-item" draggable="true" data-device-type="server">
+                                        <div class="device-icon">
+                                            <i class="fas fa-server"></i>
+                                        </div>
+                                        <div class="device-name">Server</div>
+                                    </div>
+                                    <div class="device-item" draggable="true" data-device-type="wireless">
+                                        <div class="device-icon">
+                                            <i class="fas fa-wifi"></i>
+                                        </div>
+                                        <div class="device-name">Wireless AP</div>
+                                    </div>
+                                    <div class="device-item" draggable="true" data-device-type="firewall">
+                                        <div class="device-icon">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </div>
+                                        <div class="device-name">Firewall</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="tools-section">
+                                <h4 class="palette-title" style="font-size: 1rem; margin-bottom: 12px;">Tools</h4>
+                                <button id="connectTool" class="btn btn-outline tool-btn">
+                                    <i class="fas fa-link"></i>
+                                    Connect Devices
+                                </button>
+                                <button id="selectTool" class="btn btn-outline tool-btn active">
+                                    <i class="fas fa-mouse-pointer"></i>
+                                    Select Tool
+                                </button>
+                                <button id="clearCanvas" class="btn btn-danger tool-btn">
+                                    <i class="fas fa-trash"></i>
+                                    Clear Canvas
+                                </button>
+                            </div>
+                            
+                            <div class="properties-panel">
+                                <h4 class="palette-title" style="font-size: 1rem; margin-bottom: 12px;">Properties</h4>
+                                <div id="deviceProperties">
+                                    <p class="text-sm" style="color: var(--text-secondary);">Select a device to view properties</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="canvas-container">
+                            <div class="canvas-header">
+                                <span id="canvasStatus">Drag devices from the library to get started</span>
+                            </div>
+                            <div id="topologyCanvas" class="canvas"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Device Management Page -->
+                <div id="devicesPage" class="page hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 style="font-size: 1.5rem; font-weight: 600; margin: 0;">Device Management</h2>
+                        <button id="addDeviceBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add Device
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Device</th>
+                                        <th>Type</th>
+                                        <th>IP Address</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="devicesTable">
+                                    <!-- Populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other pages (simplified for brevity) -->
+                <div id="inventoryPage" class="page hidden">
+                    <h2>Inventory Management</h2>
+                    <p>Network inventory features will be implemented here.</p>
+                </div>
+
+                <div id="provisioningPage" class="page hidden">
+                    <h2>Device Provisioning</h2>
+                    <p>Device provisioning and configuration features will be implemented here.</p>
+                </div>
+
+                <div id="telemetryPage" class="page hidden">
+                    <h2>Telemetry & Monitoring</h2>
+                    <p>Network telemetry and monitoring features will be implemented here.</p>
+                </div>
+
+                <div id="reportsPage" class="page hidden">
+                    <h2>Reports</h2>
+                    <p>Report generation and management features will be implemented here.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Device Modal -->
+    <div id="addDeviceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Add New Device</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Device Name</label>
+                    <input type="text" id="deviceName" class="form-input" placeholder="Enter device name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Device Type</label>
+                    <select id="deviceType" class="form-select">
+                        <option value="router">Router</option>
+                        <option value="switch">Switch</option>
+                        <option value="server">Server</option>
+                        <option value="wireless">Wireless AP</option>
+                        <option value="firewall">Firewall</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">IP Address</label>
+                    <input type="text" id="deviceIP" class="form-input" placeholder="192.168.1.1">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="deviceUsername" class="form-input" placeholder="admin">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="devicePassword" class="form-input" placeholder="••••••••">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline modal-close">Cancel</button>
+                <button id="saveDeviceBtn" class="btn btn-primary">Add Device</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        const app = {
+            currentUser: null,
+            currentPage: 'dashboard',
+            devices: [
+                { id: 1, name: 'Router-01', type: 'router', ip: '192.168.1.1', status: 'active' },
+                { id: 2, name: 'Switch-01', type: 'switch', ip: '192.168.1.2', status: 'active' },
+                { id: 3, name: 'Server-01', type: 'server', ip: '192.168.1.10', status: 'inactive' },
+                { id: 4, name: 'AP-01', type: 'wireless', ip: '192.168.1.50', status: 'active' }
+            ],
+            topology: {
+                devices: [],
+                connections: [],
+                selectedDevice: null,
+                currentTool: 'select',
+                connectionStart: null,
+                deviceCounter: 1
+            }
+        };
+
+        // API Mock Functions
+        const API = {
+            login: async (username, password) => {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                if (username === 'admin' && password === 'admin') {
+                    return { success: true, user: { username, role: 'Administrator' } };
+                }
+                throw new Error('Invalid credentials');
+            },
+
+            getDevices: async () => {
+                await new Promise(resolve => setTimeout(resolve, 300));
+                return app.devices;
+            },
+
+            createDevice: async (device) => {
+                await new Promise(resolve => setTimeout(resolve, 500));
+                const newDevice = {
+                    id: Date.now(),
+                    ...device,
+                    status: 'inactive'
+                };
+                app.devices.push(newDevice);
+                return newDevice;
+            }
+        };
+
+        // Utility Functions
+        function $(selector) {
+            return document.querySelector(selector);
+        }
+
+        function $$(selector) {
+            return document.querySelectorAll(selector);
+        }
+
+        function showElement(element) {
+            if (typeof element === 'string') element = $(element);
+            element.classList.remove('hidden');
+        }
+
+        function hideElement(element) {
+            if (typeof element === 'string') element = $(element);
+            element.classList.add('hidden');
+        }
+
+        function getDeviceIcon(type) {
+            const icons = {
+                router: 'fas fa-network-wired',
+                switch: 'fas fa-project-diagram',
+                server: 'fas fa-server',
+                wireless: 'fas fa-wifi',
+                firewall: 'fas fa-shield-alt'
+            };
+            return icons[type] || 'fas fa-desktop';
+        }
+
+        function getStatusBadge(status) {
+            const classes = {
+                active: 'badge-success',
+                inactive: 'badge-danger',
+                warning: 'badge-warning'
+            };
+            return `<span class="badge ${classes[status] || 'badge-secondary'}">${status}</span>`;
+        }
+
+        // Login Functionality
+        async function handleLogin() {
+            const username = $('#username').value;
+            const password = $('#password').value;
+            const loginBtn = $('#loginBtn');
+            const loginText = $('#loginText');
+            const loginSpinner = $('#loginSpinner');
+
+            if (!username || !password) {
+                alert('Please enter username and password');
+                return;
+            }
+
+            loginBtn.disabled = true;
+            hideElement(loginText);
+            showElement(loginSpinner);
+
+            try {
+                const result = await API.login(username, password);
+                app.currentUser = result.user;
+                
+                hideElement('#loginScreen');
+                showElement('#mainApp');
+                
+                // Initialize the application
+                initializeApp();
+                
+            } catch (error) {
+                alert('Login failed: ' + error.message);
+            } finally {
+                loginBtn.disabled = false;
+                showElement(loginText);
+                hideElement(loginSpinner);
+            }
+        }
+
+        function handleLogout() {
+            app.currentUser = null;
+            hideElement('#mainApp');
+            showElement('#loginScreen');
+            $('#username').value = '';
+            $('#password').value = '';
+        }
+
+        // Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            $$('.page').forEach(page => hideElement(page));
+            
+            // Show selected page
+            showElement(`#${pageId}Page`);
+            
+            // Update navigation
+            $$('.nav-link').forEach(link => link.classList.remove('active'));
+            $(`.nav-link[data-page="${pageId}"]`).classList.add('active');
+            
+            // Update page title
+            const titles = {
+                dashboard: 'Dashboard',
+                topology: 'Topology Builder',
+                devices: 'Device Management',
+                inventory: 'Inventory',
+                provisioning: 'Provisioning',
+                telemetry: 'Telemetry',
+                reports: 'Reports'
+            };
+            $('#pageTitle').textContent = titles[pageId] || 'Dashboard';
+            
+            app.currentPage = pageId;
+            
+            // Load page-specific data
+            if (pageId === 'dashboard') loadDashboard();
+            if (pageId === 'devices') loadDevices();
+            if (pageId === 'topology') initTopologyBuilder();
+        }
+
+        // Dashboard Functions
+        function loadDashboard() {
+            const totalDevices = app.devices.length;
+            const activeDevices = app.devices.filter(d => d.status === 'active').length;
+            const inactiveDevices = totalDevices - activeDevices;
+
+            $('#totalDevices').textContent = totalDevices;
+            $('#activeDevices').textContent = activeDevices;
+            $('#inactiveDevices').textContent = inactiveDevices;
+
+            // Update recent devices table
+            const tbody = $('#recentDevicesTable');
+            tbody.innerHTML = '';
+            
+            app.devices.slice(0, 5).forEach(device => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="flex items-center">
+                            <i class="${getDeviceIcon(device.type)}" style="margin-right: 8px; color: var(--primary-color);"></i>
+                            ${device.name}
+                        </div>
+                    </td>
+                    <td style="text-transform: capitalize;">${device.type}</td>
+                    <td>${getStatusBadge(device.status)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Device Management Functions
+        function loadDevices() {
+            const tbody = $('#devicesTable');
+            tbody.innerHTML = '';
+            
+            app.devices.forEach(device => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="flex items-center">
+                            <i class="${getDeviceIcon(device.type)}" style="margin-right: 8px; color: var(--primary-color);"></i>
+                            ${device.name}
+                        </div>
+                    </td>
+                    <td style="text-transform: capitalize;">${device.type}</td>
+                    <td>${device.ip}</td>
+                    <td>${getStatusBadge(device.status)}</td>
+                    <td>
+                        <div class="flex gap-2">
+                            <button class="btn btn-outline" style="padding: 6px 8px;" onclick="editDevice(${device.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-outline" style="padding: 6px 8px;" onclick="viewDevice(${device.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-danger" style="padding: 6px 8px;" onclick="deleteDevice(${device.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function showAddDeviceModal() {
+            showElement('#addDeviceModal');
+        }
+
+        function hideAddDeviceModal() {
+            hideElement('#addDeviceModal');
+            // Clear form
+            $('#deviceName').value = '';
+            $('#deviceType').value = 'router';
+            $('#deviceIP').value = '';
+            $('#deviceUsername').value = '';
+            $('#devicePassword').value = '';
+        }
+
+        async function saveDevice() {
+            const device = {
+                name: $('#deviceName').value,
+                type: $('#deviceType').value,
+                ip: $('#deviceIP').value,
+                username: $('#deviceUsername').value,
+                password: $('#devicePassword').value
+            };
+
+            if (!device.name || !device.ip) {
+                alert('Please fill in required fields');
+                return;
+            }
+
+            try {
+                await API.createDevice(device);
+                hideAddDeviceModal();
+                loadDevices();
+                loadDashboard(); // Update stats
+            } catch (error) {
+                alert('Failed to add device: ' + error.message);
+            }
+        }
+
+        function editDevice(id) {
+            const device = app.devices.find(d => d.id === id);
+            if (device) {
+                alert('Edit functionality would be implemented here for: ' + device.name);
+            }
+        }
+
+        function viewDevice(id) {
+            const device = app.devices.find(d => d.id === id);
+            if (device) {
+                alert('View functionality would be implemented here for: ' + device.name);
+            }
+        }
+
+        function deleteDevice(id) {
+            if (confirm('Are you sure you want to delete this device?')) {
+                app.devices = app.devices.filter(d => d.id !== id);
+                loadDevices();
+                loadDashboard();
+            }
+        }
+
+        // Topology Builder Functions
+        function initTopologyBuilder() {
+            const canvas = $('#topologyCanvas');
+            canvas.innerHTML = '';
+            
+            // Render existing devices
+            app.topology.devices.forEach(device => {
+                renderTopologyDevice(device);
+            });
+            
+            // Render connections
+            app.topology.connections.forEach(connection => {
+                renderConnection(connection);
+            });
+        }
+
+        function renderTopologyDevice(device) {
+            const canvas = $('#topologyCanvas');
+            const deviceEl = document.createElement('div');
+            deviceEl.className = 'network-device';
+            deviceEl.style.left = device.x + 'px';
+            deviceEl.style.top = device.y + 'px';
+            deviceEl.setAttribute('data-device-id', device.id);
+            
+            deviceEl.innerHTML = `
+                <div class="device-icon">
+                    <i class="${getDeviceIcon(device.type)}"></i>
+                </div>
+                <div class="device-label">${device.name}</div>
+            `;
+            
+            // Make device draggable
+            makeDeviceDraggable(deviceEl, device);
+            
+            // Add click handler
+            deviceEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectTopologyDevice(device);
+            });
+            
+            canvas.appendChild(deviceEl);
+        }
+
+        function makeDeviceDraggable(element, device) {
+            let isDragging = false;
+            let startX, startY;
+            
+            element.addEventListener('mousedown', (e) => {
+                if (app.topology.currentTool !== 'select') return;
+                
+                isDragging = true;
+                startX = e.clientX - device.x;
+                startY = e.clientY - device.y;
+                element.style.zIndex = '1000';
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const canvas = $('#topologyCanvas');
+                const rect = canvas.getBoundingClientRect();
+                
+                device.x = Math.max(0, Math.min(e.clientX - startX, rect.width - 80));
+                device.y = Math.max(0, Math.min(e.clientY - startY, rect.height - 80));
+                
+                element.style.left = device.x + 'px';
+                element.style.top = device.y + 'px';
+                
+                // Update connections
+                updateConnectionsForDevice(device.id);
+            });
+            
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    element.style.zIndex = '';
+                }
+            });
+        }
+
+        function selectTopologyDevice(device) {
+            // Clear previous selection
+            $$('.network-device').forEach(el => el.classList.remove('selected'));
+            
+            // Select current device
+            const deviceEl = $(`[data-device-id="${device.id}"]`);
+            deviceEl.classList.add('selected');
+            
+            app.topology.selectedDevice = device;
+            
+            // Update properties panel
+            updatePropertiesPanel(device);
+            
+            // Handle connection tool
+            if (app.topology.currentTool === 'connect') {
+                if (!app.topology.connectionStart) {
+                    app.topology.connectionStart = device;
+                    $('#canvasStatus').textContent = `Click another device to connect to ${device.name}`;
+                } else if (app.topology.connectionStart.id !== device.id) {
+                    createConnection(app.topology.connectionStart, device);
+                    app.topology.connectionStart = null;
+                    $('#canvasStatus').textContent = 'Connection created! Click devices to connect them';
+                }
+            }
+        }
+
+        function updatePropertiesPanel(device) {
+            const panel = $('#deviceProperties');
+            panel.innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <div style="font-weight: 500;">${device.name}</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Type</label>
+                    <div style="text-transform: capitalize;">${device.type}</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Position</label>
+                    <div>X: ${Math.round(device.x)}, Y: ${Math.round(device.y)}</div>
+                </div>
+                <button class="btn btn-danger" style="width: 100%; margin-top: 12px;" onclick="removeTopologyDevice(${device.id})">
+                    <i class="fas fa-trash"></i>
+                    Remove Device
+                </button>
+            `;
+        }
+
+        function createConnection(device1, device2) {
+            const connection = {
+                id: Date.now(),
+                from: device1.id,
+                to: device2.id
+            };
+            
+            app.topology.connections.push(connection);
+            renderConnection(connection);
+        }
+
+        function renderConnection(connection) {
+            const device1 = app.topology.devices.find(d => d.id === connection.from);
+            const device2 = app.topology.devices.find(d => d.id === connection.to);
+            
+            if (!device1 || !device2) return;
+            
+            const canvas = $('#topologyCanvas');
+            const line = document.createElement('div');
+            line.className = 'connection-line';
+            line.setAttribute('data-connection-id', connection.id);
+            
+            updateConnectionPosition(line, device1, device2);
+            
+            line.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (confirm('Remove this connection?')) {
+                    removeConnection(connection.id);
+                }
+            });
+            
+            canvas.appendChild(line);
+        }
+
+        function updateConnectionPosition(line, device1, device2) {
+            const x1 = device1.x + 40; // Center of device
+            const y1 = device1.y + 40;
+            const x2 = device2.x + 40;
+            const y2 = device2.y + 40;
+            
+            const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+            const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+            
+            line.style.left = x1 + 'px';
+            line.style.top = y1 + 'px';
+            line.style.width = length + 'px';
+            line.style.transform = `rotate(${angle}deg)`;
+        }
+
+        function updateConnectionsForDevice(deviceId) {
+            app.topology.connections.forEach(connection => {
+                if (connection.from === deviceId || connection.to === deviceId) {
+                    const line = $(`[data-connection-id="${connection.id}"]`);
+                    const device1 = app.topology.devices.find(d => d.id === connection.from);
+                    const device2 = app.topology.devices.find(d => d.id === connection.to);
+                    
+                    if (line && device1 && device2) {
+                        updateConnectionPosition(line, device1, device2);
+                    }
+                }
+            });
+        }
+
+        function removeConnection(connectionId) {
+            app.topology.connections = app.topology.connections.filter(c => c.id !== connectionId);
+            const line = $(`[data-connection-id="${connectionId}"]`);
+            if (line) line.remove();
+        }
+
+        function removeTopologyDevice(deviceId) {
+            if (confirm('Remove this device and all its connections?')) {
+                // Remove device
+                app.topology.devices = app.topology.devices.filter(d => d.id !== deviceId);
+                const deviceEl = $(`[data-device-id="${deviceId}"]`);
+                if (deviceEl) deviceEl.remove();
+                
+                // Remove connections
+                const connectionsToRemove = app.topology.connections.filter(c => 
+                    c.from === deviceId || c.to === deviceId
+                );
+                connectionsToRemove.forEach(connection => {
+                    removeConnection(connection.id);
+                });
+                
+                // Clear selection
+                app.topology.selectedDevice = null;
+                $('#deviceProperties').innerHTML = '<p class="text-sm" style="color: var(--text-secondary);">Select a device to view properties</p>';
+            }
+        }
+
+        function setTopologyTool(tool) {
+            app.topology.currentTool = tool;
+            app.topology.connectionStart = null;
+            
+            // Update tool buttons
+            $$('.tool-btn').forEach(btn => btn.classList.remove('active'));
+            $(`#${tool}Tool`).classList.add('active');
+            
+            // Update canvas cursor and status
+            const canvas = $('#topologyCanvas');
+            const statusMessages = {
+                select: 'Click devices to select them',
+                connect: 'Click devices to connect them'
+            };
+            
+            canvas.style.cursor = tool === 'connect' ? 'crosshair' : 'default';
+            $('#canvasStatus').textContent = statusMessages[tool] || 'Tool selected';
+        }
+
+        function clearTopologyCanvas() {
+            if (confirm('Clear the entire topology? This cannot be undone.')) {
+                app.topology.devices = [];
+                app.topology.connections = [];
+                app.topology.selectedDevice = null;
+                app.topology.connectionStart = null;
+                app.topology.deviceCounter = 1;
+                
+                $('#topologyCanvas').innerHTML = '';
+                $('#deviceProperties').innerHTML = '<p class="text-sm" style="color: var(--text-secondary);">Select a device to view properties</p>';
+                $('#canvasStatus').textContent = 'Canvas cleared. Drag devices from the library to get started';
+            }
+        }
+
+        // Initialize Application
+        function initializeApp() {
+            // Load initial page
+            showPage('dashboard');
+            
+            // Set up event listeners
+            setupEventListeners();
+        }
+
+        function setupEventListeners() {
+            // Login
+            $('#loginBtn').addEventListener('click', handleLogin);
+            $('#password').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleLogin();
+            });
+            
+            // Logout
+            $('#logoutBtn').addEventListener('click', handleLogout);
+            
+            // Sidebar toggle
+            $('#sidebarToggle').addEventListener('click', () => {
+                $('#sidebar').classList.toggle('collapsed');
+            });
+            
+            // Navigation
+            $$('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    showPage(page);
+                });
+            });
+            
+            // Device management
+            $('#addDeviceBtn').addEventListener('click', showAddDeviceModal);
+            $('#saveDeviceBtn').addEventListener('click', saveDevice);
+            
+            // Modal close buttons
+            $$('.modal-close').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const modal = e.target.closest('.modal');
+                    if (modal) hideElement(modal);
+                });
+            });
+            
+            // Click outside modal to close
+            $$('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) hideElement(modal);
+                });
+            });
+            
+            // Topology builder drag and drop
+            setupTopologyDragAndDrop();
+            
+            // Topology tools
+            $('#selectTool').addEventListener('click', () => setTopologyTool('select'));
+            $('#connectTool').addEventListener('click', () => setTopologyTool('connect'));
+            $('#clearCanvas').addEventListener('click', clearTopologyCanvas);
+        }
+
+        function setupTopologyDragAndDrop() {
+            const canvas = $('#topologyCanvas');
+            let draggedDeviceType = null;
+            
+            // Handle device palette drag start
+            $$('.device-item').forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    draggedDeviceType = e.target.closest('.device-item').getAttribute('data-device-type');
+                    e.dataTransfer.effectAllowed = 'copy';
+                });
+            });
+            
+            // Handle canvas drop
+            canvas.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+                canvas.classList.add('drag-over');
+            });
+            
+            canvas.addEventListener('dragleave', () => {
+                canvas.classList.remove('drag-over');
+            });
+            
+            canvas.addEventListener('drop', (e) => {
+                e.preventDefault();
+                canvas.classList.remove('drag-over');
+                
+                if (!draggedDeviceType) return;
+                
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left - 40; // Center the device
+                const y = e.clientY - rect.top - 40;
+                
+                const device = {
+                    id: Date.now(),
+                    name: `${draggedDeviceType.charAt(0).toUpperCase() + draggedDeviceType.slice(1)}-${app.topology.deviceCounter++}`,
+                    type: draggedDeviceType,
+                    x: Math.max(0, Math.min(x, rect.width - 80)),
+                    y: Math.max(0, Math.min(y, rect.height - 80))
+                };
+                
+                app.topology.devices.push(device);
+                renderTopologyDevice(device);
+                
+                draggedDeviceType = null;
+                $('#canvasStatus').textContent = 'Device added! Click to select or use tools to connect';
+            });
+            
+            // Handle canvas click (deselect)
+            canvas.addEventListener('click', (e) => {
+                if (e.target === canvas) {
+                    // Deselect all devices
+                    $$('.network-device').forEach(el => el.classList.remove('selected'));
+                    app.topology.selectedDevice = null;
+                    $('#deviceProperties').innerHTML = '<p class="text-sm" style="color: var(--text-secondary);">Select a device to view properties</p>';
+                }
+            });
+        }
+
+        // Start the application
+        document.addEventListener('DOMContentLoaded', () => {
+            // Show login screen initially
+            showElement('#loginScreen');
+        });
+    </script>
+</body>
+</html>

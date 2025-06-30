@@ -1,0 +1,34 @@
+# backend/requirements-dev.txt - Development dependencies
+# =======================================================
+# Include production requirements
+-r requirements.txt
+
+# Testing
+pytest==7.4.2
+pytest-flask==1.2.0
+pytest-cov==4.1.0
+pytest-mock==3.11.1
+factory-boy==3.3.0
+
+# Code Quality
+flake8==6.0.0
+black==23.7.0
+isort==5.12.0
+mypy==1.5.1
+
+# Development Tools
+Flask-DebugToolbar==0.13.1
+watchdog==3.0.0
+
+# Documentation
+Sphinx==7.1.2
+sphinx-rtd-theme==1.3.0
+
+# Database Tools
+alembic==1.12.0
+
+# Development Server (FIXED VERSION)
+flask-shell-ipython==0.5.3
+
+# Load Testing
+locust==2.16.1

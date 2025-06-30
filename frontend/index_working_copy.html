@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Lab Automation Framework</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --background-color: #f8fafc;
+            --surface-color: #ffffff;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Login Screen Styles */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            padding: 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            background: var(--surface-color);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .login-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Main App Styles */
+        .app {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--surface-color);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            margin: 0 16px 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background: var(--background-color);
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .user-info {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 12px;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .username {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .user-role {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: var(--background-color);
+            color: var(--danger-color);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--surface-color);
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-primary:disabled {
+            background: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--surface-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        /* Grid Styles */
+        .grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+        /* Stat Cards */
+        .stat-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.primary {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+
+        .stat-icon.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .stat-icon.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .stat-content h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 4px;
+        }
+
+        .stat-content p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 0.875rem;
+        }
+
+        /* Table Styles */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table th {
+            background: var(--background-color);
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .table tr:hover {
+            background: var(--background-color);
+        }
+
+        /* Badge Styles */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-4 { gap: 16px; }
+        .mb-4 { margin-bottom: 16px; }
+        .mt-4 { margin-top: 16px; }
+        .text-center { text-align: center; }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error/Success Messages */
+        .error {
+            color: var(--danger-color);
+            font-size: 0.875rem;
+            margin-top: 8px;
+        }
+
+        .success {
+            color: var(--success-color);
+            font-size: 0.875rem;
+            margin-top: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .grid-cols-2,
+            .grid-cols-3,
+            .grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: fixed;
+                top: 0;
+                left: -100%;
+                height: 100vh;
+                z-index: 1000;
+                transition: left 0.3s ease;
+            }
+            
+            .sidebar.show {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 16px;">
+                    <i class="fas fa-network-wired"></i>
+                </div>
+                <h1 class="login-title">Network Lab Automation</h1>
+                <p class="login-subtitle">Sign in to access the network management dashboard</p>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" id="username" class="form-input" placeholder="Enter username" value="admin">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="password" class="form-input" placeholder="Enter password" value="admin">
+            </div>
+            
+            <button id="loginBtn" class="btn btn-primary" style="width: 100%;">
+                <span id="loginText">Sign In</span>
+                <span id="loginSpinner" class="loading-spinner hidden"></span>
+            </button>
+            
+            <div id="loginError" class="error hidden"></div>
+            <div id="loginSuccess" class="success hidden"></div>
+            
+            <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-color); text-align: center;">
+                <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                    Default credentials: <strong>admin / admin</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="app hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-network-wired"></i>
+                    Network Lab
+                </div>
+            </div>
+            
+            <nav class="nav-menu">
+                <div class="nav-item">
+                    <a href="#" class="nav-link active" data-page="dashboard">
+                        <i class="fas fa-chart-line nav-icon"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="devices">
+                        <i class="fas fa-server nav-icon"></i>
+                        <span>Devices</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="topology">
+                        <i class="fas fa-project-diagram nav-icon"></i>
+                        <span>Topology</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a href="#" class="nav-link" data-page="reports">
+                        <i class="fas fa-file-alt nav-icon"></i>
+                        <span>Reports</span>
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <div class="username" id="currentUsername">Admin User</div>
+                    <div class="user-role" id="currentUserRole">Administrator</div>
+                </div>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1 id="pageTitle" class="page-title">Dashboard</h1>
+            </header>
+            
+            <div class="content">
+                <!-- Dashboard Page -->
+                <div id="dashboardPage" class="page">
+                    <div class="grid grid-cols-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-card">
+                                    <div class="stat-icon primary">
+                                        <i class="fas fa-server"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3 id="totalDevices">-</h3>
+                                        <p>Total Devices</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-card">
+                                    <div class="stat-icon success">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3 id="activeDevices">-</h3>
+                                        <p>Active Devices</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-card">
+                                    <div class="stat-icon warning">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3 id="inactiveDevices">-</h3>
+                                        <p>Inactive Devices</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="stat-card">
+                                    <div class="stat-icon primary">
+                                        <i class="fas fa-network-wired"></i>
+                                    </div>
+                                    <div class="stat-content">
+                                        <h3 id="totalPorts">-</h3>
+                                        <p>Total Ports</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Recent Devices</h3>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Device</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentDevicesTable">
+                                        <tr>
+                                            <td colspan="3" style="text-align: center; color: var(--text-secondary);">
+                                                Loading devices...
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">System Status</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="grid grid-cols-1 gap-4">
+                                    <div class="flex items-center justify-between">
+                                        <span>Backend API</span>
+                                        <span class="badge badge-success" id="backendStatus">Healthy</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span>Database</span>
+                                        <span class="badge badge-success" id="databaseStatus">Connected</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span>Authentication</span>
+                                        <span class="badge badge-success" id="authStatus">Authenticated</span>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <span>Last Updated</span>
+                                        <span style="font-size: 0.875rem; color: var(--text-secondary);" id="lastUpdated">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Devices Page -->
+                <div id="devicesPage" class="page hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 style="font-size: 1.5rem; font-weight: 600; margin: 0;">Device Management</h2>
+                        <button id="addDeviceBtn" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add Device
+                        </button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Device</th>
+                                        <th>Type</th>
+                                        <th>IP Address</th>
+                                        <th>Status</th>
+                                        <th>Ports</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="devicesTable">
+                                    <tr>
+                                        <td colspan="6" style="text-align: center; color: var(--text-secondary);">
+                                            Loading devices...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topology Page -->
+                <div id="topologyPage" class="page hidden">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Network Topology</h3>
+                        </div>
+                        <div class="card-body">
+                            <p style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                                <i class="fas fa-project-diagram" style="font-size: 3rem; margin-bottom: 16px; display: block;"></i>
+                                Topology Builder coming soon...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Page -->
+                <div id="reportsPage" class="page hidden">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Reports & Analytics</h3>
+                        </div>
+                        <div class="card-body">
+                            <p style="text-align: center; color: var(--text-secondary); padding: 40px;">
+                                <i class="fas fa-file-alt" style="font-size: 3rem; margin-bottom: 16px; display: block;"></i>
+                                Report generation coming soon...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Global Variables
+        const API_BASE = window.location.origin;
+        let authToken = null;
+        let currentUser = null;
+        let currentPage = 'dashboard';
+
+        // DOM Elements
+        const loginScreen = document.getElementById('loginScreen');
+        const mainApp = document.getElementById('mainApp');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginError = document.getElementById('loginError');
+        const loginSuccess = document.getElementById('loginSuccess');
+
+        // Utility Functions
+        function showElement(element) {
+            if (typeof element === 'string') element = document.getElementById(element);
+            if (element) element.classList.remove('hidden');
+        }
+
+        function hideElement(element) {
+            if (typeof element === 'string') element = document.getElementById(element);
+            if (element) element.classList.add('hidden');
+        }
+
+        function showError(message) {
+            loginError.textContent = message;
+            showElement(loginError);
+            hideElement(loginSuccess);
+        }
+
+        function showSuccess(message) {
+            loginSuccess.textContent = message;
+            showElement(loginSuccess);
+            hideElement(loginError);
+        }
+
+        function getDeviceIcon(type) {
+            const icons = {
+                router: 'fas fa-network-wired',
+                switch: 'fas fa-project-diagram',
+                server: 'fas fa-server',
+                wireless: 'fas fa-wifi',
+                firewall: 'fas fa-shield-alt'
+            };
+            return icons[type] || 'fas fa-desktop';
+        }
+
+        function getStatusBadge(status) {
+            const classes = {
+                active: 'badge-success',
+                inactive: 'badge-danger',
+                warning: 'badge-warning'
+            };
+            return `<span class="badge ${classes[status] || 'badge-secondary'}">${status}</span>`;
+        }
+
+        // Authentication Functions
+        async function login() {
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!username || !password) {
+                showError('Please enter both username and password');
+                return;
+            }
+
+            loginBtn.disabled = true;
+            hideElement('loginText');
+            showElement('loginSpinner');
+            hideElement(loginError);
+            hideElement(loginSuccess);
+
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    authToken = data.access_token;
+                    currentUser = data.user;
+                    localStorage.setItem('authToken', authToken);
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    
+                    showSuccess('Login successful! Redirecting...');
+                    
+                    setTimeout(() => {
+                        showMainApp();
+                    }, 1000);
+                } else {
+                    showError(data.message || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Connection error. Please try again.');
+            } finally {
+                loginBtn.disabled = false;
+                showElement('loginText');
+                hideElement('loginSpinner');
+            }
+        }
+
+        async function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                authToken = null;
+                currentUser = null;
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('currentUser');
+                showLoginScreen();
+            }
+        }
+
+        async function checkAuth() {
+            const storedToken = localStorage.getItem('authToken');
+            const storedUser = localStorage.getItem('currentUser');
+            
+            if (!storedToken) {
+                showLoginScreen();
+                return false;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${storedToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const userData = await response.json();
+                    authToken = storedToken;
+                    currentUser = userData;
+                    showMainApp();
+                    return true;
+                } else {
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('currentUser');
+                    showLoginScreen();
+                    return false;
+                }
+            } catch (error) {
+                console.error('Auth check error:', error);
+                showLoginScreen();
+                return false;
+            }
+        }
+
+        // UI Functions
+        function showLoginScreen() {
+            showElement(loginScreen);
+            hideElement(mainApp);
+            // Clear form
+            usernameInput.value = 'admin';
+            passwordInput.value = 'admin';
+            hideElement(loginError);
+            hideElement(loginSuccess);
+        }
+
+        function showMainApp() {
+            hideElement(loginScreen);
+            showElement(mainApp);
+            
+            // Update user info
+            if (currentUser) {
+                document.getElementById('currentUsername').textContent = currentUser.username || 'User';
+                document.getElementById('currentUserRole').textContent = currentUser.role || 'User';
+            }
+            
+            // Load initial data
+            loadDashboard();
+        }
+
+        // Navigation Functions
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => hideElement(page));
+            
+            // Show selected page
+            showElement(`${pageId}Page`);
+            
+            // Update navigation
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelector(`.nav-link[data-page="${pageId}"]`)?.classList.add('active');
+            
+            // Update page title
+            const titles = {
+                dashboard: 'Dashboard',
+                devices: 'Device Management',
+                topology: 'Network Topology',
+                reports: 'Reports & Analytics'
+            };
+            document.getElementById('pageTitle').textContent = titles[pageId] || 'Dashboard';
+            
+            currentPage = pageId;
+            
+            // Load page-specific data
+            if (pageId === 'dashboard') loadDashboard();
+            if (pageId === 'devices') loadDevices();
+        }
+
+        // Data Loading Functions
+        async function loadDashboard() {
+            try {
+                // Load devices for dashboard
+                const response = await fetch(`${API_BASE}/api/devices`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const devices = await response.json();
+                    updateDashboardStats(devices);
+                    updateRecentDevices(devices);
+                    updateSystemStatus();
+                }
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+            }
+        }
+
+        function updateDashboardStats(devices) {
+            const totalDevices = devices.length;
+            const activeDevices = devices.filter(d => d.status === 'active').length;
+            const inactiveDevices = totalDevices - activeDevices;
+            const totalPorts = devices.reduce((sum, device) => sum + (device.ports?.length || 0), 0);
+
+            document.getElementById('totalDevices').textContent = totalDevices;
+            document.getElementById('activeDevices').textContent = activeDevices;
+            document.getElementById('inactiveDevices').textContent = inactiveDevices;
+            document.getElementById('totalPorts').textContent = totalPorts;
+        }
+
+        function updateRecentDevices(devices) {
+            const tbody = document.getElementById('recentDevicesTable');
+            tbody.innerHTML = '';
+
+            if (devices.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="3" style="text-align: center; color: var(--text-secondary);">No devices found</td>';
+                tbody.appendChild(row);
+                return;
+            }
+
+            devices.slice(0, 5).forEach(device => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="flex items-center">
+                            <i class="${getDeviceIcon(device.device_type)}" style="margin-right: 8px; color: var(--primary-color);"></i>
+                            ${device.name}
+                        </div>
+                    </td>
+                    <td style="text-transform: capitalize;">${device.device_type}</td>
+                    <td>${getStatusBadge(device.status)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateSystemStatus() {
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+        }
+
+        async function loadDevices() {
+            try {
+                const response = await fetch(`${API_BASE}/api/devices`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (response.ok) {
+                    const devices = await response.json();
+                    updateDevicesTable(devices);
+                } else {
+                    throw new Error('Failed to load devices');
+                }
+            } catch (error) {
+                console.error('Failed to load devices:', error);
+                const tbody = document.getElementById('devicesTable');
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--danger-color);">Failed to load devices</td></tr>';
+            }
+        }
+
+        function updateDevicesTable(devices) {
+            const tbody = document.getElementById('devicesTable');
+            tbody.innerHTML = '';
+
+            if (devices.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = '<td colspan="6" style="text-align: center; color: var(--text-secondary);">No devices found</td>';
+                tbody.appendChild(row);
+                return;
+            }
+
+            devices.forEach(device => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <div class="flex items-center">
+                            <i class="${getDeviceIcon(device.device_type)}" style="margin-right: 8px; color: var(--primary-color);"></i>
+                            ${device.name}
+                        </div>
+                    </td>
+                    <td style="text-transform: capitalize;">${device.device_type}</td>
+                    <td>${device.ip_address}</td>
+                    <td>${getStatusBadge(device.status)}</td>
+                    <td>${device.ports?.length || 0}</td>
+                    <td>
+                        <div class="flex gap-2">
+                            <button class="btn" style="padding: 6px 8px; background: var(--success-color); color: white;" onclick="viewDevice(${device.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn" style="padding: 6px 8px; background: var(--primary-color); color: white;" onclick="editDevice(${device.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Device Actions
+        function viewDevice(id) {
+            alert(`View device ${id} - This feature will be implemented soon!`);
+        }
+
+        function editDevice(id) {
+            alert(`Edit device ${id} - This feature will be implemented soon!`);
+        }
+
+        // Event Listeners
+        loginBtn.addEventListener('click', login);
+        logoutBtn.addEventListener('click', logout);
+        passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') login();
+        });
+
+        // Navigation event listeners
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.getAttribute('data-page');
+                if (page) showPage(page);
+            });
+        });
+
+        // Add device button
+        document.getElementById('addDeviceBtn')?.addEventListener('click', () => {
+            alert('Add device feature will be implemented soon!');
+        });
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', () => {
+            // Always start by checking authentication
+            checkAuth();
+        });
+
+        // Auto-refresh dashboard data every 30 seconds
+        setInterval(() => {
+            if (authToken && currentPage === 'dashboard') {
+                loadDashboard();
+            }
+        }, 32320);
+    </script>
+</body>
+</html>

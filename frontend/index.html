@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIXI Network Lab Topology Builder</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --background-color: #f8fafc;
+            --surface-color: #ffffff;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        .topology-container {
+            display: flex;
+            height: 100vh;
+            background: var(--surface-color);
+        }
+
+        /* Device Palette */
+        .device-palette {
+            width: 320px;
+            background: var(--surface-color);
+            border-right: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+        }
+
+        .palette-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+        }
+
+        .palette-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .palette-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .device-library {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .device-category {
+            margin-bottom: 24px;
+        }
+
+        .category-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .device-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: grab;
+            transition: all 0.2s ease;
+            background: var(--surface-color);
+            user-select: none;
+        }
+
+        .device-item:hover {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.05);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .device-item:active {
+            cursor: grabbing;
+            transform: translateY(0);
+        }
+
+        .device-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .device-name {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            color: var(--text-primary);
+        }
+
+        .tools-section {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .tool-btn {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--surface-color);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+        }
+
+        .tool-btn:hover {
+            background: var(--background-color);
+            border-color: var(--primary-color);
+        }
+
+        .tool-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .properties-panel {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            background: var(--background-color);
+        }
+
+        /* Canvas Area */
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            background: var(--surface-color);
+            overflow: hidden;
+        }
+
+        .canvas-header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--surface-color);
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            z-index: 50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .canvas-status {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .canvas-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .canvas-btn {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--surface-color);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .canvas-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .canvas {
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle, var(--border-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .canvas.drag-over {
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        /* Network Devices on Canvas */
+        .network-device {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: var(--surface-color);
+            border: 3px solid var(--border-color);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: move;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow);
+            user-select: none;
+            z-index: 10;
+        }
+
+        .network-device:hover {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .network-device.selected {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+        }
+
+        .network-device.dragging {
+            z-index: 1000;
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .network-device .device-icon {
+            font-size: 2.5rem;
+            margin-bottom: 6px;
+            color: var(--primary-color);
+        }
+
+        .network-device .device-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            color: var(--text-secondary);
+            line-height: 1.2;
+        }
+
+        /* Context Menu Styles */
+        .context-menu {
+            position: fixed;
+            background: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            padding: 8px 0;
+            min-width: 180px;
+            z-index: 2000;
+            display: none;
+        }
+
+        .context-menu.show {
+            display: block;
+        }
+
+        .context-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            cursor: pointer;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: background-color 0.2s;
+            font-size: 0.875rem;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .context-menu-item:hover {
+            background: var(--background-color);
+        }
+
+        .context-menu-item.danger:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .context-menu-item i {
+            width: 20px;
+            margin-right: 12px;
+            text-align: center;
+        }
+
+        .context-menu-separator {
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0;
+        }
+
+        /* Device Ports */
+        .device-port {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--surface-color);
+            border: 2px solid var(--secondary-color);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 20;
+        }
+
+        .device-port:hover {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: scale(1.3);
+        }
+
+        .device-port.connected {
+            background: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .device-port.selected {
+            background: var(--warning-color);
+            border-color: var(--warning-color);
+            transform: scale(1.4);
+        }
+
+        /* Connection Lines */
+        .connection-line {
+            position: absolute;
+            height: 3px;
+            background: var(--primary-color);
+            transform-origin: left center;
+            z-index: 5;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .connection-line:hover {
+            background: var(--danger-color);
+            height: 4px;
+            z-index: 15;
+        }
+
+        .connection-line.selected {
+            background: var(--warning-color);
+            height: 4px;
+        }
+
+        /* Connection Path */
+        .connection-path {
+            position: absolute;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .connection-path.active {
+            pointer-events: all;
+        }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface-color);
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Port Selection Modal */
+        .port-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .port-modal.show {
+            display: flex;
+        }
+
+        .port-modal-content {
+            background: var(--surface-color);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 70vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .port-modal-header {
+            margin-bottom: 20px;
+        }
+
+        .port-modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .port-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .port-option {
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--surface-color);
+        }
+
+        .port-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .port-option.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .port-option.connected {
+            border-color: var(--secondary-color);
+            background: var(--background-color);
+            color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        .port-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .port-status {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--background-color);
+        }
+
+        /* Test Result Styles */
+        .test-result {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid;
+            font-size: 0.875rem;
+        }
+
+        .test-result.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .test-result.error {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .test-result.info {
+            background: rgba(37, 99, 235, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Utilities */
+        .hidden { display: none !important; }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .device-palette {
+                width: 280px;
+            }
+            
+            .device-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .canvas-header {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="topology-container">
+        <!-- Device Palette -->
+        <div class="device-palette">
+            <div class="palette-header">
+                <h2 class="palette-title">PIXI Device Library</h2>
+                <p class="palette-subtitle">Drag devices to canvas to build your network</p>
+            </div>
+            
+            <div class="device-library">
+                <div class="device-category">
+                    <h3 class="category-title">Network Infrastructure</h3>
+                    <div class="device-grid">
+                        <div class="device-item" draggable="true" data-device-type="g31" data-ports="8">
+                            <div class="device-icon">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <div class="device-name">G31</div>
+                        </div>
+                        <div class="device-item" draggable="true" data-device-type="g32" data-ports="8">
+                            <div class="device-icon">
+                                <i class="fas fa-server"></i>
+                            </div>
+                            <div class="device-name">G32</div>
+                        </div>
+                        <div class="device-item" draggable="true" data-device-type="g34c" data-ports="8">
+                            <div class="device-icon">
+                                 <i class="fas fa-server"></i>
+                            </div>
+                            <div class="device-name">G34C</div>
+                        </div>
+                        <div class="device-item" draggable="true" data-device-type="g42" data-ports="8">
+                            <div class="device-icon">
+                                 <i class="fas fa-server"></i>
+                            </div>
+                            <div class="device-name">G42</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tools-section">
+                <h3 class="category-title">Tools</h3>
+                <button id="selectTool" class="tool-btn active">
+                    <i class="fas fa-mouse-pointer"></i>
+                    Select Tool
+                </button>
+                <button id="connectTool" class="tool-btn">
+                    <i class="fas fa-link"></i>
+                    Connect Devices
+                </button>
+                <button id="deleteTool" class="tool-btn">
+                    <i class="fas fa-trash"></i>
+                    Delete Tool
+                </button>
+                <button id="clearCanvas" class="tool-btn">
+                    <i class="fas fa-eraser"></i>
+                    Clear All
+                </button>
+            </div>
+            
+            <div class="properties-panel">
+                <h3 class="category-title">Properties</h3>
+                <div id="deviceProperties">
+                    <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                        Select a device to view properties
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canvas Area -->
+        <div class="canvas-container">
+            <div class="canvas-header">
+                <span id="canvasStatus" class="canvas-status">
+                    Drag devices from the library to get started
+                </span>
+                <div class="canvas-controls">
+                    <button id="saveTopology" class="canvas-btn">
+                        <i class="fas fa-save"></i> Save
+                    </button>
+                    <button id="loadTopology" class="canvas-btn">
+                        <i class="fas fa-folder-open"></i> Load
+                    </button>
+                    <button id="exportTopology" class="canvas-btn">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+            
+            <svg id="connectionSvg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none;">
+            </svg>
+            
+            <div id="topologyCanvas" class="canvas"></div>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div id="deviceContextMenu" class="context-menu">
+        <button class="context-menu-item" id="contextRename">
+            <i class="fas fa-edit"></i>
+            Rename Device
+        </button>
+        <button class="context-menu-item" id="contextConfigure">
+            <i class="fas fa-cog"></i>
+            Configure Device
+        </button>
+        <button class="context-menu-item" id="contextTest">
+            <i class="fas fa-plug"></i>
+            Test Connection
+        </button>
+        <div class="context-menu-separator"></div>
+        <button class="context-menu-item" id="contextDuplicate">
+            <i class="fas fa-copy"></i>
+            Duplicate Device
+        </button>
+        <div class="context-menu-separator"></div>
+        <button class="context-menu-item danger" id="contextDelete">
+            <i class="fas fa-trash"></i>
+            Delete Device
+        </button>
+    </div>
+
+    <!-- Device Configuration Modal -->
+    <div id="deviceConfigModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Configure Device</h3>
+                <button class="modal-close" id="configModalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Device Name</label>
+                    <input type="text" id="configDeviceName" class="form-input" placeholder="Enter device name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">IP Address</label>
+                    <input type="text" id="configDeviceIP" class="form-input" placeholder="192.168.1.1">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="configDeviceUsername" class="form-input" placeholder="admin">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="configDevicePassword" class="form-input" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">SSH Port</label>
+                    <input type="number" id="configDevicePort" class="form-input" placeholder="22" value="22">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <input type="text" id="configDeviceDescription" class="form-input" placeholder="Device description">
+                </div>
+                <div id="configTestResult" class="test-result hidden">
+                    <!-- Test results will be displayed here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="configCancelBtn">Cancel</button>
+                <button id="testConfigBtn" class="btn btn-secondary">
+                    <i class="fas fa-plug"></i>
+                    Test Connection
+                </button>
+                <button id="saveConfigBtn" class="btn btn-primary">
+                    <i class="fas fa-save"></i>
+                    Save Configuration
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Port Selection Modal -->
+    <div id="portModal" class="port-modal">
+        <div class="port-modal-content">
+            <div class="port-modal-header">
+                <h3 class="port-modal-title">Select Port for Connection</h3>
+                <p id="portModalSubtitle" style="color: var(--text-secondary);">Choose a port on the device</p>
+            </div>
+            
+            <div id="portList" class="port-list">
+                <!-- Ports will be populated dynamically -->
+            </div>
+            
+            <div class="modal-actions">
+                <button id="cancelPortSelection" class="btn btn-outline">Cancel</button>
+                <button id="confirmPortSelection" class="btn btn-primary">Connect</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class TopologyBuilder {
+            constructor() {
+                this.devices = [];
+                this.connections = [];
+                this.selectedDevice = null;
+                this.selectedConnection = null;
+                this.currentTool = 'select';
+                this.connectionInProgress = null;
+                this.deviceCounter = 1;
+                this.isDragging = false;
+                this.draggedDeviceType = null;
+                this.contextMenuDevice = null;
+                
+                this.canvas = document.getElementById('topologyCanvas');
+                this.svg = document.getElementById('connectionSvg');
+                
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.setupDragAndDrop();
+                this.setupContextMenu();
+                this.updateStatus('Ready - Drag devices from the library to start building');
+            }
+
+            setupEventListeners() {
+                // Tool buttons
+                document.getElementById('selectTool').addEventListener('click', () => this.setTool('select'));
+                document.getElementById('connectTool').addEventListener('click', () => this.setTool('connect'));
+                document.getElementById('deleteTool').addEventListener('click', () => this.setTool('delete'));
+                document.getElementById('clearCanvas').addEventListener('click', () => this.clearCanvas());
+                
+                // Canvas controls
+                document.getElementById('saveTopology').addEventListener('click', () => this.saveTopology());
+                document.getElementById('exportTopology').addEventListener('click', () => this.exportTopology());
+                
+                // Canvas click
+                this.canvas.addEventListener('click', (e) => this.handleCanvasClick(e));
+                
+                // Port modal
+                document.getElementById('cancelPortSelection').addEventListener('click', () => this.hidePortModal());
+                document.getElementById('confirmPortSelection').addEventListener('click', () => this.confirmPortSelection());
+
+                // Configuration modal
+                document.getElementById('configModalClose').addEventListener('click', () => this.hideConfigModal());
+                document.getElementById('configCancelBtn').addEventListener('click', () => this.hideConfigModal());
+                document.getElementById('testConfigBtn').addEventListener('click', () => this.testDeviceConfig());
+                document.getElementById('saveConfigBtn').addEventListener('click', () => this.saveDeviceConfig());
+
+                // Hide context menu when clicking elsewhere
+                document.addEventListener('click', (e) => {
+                    if (!document.getElementById('deviceContextMenu').contains(e.target)) {
+                        this.hideContextMenu();
+                    }
+                });
+
+                // Prevent context menu on canvas
+                this.canvas.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                });
+            }
+
+            setupContextMenu() {
+                // Context menu items
+                document.getElementById('contextRename').addEventListener('click', () => {
+                    this.hideContextMenu();
+                    if (this.contextMenuDevice) {
+                        this.editDeviceName(this.contextMenuDevice);
+                    }
+                });
+
+                document.getElementById('contextConfigure').addEventListener('click', () => {
+                    this.hideContextMenu();
+                    if (this.contextMenuDevice) {
+                        this.showConfigModal(this.contextMenuDevice);
+                    }
+                });
+
+                document.getElementById('contextTest').addEventListener('click', () => {
+                    this.hideContextMenu();
+                    if (this.contextMenuDevice) {
+                        this.testDeviceConnection(this.contextMenuDevice);
+                    }
+                });
+
+                document.getElementById('contextDuplicate').addEventListener('click', () => {
+                    this.hideContextMenu();
+                    if (this.contextMenuDevice) {
+                        this.duplicateDevice(this.contextMenuDevice);
+                    }
+                });
+
+                document.getElementById('contextDelete').addEventListener('click', () => {
+                    this.hideContextMenu();
+                    if (this.contextMenuDevice) {
+                        if (confirm(`Delete ${this.contextMenuDevice.name} and all its connections?`)) {
+                            this.deleteDevice(this.contextMenuDevice.id);
+                        }
+                    }
+                });
+            }
+
+            showContextMenu(e, device) {
+                const contextMenu = document.getElementById('deviceContextMenu');
+                this.contextMenuDevice = device;
+                
+                // Position the context menu
+                contextMenu.style.left = e.pageX + 'px';
+                contextMenu.style.top = e.pageY + 'px';
+                contextMenu.classList.add('show');
+
+                // Adjust position if menu goes off screen
+                const rect = contextMenu.getBoundingClientRect();
+                if (rect.right > window.innerWidth) {
+                    contextMenu.style.left = (e.pageX - rect.width) + 'px';
+                }
+                if (rect.bottom > window.innerHeight) {
+                    contextMenu.style.top = (e.pageY - rect.height) + 'px';
+                }
+            }
+
+            hideContextMenu() {
+                document.getElementById('deviceContextMenu').classList.remove('show');
+                this.contextMenuDevice = null;
+            }
+
+            showConfigModal(device) {
+                const modal = document.getElementById('deviceConfigModal');
+                
+                // Populate form with device data
+                document.getElementById('configDeviceName').value = device.name || '';
+                document.getElementById('configDeviceIP').value = device.config?.ip || '';
+                document.getElementById('configDeviceUsername').value = device.config?.username || '';
+                document.getElementById('configDevicePassword').value = ''; // Don't show password
+                document.getElementById('configDevicePort').value = device.config?.port || '22';
+                document.getElementById('configDeviceDescription').value = device.config?.description || '';
+
+                // Store device reference
+                modal.setAttribute('data-device-id', device.id);
+                
+                // Hide test result
+                document.getElementById('configTestResult').classList.add('hidden');
+                
+                modal.classList.add('show');
+            }
+
+            hideConfigModal() {
+                document.getElementById('deviceConfigModal').classList.remove('show');
+            }
+
+            async testDeviceConfig() {
+                const ip = document.getElementById('configDeviceIP').value;
+                const username = document.getElementById('configDeviceUsername').value;
+                const password = document.getElementById('configDevicePassword').value;
+                const port = document.getElementById('configDevicePort').value || '22';
+
+                const resultDiv = document.getElementById('configTestResult');
+                const testBtn = document.getElementById('testConfigBtn');
+
+                if (!ip || !username || !password) {
+                    this.showTestResult('error', 'Please fill in IP address, username, and password');
+                    return;
+                }
+
+                // Simulate connection test
+                testBtn.disabled = true;
+                testBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
+                this.showTestResult('info', 'Testing connection...');
+
+                try {
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // Simulate random success/failure for demo
+                    const success = Math.random() > 0.3; // 70% success rate
+                    
+                    if (success) {
+                        this.showTestResult('success', 
+                            `Connection successful!<br>` +
+                            `Device Type: ${this.getDeviceTypeFromIP(ip)}<br>` +
+                            `Response Time: ${Math.floor(Math.random() * 50 + 10)}ms`
+                        );
+                    } else {
+                        this.showTestResult('error', 'Connection failed: Authentication error or device unreachable');
+                    }
+                } catch (error) {
+                    this.showTestResult('error', `Connection test failed: ${error.message}`);
+                } finally {
+                    testBtn.disabled = false;
+                    testBtn.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
+                }
+            }
+
+            getDeviceTypeFromIP(ip) {
+                // Simple device type detection based on IP pattern (for demo)
+                const lastOctet = parseInt(ip.split('.').pop());
+                if (lastOctet < 50) return 'Network Infrastructure';
+                if (lastOctet < 100) return 'Server';
+                return 'Network Device';
+            }
+
+            showTestResult(type, message) {
+                const resultDiv = document.getElementById('configTestResult');
+                resultDiv.className = `test-result ${type}`;
+                resultDiv.innerHTML = message;
+                resultDiv.classList.remove('hidden');
+            }
+
+            saveDeviceConfig() {
+                const modal = document.getElementById('deviceConfigModal');
+                const deviceId = parseInt(modal.getAttribute('data-device-id'));
+                const device = this.devices.find(d => d.id === deviceId);
+
+                if (!device) return;
+
+                const config = {
+                    ip: document.getElementById('configDeviceIP').value,
+                    username: document.getElementById('configDeviceUsername').value,
+                    password: document.getElementById('configDevicePassword').value,
+                    port: document.getElementById('configDevicePort').value,
+                    description: document.getElementById('configDeviceDescription').value
+                };
+
+                const newName = document.getElementById('configDeviceName').value;
+                
+                // Update device
+                if (newName && newName !== device.name) {
+                    device.name = newName;
+                    const deviceEl = document.querySelector(`[data-device-id="${deviceId}"] .device-label`);
+                    if (deviceEl) deviceEl.textContent = device.name;
+                }
+
+                device.config = config;
+                
+                // Update properties panel if this device is selected
+                if (this.selectedDevice && this.selectedDevice.id === deviceId) {
+                    this.updatePropertiesPanel();
+                }
+
+                this.hideConfigModal();
+                this.updateStatus(`${device.name} configuration saved`);
+            }
+
+            testDeviceConnection(device) {
+                if (!device.config || !device.config.ip) {
+                    alert('Please configure the device first (right-click → Configure Device)');
+                    return;
+                }
+
+                this.updateStatus(`Testing connection to ${device.name}...`);
+                
+                // Simulate connection test
+                setTimeout(() => {
+                    const success = Math.random() > 0.2; // 80% success rate
+                    if (success) {
+                        alert(`✅ Connection to ${device.name} (${device.config.ip}) successful!\nResponse time: ${Math.floor(Math.random() * 50 + 10)}ms`);
+                        this.updateStatus(`${device.name} is reachable`);
+                    } else {
+                        alert(`❌ Connection to ${device.name} (${device.config.ip}) failed!\nDevice unreachable or authentication error`);
+                        this.updateStatus(`${device.name} connection failed`);
+                    }
+                }, 1500);
+            }
+
+            duplicateDevice(device) {
+                const rect = this.canvas.getBoundingClientRect();
+                
+                const newDevice = {
+                    id: Date.now(),
+                    name: device.name + '-Copy',
+                    type: device.type,
+                    x: Math.min(device.x + 120, rect.width - 100),
+                    y: Math.min(device.y + 120, rect.height - 100),
+                    ports: JSON.parse(JSON.stringify(device.ports)), // Deep copy ports
+                    config: device.config ? JSON.parse(JSON.stringify(device.config)) : null
+                };
+
+                // Reset port connections for the duplicate
+                newDevice.ports.forEach(port => {
+                    port.id = `${Date.now()}-${Math.random()}`;
+                    port.connected = false;
+                    port.connectedTo = null;
+                });
+
+                this.devices.push(newDevice);
+                this.renderDevice(newDevice);
+                this.updateStatus(`${newDevice.name} created`);
+            }
+
+            setupDragAndDrop() {
+                // Device palette drag start
+                document.querySelectorAll('.device-item').forEach(item => {
+                    item.addEventListener('dragstart', (e) => {
+                        this.draggedDeviceType = {
+                            type: item.dataset.deviceType,
+                            ports: parseInt(item.dataset.ports)
+                        };
+                        e.dataTransfer.effectAllowed = 'copy';
+                    });
+                });
+
+                // Canvas drop handling
+                this.canvas.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'copy';
+                    this.canvas.classList.add('drag-over');
+                });
+
+                this.canvas.addEventListener('dragleave', () => {
+                    this.canvas.classList.remove('drag-over');
+                });
+
+                this.canvas.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    this.canvas.classList.remove('drag-over');
+                    this.handleDrop(e);
+                });
+            }
+
+            handleDrop(e) {
+                if (!this.draggedDeviceType) return;
+
+                const rect = this.canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left - 50; // Center device
+                const y = e.clientY - rect.top - 50;
+
+                const device = {
+                    id: Date.now(),
+                    name: `${this.draggedDeviceType.type.charAt(0).toUpperCase() + this.draggedDeviceType.type.slice(1)}-${this.deviceCounter++}`,
+                    type: this.draggedDeviceType.type,
+                    x: Math.max(0, Math.min(x, rect.width - 100)),
+                    y: Math.max(0, Math.min(y, rect.height - 100)),
+                    ports: this.generatePorts(this.draggedDeviceType.type, this.draggedDeviceType.ports),
+                    config: null // Will be set when configured
+                };
+
+                this.devices.push(device);
+                this.renderDevice(device);
+                this.updateStatus(`${device.name} added to topology`);
+
+                this.draggedDeviceType = null;
+            }
+
+            generatePorts(deviceType, portCount) {
+                const ports = [];
+                const portTypes = {
+                    g31: ['Line1', 'Line2'],
+                    g32: ['Line1', 'Line2'],
+                    g34c: ['Line1', 'Line2'],
+                    g42: ['Line1', 'Line2'],
+                };
+
+                const typeOptions = portTypes[deviceType] || ['Ethernet'];
+
+                for (let i = 0; i < portCount; i++) {
+                    const portType = typeOptions[i % typeOptions.length];
+                    ports.push({
+                        id: `${Date.now()}-${i}`,
+                        name: `${portType}${Math.floor(i / typeOptions.length)}/${i % typeOptions.length + 1}`,
+                        type: portType,
+                        connected: false,
+                        connectedTo: null
+                    });
+                }
+
+                return ports;
+            }
+
+            renderDevice(device) {
+                const deviceEl = document.createElement('div');
+                deviceEl.className = 'network-device';
+                deviceEl.style.left = device.x + 'px';
+                deviceEl.style.top = device.y + 'px';
+                deviceEl.setAttribute('data-device-id', device.id);
+
+                const icon = this.getDeviceIcon(device.type);
+                deviceEl.innerHTML = `
+                    <div class="device-icon">
+                        <i class="${icon}"></i>
+                    </div>
+                    <div class="device-label">${device.name}</div>
+                `;
+
+                // Add event listeners
+                deviceEl.addEventListener('click', (e) => this.handleDeviceClick(device, e));
+                deviceEl.addEventListener('dblclick', (e) => this.handleDeviceDoubleClick(device, e));
+                deviceEl.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.showContextMenu(e, device);
+                });
+                
+                this.makeDeviceDraggable(deviceEl, device);
+                this.addDevicePorts(deviceEl, device);
+
+                this.canvas.appendChild(deviceEl);
+            }
+
+            makeDeviceDraggable(element, device) {
+                let isDragging = false;
+                let startX, startY;
+
+                element.addEventListener('mousedown', (e) => {
+                    if (this.currentTool !== 'select' || e.target.classList.contains('device-port')) return;
+
+                    isDragging = true;
+                    startX = e.clientX - device.x;
+                    startY = e.clientY - device.y;
+                    element.classList.add('dragging');
+                    e.preventDefault();
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+
+                    const rect = this.canvas.getBoundingClientRect();
+                    device.x = Math.max(0, Math.min(e.clientX - startX, rect.width - 100));
+                    device.y = Math.max(0, Math.min(e.clientY - startY, rect.height - 100));
+
+                    element.style.left = device.x + 'px';
+                    element.style.top = device.y + 'px';
+
+                    this.updateConnections();
+                });
+
+                document.addEventListener('mouseup', () => {
+                    if (isDragging) {
+                        isDragging = false;
+                        element.classList.remove('dragging');
+                    }
+                });
+            }
+
+            addDevicePorts(deviceEl, device) {
+                const portPositions = this.getPortPositions(device.ports.length);
+                
+                device.ports.forEach((port, index) => {
+                    const portEl = document.createElement('div');
+                    portEl.className = 'device-port';
+                    portEl.style.left = portPositions[index].x + 'px';
+                    portEl.style.top = portPositions[index].y + 'px';
+                    portEl.setAttribute('data-port-id', port.id);
+                    portEl.setAttribute('data-device-id', device.id);
+                    portEl.title = port.name;
+
+                    portEl.addEventListener('click', (e) => this.handlePortClick(device, port, e));
+
+                    deviceEl.appendChild(portEl);
+                });
+            }
+
+            getPortPositions(portCount) {
+                const positions = [];
+                const radius = 45; // Distance from center
+                const center = { x: 50, y: 50 }; // Center of 100x100 device
+
+                for (let i = 0; i < portCount; i++) {
+                    const angle = (2 * Math.PI * i) / portCount - Math.PI / 2; // Start from top
+                    positions.push({
+                        x: center.x + radius * Math.cos(angle) - 6, // -6 to center the 12px port
+                        y: center.y + radius * Math.sin(angle) - 6
+                    });
+                }
+
+                return positions;
+            }
+
+            handleDeviceClick(device, e) {
+                e.stopPropagation();
+
+                if (this.currentTool === 'select') {
+                    this.selectDevice(device);
+                } else if (this.currentTool === 'delete') {
+                    this.deleteDevice(device.id);
+                } else if (this.currentTool === 'connect') {
+                    this.startConnection(device);
+                }
+            }
+
+            handleDeviceDoubleClick(device, e) {
+                e.stopPropagation();
+                this.editDeviceName(device);
+            }
+
+            handlePortClick(device, port, e) {
+                e.stopPropagation();
+
+                if (this.currentTool === 'connect') {
+                    if (!this.connectionInProgress) {
+                        this.startConnectionFromPort(device, port);
+                    } else {
+                        this.completeConnection(device, port);
+                    }
+                }
+            }
+
+            startConnectionFromPort(device, port) {
+                if (port.connected) {
+                    this.updateStatus('Port is already connected');
+                    return;
+                }
+
+                this.connectionInProgress = {
+                    fromDevice: device,
+                    fromPort: port,
+                    stage: 'selecting_target'
+                };
+
+                this.updateStatus(`Select target port to connect to ${device.name}:${port.name}`);
+                this.highlightAvailablePorts();
+            }
+
+            completeConnection(toDevice, toPort) {
+                if (!this.connectionInProgress) return;
+
+                if (toPort.connected) {
+                    this.updateStatus('Target port is already connected');
+                    return;
+                }
+
+                if (this.connectionInProgress.fromDevice.id === toDevice.id) {
+                    this.updateStatus('Cannot connect device to itself');
+                    return;
+                }
+
+                // Create connection
+                const connection = {
+                    id: Date.now(),
+                    fromDevice: this.connectionInProgress.fromDevice.id,
+                    fromPort: this.connectionInProgress.fromPort.id,
+                    toDevice: toDevice.id,
+                    toPort: toPort.id
+                };
+
+                this.connections.push(connection);
+
+                // Update port status
+                this.connectionInProgress.fromPort.connected = true;
+                this.connectionInProgress.fromPort.connectedTo = toPort.id;
+                toPort.connected = true;
+                toPort.connectedTo = this.connectionInProgress.fromPort.id;
+
+                this.renderConnection(connection);
+                this.updatePortVisuals();
+                
+                this.updateStatus(`Connected ${this.connectionInProgress.fromDevice.name}:${this.connectionInProgress.fromPort.name} to ${toDevice.name}:${toPort.name}`);
+                
+                this.connectionInProgress = null;
+                this.clearPortHighlights();
+            }
+
+            renderConnection(connection) {
+                const fromDevice = this.devices.find(d => d.id === connection.fromDevice);
+                const toDevice = this.devices.find(d => d.id === connection.toDevice);
+                
+                if (!fromDevice || !toDevice) return;
+
+                const fromPort = fromDevice.ports.find(p => p.id === connection.fromPort);
+                const toPort = toDevice.ports.find(p => p.id === connection.toPort);
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('data-connection-id', connection.id);
+                line.setAttribute('class', 'connection-line');
+                line.style.stroke = 'var(--primary-color)';
+                line.style.strokeWidth = '3';
+                line.style.cursor = 'pointer';
+
+                this.updateConnectionPosition(line, fromDevice, toDevice, fromPort, toPort);
+
+                line.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (this.currentTool === 'delete') {
+                        this.deleteConnection(connection.id);
+                    } else {
+                        this.selectConnection(connection);
+                    }
+                });
+
+                this.svg.appendChild(line);
+            }
+
+            updateConnectionPosition(line, fromDevice, toDevice, fromPort, toPort) {
+                // Calculate port positions relative to canvas
+                const fromPortIndex = fromDevice.ports.indexOf(fromPort);
+                const toPortIndex = toDevice.ports.indexOf(toPort);
+                
+                const fromPortPos = this.getPortPositions(fromDevice.ports.length)[fromPortIndex];
+                const toPortPos = this.getPortPositions(toDevice.ports.length)[toPortIndex];
+
+                const x1 = fromDevice.x + fromPortPos.x + 6; // +6 to center on port
+                const y1 = fromDevice.y + fromPortPos.y + 6;
+                const x2 = toDevice.x + toPortPos.x + 6;
+                const y2 = toDevice.y + toPortPos.y + 6;
+
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+            }
+
+            updateConnections() {
+                this.connections.forEach(connection => {
+                    const line = this.svg.querySelector(`[data-connection-id="${connection.id}"]`);
+                    if (line) {
+                        const fromDevice = this.devices.find(d => d.id === connection.fromDevice);
+                        const toDevice = this.devices.find(d => d.id === connection.toDevice);
+                        const fromPort = fromDevice?.ports.find(p => p.id === connection.fromPort);
+                        const toPort = toDevice?.ports.find(p => p.id === connection.toPort);
+
+                        if (fromDevice && toDevice && fromPort && toPort) {
+                            this.updateConnectionPosition(line, fromDevice, toDevice, fromPort, toPort);
+                        }
+                    }
+                });
+            }
+
+            selectDevice(device) {
+                // Clear previous selections
+                document.querySelectorAll('.network-device').forEach(el => el.classList.remove('selected'));
+                document.querySelectorAll('.connection-line').forEach(el => el.classList.remove('selected'));
+
+                // Select device
+                const deviceEl = document.querySelector(`[data-device-id="${device.id}"]`);
+                deviceEl.classList.add('selected');
+
+                this.selectedDevice = device;
+                this.selectedConnection = null;
+                this.updatePropertiesPanel();
+            }
+
+            selectConnection(connection) {
+                // Clear previous selections
+                document.querySelectorAll('.network-device').forEach(el => el.classList.remove('selected'));
+                document.querySelectorAll('.connection-line').forEach(el => el.classList.remove('selected'));
+
+                // Select connection
+                const line = this.svg.querySelector(`[data-connection-id="${connection.id}"]`);
+                line.classList.add('selected');
+
+                this.selectedConnection = connection;
+                this.selectedDevice = null;
+                this.updatePropertiesPanel();
+            }
+
+            deleteDevice(deviceId) {
+                if (!confirm('Delete this device and all its connections?')) return;
+
+                // Remove connections
+                this.connections = this.connections.filter(conn => {
+                    if (conn.fromDevice === deviceId || conn.toDevice === deviceId) {
+                        const line = this.svg.querySelector(`[data-connection-id="${conn.id}"]`);
+                        line?.remove();
+                        return false;
+                    }
+                    return true;
+                });
+
+                // Remove device
+                this.devices = this.devices.filter(d => d.id !== deviceId);
+                const deviceEl = document.querySelector(`[data-device-id="${deviceId}"]`);
+                deviceEl?.remove();
+
+                // Clear selection
+                this.selectedDevice = null;
+                this.updatePropertiesPanel();
+                this.updateStatus('Device deleted');
+            }
+
+            deleteConnection(connectionId) {
+                const connection = this.connections.find(c => c.id === connectionId);
+                if (!connection) return;
+
+                // Update port status
+                const fromDevice = this.devices.find(d => d.id === connection.fromDevice);
+                const toDevice = this.devices.find(d => d.id === connection.toDevice);
+                
+                if (fromDevice && toDevice) {
+                    const fromPort = fromDevice.ports.find(p => p.id === connection.fromPort);
+                    const toPort = toDevice.ports.find(p => p.id === connection.toPort);
+                    
+                    if (fromPort) {
+                        fromPort.connected = false;
+                        fromPort.connectedTo = null;
+                    }
+                    if (toPort) {
+                        toPort.connected = false;
+                        toPort.connectedTo = null;
+                    }
+                }
+
+                // Remove connection
+                this.connections = this.connections.filter(c => c.id !== connectionId);
+                const line = this.svg.querySelector(`[data-connection-id="${connectionId}"]`);
+                line?.remove();
+
+                this.updatePortVisuals();
+                this.updateStatus('Connection deleted');
+            }
+
+            updatePortVisuals() {
+                document.querySelectorAll('.device-port').forEach(portEl => {
+                    const deviceId = parseInt(portEl.dataset.deviceId);
+                    const portId = portEl.dataset.portId;
+                    
+                    const device = this.devices.find(d => d.id === deviceId);
+                    const port = device?.ports.find(p => p.id === portId);
+                    
+                    if (port) {
+                        portEl.classList.toggle('connected', port.connected);
+                    }
+                });
+            }
+
+            highlightAvailablePorts() {
+                document.querySelectorAll('.device-port').forEach(portEl => {
+                    const deviceId = parseInt(portEl.dataset.deviceId);
+                    const portId = portEl.dataset.portId;
+                    
+                    if (deviceId !== this.connectionInProgress.fromDevice.id) {
+                        const device = this.devices.find(d => d.id === deviceId);
+                        const port = device?.ports.find(p => p.id === portId);
+                        
+                        if (port && !port.connected) {
+                            portEl.style.borderColor = 'var(--warning-color)';
+                            portEl.style.backgroundColor = 'var(--warning-color)';
+                        }
+                    }
+                });
+            }
+
+            clearPortHighlights() {
+                document.querySelectorAll('.device-port').forEach(portEl => {
+                    portEl.style.borderColor = '';
+                    portEl.style.backgroundColor = '';
+                });
+            }
+
+            setTool(tool) {
+                this.currentTool = tool;
+                this.connectionInProgress = null;
+                this.clearPortHighlights();
+
+                // Update tool buttons
+                document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById(`${tool}Tool`).classList.add('active');
+
+                const messages = {
+                    select: 'Click devices to select them',
+                    connect: 'Click ports to connect devices',
+                    delete: 'Click devices or connections to delete them'
+                };
+
+                this.updateStatus(messages[tool] || 'Tool selected');
+            }
+
+            clearCanvas() {
+                if (!confirm('Clear the entire topology? This cannot be undone.')) return;
+
+                this.devices = [];
+                this.connections = [];
+                this.selectedDevice = null;
+                this.selectedConnection = null;
+                this.connectionInProgress = null;
+                this.deviceCounter = 1;
+
+                this.canvas.innerHTML = '';
+                this.svg.innerHTML = '';
+                this.updatePropertiesPanel();
+                this.updateStatus('Canvas cleared');
+            }
+
+            editDeviceName(device) {
+                const newName = prompt('Enter new device name:', device.name);
+                if (newName && newName.trim()) {
+                    device.name = newName.trim();
+                    const deviceEl = document.querySelector(`[data-device-id="${device.id}"] .device-label`);
+                    deviceEl.textContent = device.name;
+                    this.updatePropertiesPanel();
+                }
+            }
+
+            updatePropertiesPanel() {
+                const panel = document.getElementById('deviceProperties');
+                
+                if (this.selectedDevice) {
+                    const device = this.selectedDevice;
+                    const connectedPorts = device.ports.filter(p => p.connected).length;
+                    
+                    panel.innerHTML = `
+                        <div style="margin-bottom: 16px;">
+                            <h4 style="margin-bottom: 8px; font-weight: 600;">${device.name}</h4>
+                            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 12px;">
+                                ${device.type.charAt(0).toUpperCase() + device.type.slice(1)}
+                            </p>
+                        </div>
+                        
+                        <div style="margin-bottom: 16px;">
+                            <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                                <strong>Position:</strong> (${Math.round(device.x)}, ${Math.round(device.y)})
+                            </p>
+                            <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                                <strong>Total Ports:</strong> ${device.ports.length}
+                            </p>
+                            <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                                <strong>Connected:</strong> ${connectedPorts}
+                            </p>
+                            <p style="font-size: 0.875rem; margin-bottom: 12px;">
+                                <strong>Available:</strong> ${device.ports.length - connectedPorts}
+                            </p>
+                            ${device.config ? `
+                                <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                                    <strong>IP Address:</strong> ${device.config.ip || 'Not set'}
+                                </p>
+                                <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                                    <strong>Username:</strong> ${device.config.username || 'Not set'}
+                                </p>
+                                <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                                    <strong>SSH Port:</strong> ${device.config.port || '22'}
+                                </p>
+                                ${device.config.description ? `
+                                    <p style="font-size: 0.875rem;">
+                                        <strong>Description:</strong> ${device.config.description}
+                                    </p>
+                                ` : ''}
+                            ` : `
+                                <p style="font-size: 0.875rem; color: var(--warning-color);">
+                                    <i class="fas fa-exclamation-triangle"></i> Device not configured
+                                </p>
+                            `}
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <button onclick="topology.editDeviceName(topology.selectedDevice)" class="btn btn-outline" style="padding: 8px; font-size: 0.75rem;">
+                                <i class="fas fa-edit"></i> Rename
+                            </button>
+                            <button onclick="topology.showConfigModal(topology.selectedDevice)" class="btn btn-outline" style="padding: 8px; font-size: 0.75rem;">
+                                <i class="fas fa-cog"></i> Configure
+                            </button>
+                        </div>
+                        <button onclick="topology.deleteDevice(${device.id})" class="btn" style="width: 100%; margin-top: 8px; padding: 8px; font-size: 0.75rem; background: var(--danger-color); color: white;">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    `;
+                } else if (this.selectedConnection) {
+                    const connection = this.selectedConnection;
+                    const fromDevice = this.devices.find(d => d.id === connection.fromDevice);
+                    const toDevice = this.devices.find(d => d.id === connection.toDevice);
+                    const fromPort = fromDevice?.ports.find(p => p.id === connection.fromPort);
+                    const toPort = toDevice?.ports.find(p => p.id === connection.toPort);
+                    
+                    panel.innerHTML = `
+                        <div style="margin-bottom: 16px;">
+                            <h4 style="margin-bottom: 8px; font-weight: 600;">Connection</h4>
+                            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                                Link between devices
+                            </p>
+                        </div>
+                        
+                        <div style="margin-bottom: 16px;">
+                            <p style="font-size: 0.875rem; margin-bottom: 8px;">
+                                <strong>From:</strong><br>
+                                ${fromDevice?.name} : ${fromPort?.name}
+                            </p>
+                            <p style="font-size: 0.875rem; margin-bottom: 8px;">
+                                <strong>To:</strong><br>
+                                ${toDevice?.name} : ${toPort?.name}
+                            </p>
+                        </div>
+                        
+                        <button onclick="topology.deleteConnection(${connection.id})" class="btn" style="width: 100%; padding: 8px; font-size: 0.75rem; background: var(--danger-color); color: white;">
+                            <i class="fas fa-unlink"></i> Disconnect
+                        </button>
+                    `;
+                } else {
+                    panel.innerHTML = `
+                        <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                            Select a device or connection to view properties
+                        </p>
+                    `;
+                }
+            }
+
+            handleCanvasClick(e) {
+                if (e.target === this.canvas) {
+                    // Deselect all
+                    document.querySelectorAll('.network-device').forEach(el => el.classList.remove('selected'));
+                    document.querySelectorAll('.connection-line').forEach(el => el.classList.remove('selected'));
+                    
+                    this.selectedDevice = null;
+                    this.selectedConnection = null;
+                    this.updatePropertiesPanel();
+                    
+                    // Cancel connection in progress
+                    if (this.connectionInProgress) {
+                        this.connectionInProgress = null;
+                        this.clearPortHighlights();
+                        this.updateStatus('Connection cancelled');
+                    }
+                }
+            }
+
+            getDeviceIcon(type) {
+                const icons = {
+                    g31: 'fas fa-server',
+                    g32: 'fas fa-server',
+                    g34c: 'fas fa-server',   
+                    g42: 'fas fa-server',   
+                };
+                return icons[type] || 'fas fa-server';
+            }
+
+            updateStatus(message) {
+                document.getElementById('canvasStatus').textContent = message;
+            }
+
+            saveTopology() {
+                const topology = {
+                    devices: this.devices,
+                    connections: this.connections,
+                    timestamp: new Date().toISOString()
+                };
+                
+                localStorage.setItem('network_topology', JSON.stringify(topology));
+                this.updateStatus('Topology saved locally');
+            }
+
+            exportTopology() {
+                const topology = {
+                    devices: this.devices,
+                    connections: this.connections,
+                    metadata: {
+                        created: new Date().toISOString(),
+                        deviceCount: this.devices.length,
+                        connectionCount: this.connections.length
+                    }
+                };
+                
+                const blob = new Blob([JSON.stringify(topology, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `network_topology_${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                this.updateStatus('Topology exported');
+            }
+
+            // Load topology from localStorage
+            loadTopology() {
+                const saved = localStorage.getItem('network_topology');
+                if (saved) {
+                    try {
+                        const topology = JSON.parse(saved);
+                        
+                        // Clear current topology
+                        this.clearCanvas();
+                        
+                        // Load devices
+                        this.devices = topology.devices || [];
+                        this.devices.forEach(device => {
+                            this.renderDevice(device);
+                        });
+                        
+                        // Load connections
+                        this.connections = topology.connections || [];
+                        this.connections.forEach(connection => {
+                            this.renderConnection(connection);
+                        });
+                        
+                        // Update device counter
+                        if (this.devices.length > 0) {
+                            const maxCounter = Math.max(...this.devices.map(d => {
+                                const match = d.name.match(/-(\d+)$/);
+                                return match ? parseInt(match[1]) : 0;
+                            }));
+                            this.deviceCounter = maxCounter + 1;
+                        }
+                        
+                        this.updatePortVisuals();
+                        this.updateStatus('Topology loaded successfully');
+                        
+                    } catch (error) {
+                        this.updateStatus('Failed to load topology');
+                        console.error('Load error:', error);
+                    }
+                } else {
+                    this.updateStatus('No saved topology found');
+                }
+            }
+
+            getTopologyData() {
+                return {
+                    devices: this.devices,
+                    connections: this.connections
+                };
+            }
+        }
+
+        // Initialize topology builder
+        const topology = new TopologyBuilder();
+
+        // Global access for button onclick handlers
+        window.topology = topology;
+
+        // Add load topology functionality
+        document.getElementById('loadTopology').addEventListener('click', () => topology.loadTopology());
+    </script>
+</body>
+</html>

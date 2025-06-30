@@ -1,0 +1,417 @@
+/* Device Types - Specific Styling */
+.network-device[data-device-type="router"] {
+    border-color: #3b82f6;
+}
+
+.network-device[data-device-type="router"] .device-icon {
+    color: #3b82f6;
+}
+
+.network-device[data-device-type="switch"] {
+    border-color: #10b981;
+}
+
+.network-device[data-device-type="switch"] .device-icon {
+    color: #10b981;
+}
+
+.network-device[data-device-type="server"] {
+    border-color: #f59e0b;
+}
+
+.network-device[data-device-type="server"] .device-icon {
+    color: #f59e0b;
+}
+
+.network-device[data-device-type="wireless"] {
+    border-color: #8b5cf6;
+}
+
+.network-device[data-device-type="wireless"] .device-icon {
+    color: #8b5cf6;
+}
+
+.network-device[data-device-type="firewall"] {
+    border-color: #ef4444;
+}
+
+.network-device[data-device-type="firewall"] .device-icon {
+    color: #ef4444;
+}
+
+/* Connection Preview */
+.connection-preview {
+    position: absolute;
+    border: 2px dashed var(--primary-color);
+    border-radius: 20px;
+    background: rgba(37, 99, 235, 0.1);
+    pointer-events: none;
+    z-index: 5;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
+}
+
+/* Property Actions */
+.property-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.property-actions .btn {
+    flex: 1;
+}
+
+/* Canvas Grid Enhancement */
+.canvas.grid-enabled {
+    background-image: 
+        radial-gradient(circle, var(--border-color) 1px, transparent 1px),
+        linear-gradient(var(--border-light) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+    background-size: 20px 20px, 20px 20px, 20px 20px;
+}
+
+/* Zoom Controls */
+.zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 10;
+}
+
+.zoom-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.zoom-btn:hover {
+    background: var(--background-color);
+    box-shadow: var(--shadow-md);
+}
+
+/* Selection Box */
+.selection-box {
+    position: absolute;
+    border: 2px dashed var(--primary-color);
+    background: rgba(37, 99, 235, 0.1);
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Mini-map */
+.minimap {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 200px;
+    height: 150px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    z-index: 10;
+    overflow: hidden;
+}
+
+.minimap-canvas {
+    width: 100%;
+    height: 100%;
+    transform-origin: top left;
+}
+
+.minimap-viewport {
+    position: absolute;
+    border: 2px solid var(--primary-color);
+    background: rgba(37, 99, 235, 0.2);
+    cursor: move;
+}
+
+/* Toolbar */
+.topology-toolbar {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    background: var(--surface-color);
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    z-index: 10;
+}
+
+.toolbar-btn {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    background: var(--surface-color);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.toolbar-btn:hover {
+    background: var(--background-color);
+    border-color: var(--primary-color);
+}
+
+.toolbar-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+/* Status Indicators */
+.device-status-indicator {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--surface-color);
+    z-index: 11;
+}
+
+.device-status-indicator.active {
+    background: var(--success-color);
+}
+
+.device-status-indicator.inactive {
+    background: var(--danger-color);
+}
+
+.device-status-indicator.warning {
+    background: var(--warning-color);
+}
+
+/* Connection Labels */
+.connection-label {
+    position: absolute;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    pointer-events: none;
+    z-index: 3;
+    white-space: nowrap;
+}
+
+/* Responsive Design for Topology */
+@media (max-width: 768px) {
+    .topology-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 500px;
+    }
+
+    .device-palette {
+        width: 100%;
+        max-height: 250px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        overflow-y: auto;
+    }
+
+    .device-library {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 8px;
+    }
+
+    .device-item {
+        flex-direction: column;
+        text-align: center;
+        padding: 8px;
+    }
+
+    .device-icon {
+        margin-right: 0;
+        margin-bottom: 4px;
+    }
+
+    .canvas-container {
+        height: 400px;
+        min-height: 400px;
+    }
+
+    .canvas-header {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        padding: 12px;
+        background: var(--background-color);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .canvas-status {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+    }
+
+    .tools-section {
+        padding: 12px;
+    }
+
+    .tool-btn {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+    }
+
+    .properties-panel {
+        padding: 12px;
+        max-height: 200px;
+    }
+
+    .network-device {
+        width: 60px;
+        height: 60px;
+    }
+
+    .network-device .device-icon {
+        font-size: 1.2rem;
+    }
+
+    .network-device .device-label {
+        font-size: 0.7rem;
+    }
+
+    .minimap {
+        display: none;
+    }
+
+    .zoom-controls {
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .topology-toolbar {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+        margin: 8px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+/* Dark mode support (if implemented later) */
+@media (prefers-color-scheme: dark) {
+    .canvas {
+        background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    }
+    
+    .connection-line {
+        filter: brightness(1.2);
+    }
+    
+    .network-device {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .network-device {
+        border-width: 3px;
+    }
+    
+    .connection-line {
+        height: 3px;
+    }
+    
+    .device-palette {
+        border-right-width: 2px;
+    }
+}
+
+/* Animations for smooth interactions */
+@keyframes deviceDrop {
+    0% {
+        transform: scale(0.8) rotate(-10deg);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+.network-device.newly-added {
+    animation: deviceDrop 0.3s ease-out;
+}
+
+@keyframes connectionCreate {
+    0% {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+.connection-line.newly-created {
+    animation: connectionCreate 0.4s ease-out;
+}
+
+/* Print styles for topology */
+@media print {
+    .device-palette,
+    .canvas-header,
+    .zoom-controls,
+    .minimap,
+    .topology-toolbar {
+        display: none !important;
+    }
+    
+    .topology-container {
+        height: auto;
+        flex-direction: column;
+        box-shadow: none;
+        border: 1px solid #000;
+    }
+    
+    .canvas-container {
+        height: 600px;
+    }
+    
+    .canvas {
+        background: white !important;
+    }
+    
+    .network-device {
+        border-color: #000 !important;
+        box-shadow: none !important;
+    }
+    
+    .connection-line {
+        background: #000 !important;
+    }
+}
