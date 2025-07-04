@@ -271,6 +271,14 @@
             z-index: 1000;
             transform: rotate(5deg) scale(1.05);
         }
+        
+        .network-device.connected {
+            border-color: var(--success-color);
+        }
+
+        .network-device.error {
+            border-color: var(--danger-color);
+        }
 
         .network-device .device-icon {
             font-size: 2.5rem;
@@ -493,6 +501,106 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
+        
+        /* File Upload Styles */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s;
+            background: var(--background-color);
+            cursor: pointer;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        .file-upload-input {
+            display: none;
+        }
+
+        .file-upload-text {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .file-upload-hint {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: var(--background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-top: 12px;
+        }
+
+        .uploaded-file-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .uploaded-file-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .uploaded-file-size {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .file-remove-btn {
+            background: none;
+            border: none;
+            color: var(--danger-color);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .file-remove-btn:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* CLI Script Preview */
+        .cli-preview {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            margin-top: 12px;
+        }
+
+        .cli-preview-line {
+            margin-bottom: 4px;
+        }
+
+        .cli-preview-line:before {
+            content: '$ ';
+            color: #10b981;
+        }
+
         /* Port Selection Modal */
         .port-modal {
             position: fixed;
@@ -643,6 +751,41 @@
             color: var(--primary-color);
         }
 
+        /* Command Execution Results */
+        .command-results {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            margin-top: 12px;
+        }
+
+        .command-output {
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #374151;
+        }
+
+        .command-prompt {
+            color: #10b981;
+            margin-bottom: 4px;
+        }
+
+        .command-response {
+            color: #e2e8f0;
+            white-space: pre-wrap;
+        }
+
+        .command-error {
+            color: #ef4444;
+        }
+
+
         /* Utilities */
         .hidden { display: none !important; }
         
@@ -661,6 +804,527 @@
                 gap: 12px;
             }
         }
+/* Enhanced CSS for PIXI Topology Builder with Connection Testing */
+/* Add these styles to your existing CSS */
+
+/* Device Status Indicators */
+.device-status-indicator {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--surface-color);
+    z-index: 30;
+}
+
+.device-status-indicator.configured {
+    background: var(--warning-color);
+}
+
+.device-status-indicator.unconfigured {
+    background: var(--secondary-color);
+}
+
+/* Connection Status Classes for Devices */
+.network-device.status-connected {
+    border-color: var(--success-color);
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+}
+
+.network-device.status-connected .device-status-indicator {
+    background: var(--success-color);
+}
+
+.network-device.status-disconnected {
+    border-color: var(--danger-color);
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
+}
+
+.network-device.status-disconnected .device-status-indicator {
+    background: var(--danger-color);
+}
+
+.network-device.status-error {
+    border-color: var(--warning-color);
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+    animation: pulse-warning 2s infinite;
+}
+
+.network-device.status-error .device-status-indicator {
+    background: var(--warning-color);
+}
+
+@keyframes pulse-warning {
+    0%, 100% { 
+        box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+    }
+    50% { 
+        box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.1);
+    }
+}
+
+/* Enhanced Test Result Styles */
+.test-result {
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.test-result.success {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: var(--success-color);
+    color: var(--success-color);
+}
+
+.test-result.error {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger-color);
+    color: var(--danger-color);
+}
+
+.test-result.info {
+    background: rgba(37, 99, 235, 0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Test Status Headers */
+.test-status-success {
+    color: var(--success-color);
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.test-status-error {
+    color: var(--danger-color);
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+/* Test Details Grid */
+.test-details {
+    margin: 12px 0;
+}
+
+.test-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.test-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.test-item i {
+    width: 20px;
+    margin-right: 12px;
+    text-align: center;
+}
+
+.test-item.success {
+    color: var(--success-color);
+}
+
+.test-item.failed {
+    color: var(--danger-color);
+}
+
+.test-item small {
+    margin-left: auto;
+    opacity: 0.7;
+}
+
+/* Test Detail Cards for Modal */
+.test-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.test-detail-card {
+    background: var(--background-color);
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.test-detail-card h6 {
+    margin: 8px 0 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.test-detail-card p {
+    margin: 0 0 8px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.test-detail-card small {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.test-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 8px;
+    font-size: 1.2rem;
+}
+
+.test-icon.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+}
+
+.test-icon.failed {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+}
+
+/* Device Info Section */
+.device-info {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(37, 99, 235, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+.device-info-section {
+    margin-top: 20px;
+    padding: 12px;
+    background: var(--background-color);
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+.device-info-section h6 {
+    margin: 0 0 8px;
+    color: var(--text-primary);
+}
+
+.device-info-section p {
+    margin: 4px 0;
+    font-size: 0.875rem;
+}
+
+/* Recommendations Section */
+.recommendations {
+    margin-top: 12px;
+    padding: 8px 0;
+}
+
+.recommendations small {
+    display: block;
+    margin: 4px 0;
+    padding: 4px 0;
+    color: var(--text-secondary);
+}
+
+.recommendations-section {
+    margin-top: 16px;
+    padding: 12px;
+    background: rgba(245, 158, 11, 0.05);
+    border-radius: 6px;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.recommendations-section h6 {
+    margin: 0 0 8px;
+    color: var(--warning-color);
+}
+
+.recommendations-section ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.recommendations-section li {
+    font-size: 0.875rem;
+    margin: 4px 0;
+    color: var(--text-secondary);
+}
+
+/* Enhanced Modal Styles */
+.modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-body {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+/* Loading States */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn:disabled .fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Enhanced Tool Buttons */
+.tool-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.tool-btn i {
+    margin-right: 8px;
+}
+
+/* Text Utilities */
+.text-success {
+    color: var(--success-color) !important;
+}
+
+.text-danger {
+    color: var(--danger-color) !important;
+}
+
+.text-warning {
+    color: var(--warning-color) !important;
+}
+
+.text-info {
+    color: var(--primary-color) !important;
+}
+
+/* Status Badge Styles */
+.status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.status-badge.connected {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+}
+
+.status-badge.disconnected {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+}
+
+.status-badge.error {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning-color);
+}
+
+.status-badge.unconfigured {
+    background: rgba(100, 116, 139, 0.1);
+    color: var(--secondary-color);
+}
+
+/* Properties Panel Enhancements */
+.properties-panel .btn {
+    font-size: 0.75rem;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.properties-panel .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+}
+
+/* Device Label Enhancements */
+.device-label {
+    position: relative;
+    z-index: 5;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-top: 4px;
+}
+
+/* Context Menu Enhancements */
+.context-menu-item i {
+    color: var(--primary-color);
+}
+
+.context-menu-item.danger i {
+    color: var(--danger-color);
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+    .test-details-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        margin: 10px;
+        max-width: calc(100vw - 20px);
+    }
+    
+    .test-detail-card {
+        padding: 12px;
+    }
+}
+
+/* Animation for successful connection test */
+@keyframes success-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.network-device.test-success {
+    animation: success-pulse 1s ease-out;
+}
+
+/* Animation for failed connection test */
+@keyframes error-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.network-device.test-failed {
+    animation: error-shake 0.5s ease-in-out;
+}
+        
+
+
+/* Additional CSS for enhanced modals */
+.form-help {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+    display: block;
+}
+
+.validation-messages {
+    margin-top: 12px;
+}
+
+.validation-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--danger-color);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: var(--danger-color);
+    font-size: 0.875rem;
+}
+
+.validation-error i {
+    margin-right: 8px;
+}
+
+.test-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.summary-card {
+    text-align: center;
+    padding: 16px;
+    background: var(--background-color);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.summary-card .number {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.summary-card .label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.bulk-test-details {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.bulk-test-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.bulk-test-item.success {
+    background: rgba(16, 185, 129, 0.05);
+    border-color: var(--success-color);
+}
+
+.bulk-test-item.failed {
+    background: rgba(239, 68, 68, 0.05);
+    border-color: var(--danger-color);
+}
+
+.bulk-test-item .device-info {
+    flex: 1;
+    margin-left: 12px;
+}
+
+.bulk-test-item .device-name {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.bulk-test-item .device-details {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.bulk-test-item .status-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.bulk-test-item.success .status-icon {
+    background: var(--success-color);
+    color: white;
+}
+
+.bulk-test-item.failed .status-icon {
+    background: var(--danger-color);
+    color: white;
+}
     </style>
 </head>
 <body>
@@ -774,6 +1438,10 @@
             <i class="fas fa-plug"></i>
             Test Connection
         </button>
+        <button class="context-menu-item" id="contextUploadScript">
+            <i class="fas fa-file-upload"></i>
+            Upload CLI Script
+        </button>
         <div class="context-menu-separator"></div>
         <button class="context-menu-item" id="contextDuplicate">
             <i class="fas fa-copy"></i>
@@ -787,7 +1455,7 @@
     </div>
 
     <!-- Device Configuration Modal -->
-    <div id="deviceConfigModal" class="modal">
+    <!-- <div id="deviceConfigModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title">Configure Device</h3>
@@ -819,7 +1487,6 @@
                     <input type="text" id="configDeviceDescription" class="form-input" placeholder="Device description">
                 </div>
                 <div id="configTestResult" class="test-result hidden">
-                    <!-- Test results will be displayed here -->
                 </div>
             </div>
             <div class="modal-footer">
@@ -834,7 +1501,274 @@
                 </button>
             </div>
         </div>
+    </div> -->
+<div id="deviceConfigModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-cog"></i>
+                Configure Device
+            </h3>
+            <button class="modal-close" id="configModalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-tag"></i>
+                    Device Name
+                </label>
+                <input type="text" id="configDeviceName" class="form-input" 
+                       placeholder="Enter device name" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-network-wired"></i>
+                    IP Address
+                </label>
+                <input type="text" id="configDeviceIP" class="form-input" 
+                       placeholder="192.168.1.1" required
+                       pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$">
+                <small class="form-help">Enter a valid IPv4 address</small>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-user"></i>
+                        Username
+                    </label>
+                    <input type="text" id="configDeviceUsername" class="form-input" 
+                           placeholder="admin" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-lock"></i>
+                        Password
+                    </label>
+                    <div style="position: relative;">
+                        <input type="password" id="configDevicePassword" class="form-input" 
+                               placeholder="••••••••" required>
+                        <button type="button" id="togglePasswordBtn" 
+                                style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-secondary); cursor: pointer;">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-plug"></i>
+                        SSH Port
+                    </label>
+                    <input type="number" id="configDevicePort" class="form-input" 
+                           placeholder="22" value="22" min="1" max="65535">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-server"></i>
+                        Device Type
+                    </label>
+                    <select id="configDeviceType" class="form-select">
+                        <option value="g31">G31</option>
+                        <option value="g32">G32</option>
+                        <option value="g34c">G34C</option>
+                        <option value="g42">G42</option>
+                        <option value="router">Router</option>
+                        <option value="switch">Switch</option>
+                        <option value="server">Server</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-info-circle"></i>
+                    Description
+                </label>
+                <input type="text" id="configDeviceDescription" class="form-input" 
+                       placeholder="Device description (optional)">
+            </div>
+            
+            <!-- Connection Test Results Area -->
+            <div id="configTestResult" class="test-result hidden">
+                <!-- Test results will be displayed here -->
+            </div>
+            
+            <!-- Real-time Validation Messages -->
+            <div id="configValidationMessages" class="validation-messages hidden">
+                <!-- Validation messages will appear here -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" id="configCancelBtn">
+                <i class="fas fa-times"></i>
+                Cancel
+            </button>
+            <button id="testConfigBtn" class="btn btn-secondary">
+                <i class="fas fa-plug"></i>
+                Test Connection
+            </button>
+            <button id="saveConfigBtn" class="btn btn-primary">
+                <i class="fas fa-save"></i>
+                Save Configuration
+            </button>
+        </div>
     </div>
+</div>
+
+
+<!-- CLI Script Upload Modal -->
+    <div id="cliScriptModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Upload CLI Script</h3>
+                <button class="modal-close" id="scriptModalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Select CLI Script File</label>
+                    <div class="file-upload-area" id="scriptFileUpload">
+                        <div class="file-upload-text">
+                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 8px;"></i><br>
+                            Click to browse or drag and drop CLI script file
+                        </div>
+                        <div class="file-upload-hint">
+                            Supported formats: .txt, .cli, .cmd (Max 5MB)
+                        </div>
+                    </div>
+                    <input type="file" id="scriptFileInput" class="file-upload-input" accept=".txt,.cli,.cmd">
+                    <div id="uploadedScript" class="uploaded-file hidden">
+                        <div class="uploaded-file-info">
+                            <i class="fas fa-file-alt" style="color: var(--primary-color);"></i>
+                            <div>
+                                <div class="uploaded-file-name" id="scriptFileName"></div>
+                                <div class="uploaded-file-size" id="scriptFileSize"></div>
+                            </div>
+                        </div>
+                        <button class="file-remove-btn" id="removeScriptFile">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="scriptPreviewGroup" style="display: none;">
+                    <label class="form-label">Script Preview</label>
+                    <div id="scriptPreview" class="cli-preview">
+                        <!-- Script content will be shown here -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Execution Mode</label>
+                    <select id="executionMode" class="form-select">
+                        <option value="sequential">Sequential (Execute one by one)</option>
+                        <option value="batch">Batch (Execute all at once)</option>
+                        <option value="interactive">Interactive (Prompt for each command)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Command Timeout (seconds)</label>
+                    <input type="number" id="commandTimeout" class="form-input" value="30" min="5" max="300">
+                </div>
+
+                <div id="scriptExecutionResult" class="test-result hidden">
+                    <!-- Execution results will be displayed here -->
+                </div>
+
+                <div id="commandResults" class="command-results hidden">
+                    <!-- Command output will be displayed here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="scriptCancelBtn">Cancel</button>
+                <button id="executeScriptBtn" class="btn btn-secondary" disabled>
+                    <i class="fas fa-play"></i>
+                    Execute Script
+                </button>
+                <button id="saveScriptBtn" class="btn btn-primary" disabled>
+                    <i class="fas fa-save"></i>
+                    Save Script
+                </button>
+            </div>
+        </div>
+    </div>
+
+<!-- Authentication Setup Modal (if needed) -->
+<!-- <div id="authModal" class="modal">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-key"></i>
+                Authentication Required
+            </h3>
+        </div>
+        <div class="modal-body">
+            <p style="margin-bottom: 20px; color: var(--text-secondary);">
+                Please authenticate to use advanced device management features.
+            </p>
+            
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" id="authUsername" class="form-input" placeholder="Enter username" value="admin">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="authPassword" class="form-input" placeholder="Enter password" value="admin">
+            </div>
+            
+            <div id="authError" class="test-result error hidden">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="hideAuthModal()">
+                Cancel
+            </button>
+            <button class="btn btn-primary" onclick="performAuth()">
+                <i class="fas fa-sign-in-alt"></i>
+                Login
+            </button>
+        </div>
+    </div>
+</div> -->
+
+<!-- Bulk Test Results Modal -->
+<div id="bulkTestModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class="fas fa-network-wired"></i>
+                Bulk Connection Test Results
+            </h3>
+            <button class="modal-close" onclick="hideBulkTestModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div id="bulkTestSummary" class="test-summary">
+                <!-- Summary stats will be populated here -->
+            </div>
+            
+            <div id="bulkTestDetails" class="bulk-test-details">
+                <!-- Individual device results will be populated here -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="hideBulkTestModal()">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 
     <!-- Port Selection Modal -->
     <div id="portModal" class="port-modal">
@@ -855,30 +1789,37 @@
         </div>
     </div>
 
-    <script>
+   <script>
         class TopologyBuilder {
-            constructor() {
-                this.devices = [];
-                this.connections = [];
-                this.selectedDevice = null;
-                this.selectedConnection = null;
-                this.currentTool = 'select';
-                this.connectionInProgress = null;
-                this.deviceCounter = 1;
-                this.isDragging = false;
-                this.draggedDeviceType = null;
-                this.contextMenuDevice = null;
-                
-                this.canvas = document.getElementById('topologyCanvas');
-                this.svg = document.getElementById('connectionSvg');
-                
-                this.init();
-            }
+    constructor() {
+        this.devices = [];
+        this.connections = [];
+        this.selectedDevice = null;
+        this.selectedConnection = null;
+        this.currentTool = 'select';
+        this.connectionInProgress = null;
+        this.deviceCounter = 1;
+        this.isDragging = false;
+        this.draggedDeviceType = null;
+        this.contextMenuDevice = null;
+        this.uploadedScript = null;
+        //this.backendUrl = 'http://localhost:8000'; // Backend API URL
+        
+        this.canvas = document.getElementById('topologyCanvas');
+        this.svg = document.getElementById('connectionSvg');
+        
+        // API configuration
+        this.apiBaseUrl = '/api';
+        this.authToken = localStorage.getItem('auth_token');
+        
+        this.init();
+    }
 
-            init() {
+    init() {
                 this.setupEventListeners();
                 this.setupDragAndDrop();
                 this.setupContextMenu();
+                this.setupFileUpload();
                 this.updateStatus('Ready - Drag devices from the library to start building');
             }
 
@@ -906,6 +1847,13 @@
                 document.getElementById('testConfigBtn').addEventListener('click', () => this.testDeviceConfig());
                 document.getElementById('saveConfigBtn').addEventListener('click', () => this.saveDeviceConfig());
 
+                // CLI Script modal
+                document.getElementById('scriptModalClose').addEventListener('click', () => this.hideScriptModal());
+                document.getElementById('scriptCancelBtn').addEventListener('click', () => this.hideScriptModal());
+                document.getElementById('executeScriptBtn').addEventListener('click', () => this.executeScript());
+                document.getElementById('saveScriptBtn').addEventListener('click', () => this.saveScript());
+
+
                 // Hide context menu when clicking elsewhere
                 document.addEventListener('click', (e) => {
                     if (!document.getElementById('deviceContextMenu').contains(e.target)) {
@@ -918,43 +1866,210 @@
                     e.preventDefault();
                 });
             }
+            
+            setupFileUpload() {
+                const uploadArea = document.getElementById('scriptFileUpload');
+                const fileInput = document.getElementById('scriptFileInput');
+                const removeBtn = document.getElementById('removeScriptFile');
 
+                // Click to browse
+                uploadArea.addEventListener('click', () => fileInput.click());
+
+                // Drag and drop
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('dragover');
+                });
+
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.classList.remove('dragover');
+                });
+
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        this.handleScriptFile(files[0]);
+                    }
+                });
+
+                // File input change
+                fileInput.addEventListener('change', (e) => {
+                    if (e.target.files.length > 0) {
+                        this.handleScriptFile(e.target.files[0]);
+                    }
+                });
+
+                // Remove file
+                removeBtn.addEventListener('click', () => {
+                    this.removeScriptFile();
+                });
+            }
+
+            handleScriptFile(file) {
+                // Validate file
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                const allowedTypes = ['.txt', '.cli', '.cmd'];
+                const fileExt = '.' + file.name.split('.').pop().toLowerCase();
+
+                if (file.size > maxSize) {
+                    alert('File size must be less than 5MB');
+                    return;
+                }
+
+                if (!allowedTypes.includes(fileExt)) {
+                    alert('Only .txt, .cli, and .cmd files are supported');
+                    return;
+                }
+
+                // Read file content
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.uploadedScript = {
+                        name: file.name,
+                        size: file.size,
+                        content: e.target.result,
+                        commands: this.parseScriptCommands(e.target.result)
+                    };
+
+                    this.showUploadedFile();
+                    this.showScriptPreview();
+                    this.enableScriptButtons();
+                };
+
+                reader.readAsText(file);
+            }
+
+            parseScriptCommands(content) {
+                return content
+                    .split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line && !line.startsWith('#') && !line.startsWith('//'))
+                    .map(line => ({
+                        command: line,
+                        status: 'pending',
+                        output: '',
+                        error: null
+                    }));
+            }
+
+            showUploadedFile() {
+                document.getElementById('scriptFileUpload').style.display = 'none';
+                document.getElementById('uploadedScript').classList.remove('hidden');
+                document.getElementById('scriptFileName').textContent = this.uploadedScript.name;
+                document.getElementById('scriptFileSize').textContent = this.formatFileSize(this.uploadedScript.size);
+            }
+
+            showScriptPreview() {
+                const previewGroup = document.getElementById('scriptPreviewGroup');
+                const preview = document.getElementById('scriptPreview');
+                
+                previewGroup.style.display = 'block';
+                preview.innerHTML = this.uploadedScript.commands
+                    .slice(0, 10) // Show first 10 commands
+                    .map(cmd => `<div class="cli-preview-line">${this.escapeHtml(cmd.command)}</div>`)
+                    .join('');
+
+                if (this.uploadedScript.commands.length > 10) {
+                    preview.innerHTML += `<div style="color: var(--text-secondary); margin-top: 8px;">... and ${this.uploadedScript.commands.length - 10} more commands</div>`;
+                }
+            }
+
+            enableScriptButtons() {
+                document.getElementById('executeScriptBtn').disabled = false;
+                document.getElementById('saveScriptBtn').disabled = false;
+            }
+
+            removeScriptFile() {
+                this.uploadedScript = null;
+                document.getElementById('scriptFileUpload').style.display = 'block';
+                document.getElementById('uploadedScript').classList.add('hidden');
+                document.getElementById('scriptPreviewGroup').style.display = 'none';
+                document.getElementById('scriptFileInput').value = '';
+                document.getElementById('executeScriptBtn').disabled = true;
+                document.getElementById('saveScriptBtn').disabled = true;
+                document.getElementById('scriptExecutionResult').classList.add('hidden');
+                document.getElementById('commandResults').classList.add('hidden');
+            }
+
+            formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            
+            
             setupContextMenu() {
                 // Context menu items
                 document.getElementById('contextRename').addEventListener('click', () => {
+                    const device = this.contextMenuDevice;
                     this.hideContextMenu();
-                    if (this.contextMenuDevice) {
-                        this.editDeviceName(this.contextMenuDevice);
+                    if (device) {
+                        this.editDeviceName(device);
                     }
                 });
 
                 document.getElementById('contextConfigure').addEventListener('click', () => {
+                    const device = this.contextMenuDevice;
                     this.hideContextMenu();
-                    if (this.contextMenuDevice) {
-                        this.showConfigModal(this.contextMenuDevice);
+                    if (device) {
+                        this.showConfigModal(device);
                     }
                 });
 
                 document.getElementById('contextTest').addEventListener('click', () => {
+                    const device = this.contextMenuDevice;
                     this.hideContextMenu();
+                    if (device) {
+                        this.testDeviceConnection(device);
+                    }
+                });
+                document.getElementById('contextUploadScript').addEventListener('click', () => {
+                    /*this.hideContextMenu();
                     if (this.contextMenuDevice) {
-                        this.testDeviceConnection(this.contextMenuDevice);
+                        this.showScriptModal(this.contextMenuDevice);
+                    }*/
+                    const device = this.contextMenuDevice;
+                    this.hideContextMenu();
+                    if (device) {
+                        this.showScriptModal(device);
                     }
                 });
 
                 document.getElementById('contextDuplicate').addEventListener('click', () => {
-                    this.hideContextMenu();
+                    /*this.hideContextMenu();
                     if (this.contextMenuDevice) {
                         this.duplicateDevice(this.contextMenuDevice);
+                    }*/
+
+                    const device = this.contextMenuDevice;
+                    this.hideContextMenu();
+                    if (device) {
+                        this.duplicateDevice(device);
                     }
                 });
 
                 document.getElementById('contextDelete').addEventListener('click', () => {
-                    this.hideContextMenu();
+                    /*this.hideContextMenu();
                     if (this.contextMenuDevice) {
                         if (confirm(`Delete ${this.contextMenuDevice.name} and all its connections?`)) {
                             this.deleteDevice(this.contextMenuDevice.id);
                         }
+                    }*/
+                    const device = this.contextMenuDevice;
+                    this.hideContextMenu();                    
+                        if (confirm(`Delete ${device.name} and all its connections?`)) {
+                            this.deleteDevice(device.id);      
                     }
                 });
             }
@@ -1007,11 +2122,29 @@
                 document.getElementById('deviceConfigModal').classList.remove('show');
             }
 
+    showScriptModal(device) {
+                const modal = document.getElementById('cliScriptModal');
+                modal.setAttribute('data-device-id', device.id);
+                
+                // Reset modal state
+                this.removeScriptFile();
+                document.getElementById('executionMode').value = 'sequential';
+                document.getElementById('commandTimeout').value = '30';
+                
+                modal.classList.add('show');
+            }
+
+            hideScriptModal() {
+                document.getElementById('cliScriptModal').classList.remove('show');
+                this.removeScriptFile();
+            }
+
             async testDeviceConfig() {
                 const ip = document.getElementById('configDeviceIP').value;
                 const username = document.getElementById('configDeviceUsername').value;
                 const password = document.getElementById('configDevicePassword').value;
                 const port = document.getElementById('configDevicePort').value || '22';
+                const protocol = document.getElementById('configDeviceProtocol').value;
 
                 const resultDiv = document.getElementById('configTestResult');
                 const testBtn = document.getElementById('testConfigBtn');
@@ -1021,41 +2154,222 @@
                     return;
                 }
 
-                // Simulate connection test
                 testBtn.disabled = true;
                 testBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
                 this.showTestResult('info', 'Testing connection...');
 
                 try {
-                    // Simulate API call
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    
-                    // Simulate random success/failure for demo
-                    const success = Math.random() > 0.3; // 70% success rate
-                    
-                    if (success) {
+                    // Real API call to backend
+                    const response = await fetch(`${this.backendUrl}/api/test-connection`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            ip: ip,
+                            username: username,
+                            password: password,
+                            port: parseInt(port),
+                            protocol: protocol
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
                         this.showTestResult('success', 
                             `Connection successful!<br>` +
-                            `Device Type: ${this.getDeviceTypeFromIP(ip)}<br>` +
-                            `Response Time: ${Math.floor(Math.random() * 50 + 10)}ms`
+                            `Device Type: ${result.device_type || 'Unknown'}<br>` +
+                            `Response Time: ${result.response_time || 'N/A'}ms<br>` +
+                            `OS Version: ${result.os_version || 'N/A'}`
                         );
+                        
+                        // Update device visual status
+                        const deviceId = parseInt(document.getElementById('deviceConfigModal').getAttribute('data-device-id'));
+                        this.updateDeviceStatus(deviceId, 'connected');
                     } else {
-                        this.showTestResult('error', 'Connection failed: Authentication error or device unreachable');
+                        this.showTestResult('error', 
+                            `Connection failed: ${result.error || 'Unknown error'}<br>` +
+                            `Details: ${result.details || 'No additional details'}`
+                        );
+                        
+                        // Update device visual status
+                        const deviceId = parseInt(document.getElementById('deviceConfigModal').getAttribute('data-device-id'));
+                        this.updateDeviceStatus(deviceId, 'error');
                     }
                 } catch (error) {
                     this.showTestResult('error', `Connection test failed: ${error.message}`);
+                    console.error('Connection test error:', error);
+                    
+                    // Update device visual status
+                    const deviceId = parseInt(document.getElementById('deviceConfigModal').getAttribute('data-device-id'));
+                    this.updateDeviceStatus(deviceId, 'error');
                 } finally {
                     testBtn.disabled = false;
                     testBtn.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
                 }
             }
 
-            getDeviceTypeFromIP(ip) {
-                // Simple device type detection based on IP pattern (for demo)
-                const lastOctet = parseInt(ip.split('.').pop());
-                if (lastOctet < 50) return 'Network Infrastructure';
-                if (lastOctet < 100) return 'Server';
-                return 'Network Device';
+            updateDeviceStatus(deviceId, status) {
+                const deviceEl = document.querySelector(`[data-device-id="${deviceId}"]`);
+                if (deviceEl) {
+                    deviceEl.classList.remove('connected', 'error');
+                    if (status === 'connected') {
+                        deviceEl.classList.add('connected');
+                    } else if (status === 'error') {
+                        deviceEl.classList.add('error');
+                    }
+                }
+            }
+
+            async executeScript() {
+                if (!this.uploadedScript) {
+                    alert('Please upload a script first');
+                    return;
+                }
+
+                const modal = document.getElementById('cliScriptModal');
+                const deviceId = parseInt(modal.getAttribute('data-device-id'));
+                const device = this.devices.find(d => d.id === deviceId);
+
+                if (!device || !device.config) {
+                    alert('Please configure the device first');
+                    return;
+                }
+
+                const executeBtn = document.getElementById('executeScriptBtn');
+                const resultDiv = document.getElementById('scriptExecutionResult');
+                const commandResults = document.getElementById('commandResults');
+                
+                executeBtn.disabled = true;
+                executeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Executing...';
+                
+                resultDiv.className = 'test-result info';
+                resultDiv.innerHTML = 'Executing script commands...';
+                resultDiv.classList.remove('hidden');
+                
+                commandResults.innerHTML = '';
+                commandResults.classList.remove('hidden');
+
+                try {
+                    const executionMode = document.getElementById('executionMode').value;
+                    const timeout = parseInt(document.getElementById('commandTimeout').value);
+                    //const response = await fetch(`${this.backendUrl}/api/execute-script`, {
+                    const response = await fetch(`${this.apiBaseUrl}/devices/execute-script`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            device: {
+                                ip: device.config.ip,
+                                username: device.config.username,
+                                password: device.config.password,
+                                port: device.config.port,
+                                protocol: device.config.protocol
+                            },
+                            script: {
+                                commands: this.uploadedScript.commands.map(cmd => cmd.command),
+                                execution_mode: executionMode,
+                                timeout: timeout
+                            }
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        resultDiv.className = 'test-result success';
+                        resultDiv.innerHTML = `Script executed successfully!<br>` +
+                            `Commands executed: ${result.executed_count}<br>` +
+                            `Success rate: ${result.success_rate}%`;
+
+                        // Display command results
+                        this.displayCommandResults(result.results);
+                        
+                        // Update script commands with results
+                        this.uploadedScript.commands.forEach((cmd, index) => {
+                            if (result.results[index]) {
+                                cmd.status = result.results[index].status;
+                                cmd.output = result.results[index].output;
+                                cmd.error = result.results[index].error;
+                            }
+                        });
+
+                    } else {
+                        resultDiv.className = 'test-result error';
+                        resultDiv.innerHTML = `Script execution failed: ${result.error}`;
+                        
+                        if (result.partial_results) {
+                            this.displayCommandResults(result.partial_results);
+                        }
+                    }
+
+                } catch (error) {
+                    resultDiv.className = 'test-result error';
+                    resultDiv.innerHTML = `Execution failed: ${error.message}`;
+                    console.error('Script execution error:', error);
+                } finally {
+                    executeBtn.disabled = false;
+                    executeBtn.innerHTML = '<i class="fas fa-play"></i> Execute Script';
+                }
+            }
+
+            displayCommandResults(results) {
+                const commandResults = document.getElementById('commandResults');
+                
+                results.forEach((result, index) => {
+                    const commandDiv = document.createElement('div');
+                    commandDiv.className = 'command-output';
+                    
+                    const promptDiv = document.createElement('div');
+                    promptDiv.className = 'command-prompt';
+                    promptDiv.textContent = `[${index + 1}] ${result.command}`;
+                    
+                    const responseDiv = document.createElement('div');
+                    responseDiv.className = result.status === 'success' ? 'command-response' : 'command-error';
+                    responseDiv.textContent = result.output || result.error || 'No output';
+                    
+                    commandDiv.appendChild(promptDiv);
+                    commandDiv.appendChild(responseDiv);
+                    commandResults.appendChild(commandDiv);
+                });
+                
+                // Scroll to bottom
+                commandResults.scrollTop = commandResults.scrollHeight;
+            }
+
+            saveScript() {
+                if (!this.uploadedScript) {
+                    alert('No script to save');
+                    return;
+                }
+
+                const modal = document.getElementById('cliScriptModal');
+                const deviceId = parseInt(modal.getAttribute('data-device-id'));
+                const device = this.devices.find(d => d.id === deviceId);
+
+                if (!device) return;
+
+                // Save script to device
+                if (!device.scripts) {
+                    device.scripts = [];
+                }
+
+                const script = {
+                    id: Date.now(),
+                    name: this.uploadedScript.name,
+                    commands: this.uploadedScript.commands,
+                    uploaded_at: new Date().toISOString(),
+                    execution_mode: document.getElementById('executionMode').value,
+                    timeout: parseInt(document.getElementById('commandTimeout').value)
+                };
+
+                device.scripts.push(script);
+                
+                this.updateStatus(`Script ${script.name} saved to ${device.name}`);
+                this.updatePropertiesPanel();
+                this.hideScriptModal();
             }
 
             showTestResult(type, message) {
@@ -1077,6 +2391,7 @@
                     username: document.getElementById('configDeviceUsername').value,
                     password: document.getElementById('configDevicePassword').value,
                     port: document.getElementById('configDevicePort').value,
+                    protocol: document.getElementById('configDeviceProtocol').value,
                     description: document.getElementById('configDeviceDescription').value
                 };
 
@@ -1100,7 +2415,7 @@
                 this.updateStatus(`${device.name} configuration saved`);
             }
 
-            testDeviceConnection(device) {
+            async testDeviceConnection(device) {
                 if (!device.config || !device.config.ip) {
                     alert('Please configure the device first (right-click → Configure Device)');
                     return;
@@ -1108,17 +2423,41 @@
 
                 this.updateStatus(`Testing connection to ${device.name}...`);
                 
-                // Simulate connection test
-                setTimeout(() => {
-                    const success = Math.random() > 0.2; // 80% success rate
-                    if (success) {
-                        alert(`✅ Connection to ${device.name} (${device.config.ip}) successful!\nResponse time: ${Math.floor(Math.random() * 50 + 10)}ms`);
+                try {
+                    const response = await fetch(`${this.backendUrl}/api/test-connection`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            ip: device.config.ip,
+                            username: device.config.username,
+                            password: device.config.password,
+                            port: parseInt(device.config.port || 22),
+                            protocol: device.config.protocol || 'ssh'
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok && result.success) {
+                        alert(`✅ Connection to ${device.name} (${device.config.ip}) successful!\n` +
+                              `Device Type: ${result.device_type || 'Unknown'}\n` +
+                              `Response Time: ${result.response_time || 'N/A'}ms`);
                         this.updateStatus(`${device.name} is reachable`);
+                        this.updateDeviceStatus(device.id, 'connected');
                     } else {
-                        alert(`❌ Connection to ${device.name} (${device.config.ip}) failed!\nDevice unreachable or authentication error`);
+                        alert(`❌ Connection to ${device.name} (${device.config.ip}) failed!\n` +
+                              `Error: ${result.error}\n` +
+                              `Details: ${result.details || 'No additional details'}`);
                         this.updateStatus(`${device.name} connection failed`);
+                        this.updateDeviceStatus(device.id, 'error');
                     }
-                }, 1500);
+                } catch (error) {
+                    alert(`❌ Connection to ${device.name} failed!\nError: ${error.message}`);
+                    this.updateStatus(`${device.name} connection failed`);
+                    this.updateDeviceStatus(device.id, 'error');
+                }
             }
 
             duplicateDevice(device) {
@@ -1131,7 +2470,8 @@
                     x: Math.min(device.x + 120, rect.width - 100),
                     y: Math.min(device.y + 120, rect.height - 100),
                     ports: JSON.parse(JSON.stringify(device.ports)), // Deep copy ports
-                    config: device.config ? JSON.parse(JSON.stringify(device.config)) : null
+                    config: device.config ? JSON.parse(JSON.stringify(device.config)) : null,
+                    scripts: device.scripts ? JSON.parse(JSON.stringify(device.scripts)) : []
                 };
 
                 // Reset port connections for the duplicate
@@ -1146,7 +2486,7 @@
                 this.updateStatus(`${newDevice.name} created`);
             }
 
-            setupDragAndDrop() {
+    setupDragAndDrop() {
                 // Device palette drag start
                 document.querySelectorAll('.device-item').forEach(item => {
                     item.addEventListener('dragstart', (e) => {
@@ -1644,6 +2984,7 @@
                 if (this.selectedDevice) {
                     const device = this.selectedDevice;
                     const connectedPorts = device.ports.filter(p => p.connected).length;
+                    const scriptCount = device.scripts ? device.scripts.length : 0;
                     
                     panel.innerHTML = `
                         <div style="margin-bottom: 16px;">
@@ -1665,6 +3006,9 @@
                             </p>
                             <p style="font-size: 0.875rem; margin-bottom: 12px;">
                                 <strong>Available:</strong> ${device.ports.length - connectedPorts}
+                            </p>
+                            <p style="font-size: 0.875rem; margin-bottom: 12px;">
+                                <strong>CLI Scripts:</strong> ${scriptCount}
                             </p>
                             ${device.config ? `
                                 <p style="font-size: 0.875rem; margin-bottom: 4px;">
@@ -1756,6 +3100,14 @@
                         this.updateStatus('Connection cancelled');
                     }
                 }
+            }
+             hidePortModal() {
+                document.getElementById('portModal').classList.remove('show');
+            }
+
+            confirmPortSelection() {
+                // Implementation for port selection confirmation
+                this.hidePortModal();
             }
 
             getDeviceIcon(type) {
@@ -1856,16 +3208,731 @@
                     connections: this.connections
                 };
             }
+    
+    showTestResult(type, message) {
+                const resultDiv = document.getElementById('configTestResult');
+                resultDiv.className = `test-result ${type}`;
+                resultDiv.innerHTML = message;
+                resultDiv.classList.remove('hidden');
+            }
+    // Updated device configuration testing with real backend integration
+    async testDeviceConfig() {
+        const ip = document.getElementById('configDeviceIP').value.trim();
+        const username = document.getElementById('configDeviceUsername').value.trim();
+        const password = document.getElementById('configDevicePassword').value;
+        const port = document.getElementById('configDevicePort').value || '22';
+        const deviceName = document.getElementById('configDeviceName').value.trim();
+        const deviceType = document.getElementById('configDeviceType').value.trim();
+
+        const resultDiv = document.getElementById('configTestResult');
+        const testBtn = document.getElementById('testConfigBtn');
+
+        if (!ip || !username || !password) {
+            this.showTestResult('error', 'Please fill in IP address, username, and password');
+            return false;
         }
 
-        // Initialize topology builder
-        const topology = new TopologyBuilder();
+        // Validate IP format
+        if (!this.validateIPAddress(ip)) {
+            this.showTestResult('error', 'Invalid IP address format');
+            return false;
+        }
 
-        // Global access for button onclick handlers
-        window.topology = topology;
+        // Show loading state
+        testBtn.disabled = true;
+        testBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing Connection...';
+        this.showTestResult('info', 'Connecting to device, please wait...');
 
-        // Add load topology functionality
-        document.getElementById('loadTopology').addEventListener('click', () => topology.loadTopology());
+        try {
+            // Call the real backend API
+            const response = await fetch(`${this.apiBaseUrl}/devices/test-credentials`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.authToken}`
+                },
+                body: JSON.stringify({
+                    ip_address: ip,
+                    username: username,
+                    password: password,
+                    ssh_port: parseInt(port),
+                    device_type: deviceType || 'generic'
+                })
+            });
+
+            const result = await response.json();
+            console.log(result);
+            if (response.ok) {
+                if (result.credentials_valid) {
+                    this.showDetailedTestResult('success', result);
+                    this.updateStatus(`${deviceName || ip} connection test passed`);
+                    return true;
+                } else {
+                    this.showDetailedTestResult('error', result);
+                    this.updateStatus(`${deviceName || ip} connection test failed`);
+                    return false;
+                }
+            } else {
+                throw new Error(result.message || 'Connection test failed');
+            }
+
+        } catch (error) {
+            console.error('Connection test error:', error);
+            this.showTestResult('error', `Connection test failed: ${error.message}`);
+            this.updateStatus('Connection test error');
+            return false;
+        } finally {
+            testBtn.disabled = false;
+            testBtn.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
+        }
+    }
+
+    // Display detailed test results from backend
+    showDetailedTestResult(type, result) {
+        const resultDiv = document.getElementById('configTestResult');
+        
+        if (type === 'success') {
+            const testResults = result.test_results;
+            let html = `
+                <div class="test-status-success">
+                    <i class="fas fa-check-circle"></i> <strong>Connection Successful!</strong>
+                </div>
+                <div class="test-details">
+                    
+                    <div class="test-item ${testResults.authentication.success ? 'success' : 'failed'}">
+                        <i class="fas ${testResults.authentication.success ? 'fa-check' : 'fa-times'}"></i>
+                        <span>Auth: ${testResults.authentication.message}</span>
+                    </div>
+                </div>
+            `;
+
+            // Add device info if available
+            if (result.device_info && result.device_info.success) {
+                html += '<div class="device-info">';
+                if (result.device_info.system_info) {
+                    html += `<small><strong>Device:</strong> ${JSON.stringify(result.device_info.system_info).slice(0, 100)}...</small>`;
+                }
+                html += '</div>';
+            }
+
+            // Add recommendations
+            if (result.recommendations && result.recommendations.length > 0) {
+                html += '<div class="recommendations">';
+                result.recommendations.forEach(rec => {
+                    html += `<small><i class="fas fa-lightbulb"></i> ${rec}</small><br>`;
+                });
+                html += '</div>';
+            }
+
+            resultDiv.innerHTML = html;
+        } else {
+            const testResults = result.test_results;
+            let html = `
+                <div class="test-status-error">
+                    <i class="fas fa-times-circle"></i> <strong>Connection Failed</strong>
+                </div>
+                <div class="test-details">
+            `;
+
+            if (testResults) {
+                html += `
+                    <div class="test-item ${testResults.ping.success ? 'success' : 'failed'}">
+                        <i class="fas ${testResults.ping.success ? 'fa-check' : 'fa-times'}"></i>
+                        <span>${testResults.ping.message}</span>
+                    </div>
+                    <div class="test-item ${testResults.ssh_port.success ? 'success' : 'failed'}">
+                        <i class="fas ${testResults.ssh_port.success ? 'fa-check' : 'fa-times'}"></i>
+                        <span>${testResults.ssh_port.message}</span>
+                    </div>
+                    <div class="test-item ${testResults.authentication.success ? 'success' : 'failed'}">
+                        <i class="fas ${testResults.authentication.success ? 'fa-check' : 'fa-times'}"></i>
+                        <span>${testResults.authentication.message}</span>
+                    </div>
+                `;
+            }
+
+            html += '</div>';
+
+            // Add recommendations for fixing issues
+            if (result.recommendations && result.recommendations.length > 0) {
+                html += '<div class="recommendations">';
+                result.recommendations.forEach(rec => {
+                    html += `<small><i class="fas fa-exclamation-triangle"></i> ${rec}</small><br>`;
+                });
+                html += '</div>';
+            }
+
+            resultDiv.innerHTML = html;
+        }
+
+        resultDiv.className = `test-result ${type}`;
+        resultDiv.classList.remove('hidden');
+    }
+
+    // Enhanced device connection testing for existing devices
+    async testDeviceConnection(device) {
+        if (!device.config || !device.config.ip) {
+            alert('Please configure the device first (right-click → Configure Device)');
+            return;
+        }
+
+        this.updateStatus(`Testing connection to ${device.name}...`);
+        
+        try {
+            // First, try to get the device ID from backend if it exists
+            let deviceId = device.backendId;
+            
+            if (!deviceId) {
+                // If no backend ID, test credentials directly
+                const response = await fetch(`${this.apiBaseUrl}/devices/test-credentials`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.authToken}`
+                    },
+                    body: JSON.stringify({
+                        ip_address: device.config.ip,
+                        username: device.config.username,
+                        password: device.config.password,
+                        ssh_port: parseInt(device.config.port || 22),
+                        device_type: device.type
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    this.showConnectionTestModal(device, result);
+                    
+                    if (result.credentials_valid) {
+                        this.updateStatus(`${device.name} is reachable and configured correctly`);
+                        this.updateDeviceVisualStatus(device, 'connected');
+                    } else {
+                        this.updateStatus(`${device.name} connection failed`);
+                        this.updateDeviceVisualStatus(device, 'disconnected');
+                    }
+                } else {
+                    throw new Error(result.message || 'Connection test failed');
+                }
+            } else {
+                // If we have a backend device ID, use the device-specific endpoint
+                const response = await fetch(`${this.apiBaseUrl}/devices/${deviceId}/test-connection`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${this.authToken}`
+                    }
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    this.showConnectionTestModal(device, result);
+                    this.updateDeviceVisualStatus(device, result.overall_success ? 'connected' : 'disconnected');
+                    this.updateStatus(result.overall_success ? 
+                        `${device.name} connection successful` : 
+                        `${device.name} connection failed`);
+                } else {
+                    throw new Error(result.message || 'Connection test failed');
+                }
+            }
+
+        } catch (error) {
+            console.error('Connection test error:', error);
+            alert(`❌ Connection test failed: ${error.message}`);
+            this.updateStatus(`${device.name} connection test error`);
+            this.updateDeviceVisualStatus(device, 'error');
+        }
+    }
+
+    // Show connection test results in a modal
+    showConnectionTestModal(device, result) {
+        const modal = document.createElement('div');
+        modal.className = 'modal show';
+        modal.style.display = 'flex';
+        
+        const isSuccess = result.credentials_valid || result.overall_success;
+        const statusClass = isSuccess ? 'success' : 'error';
+        const statusIcon = isSuccess ? 'fa-check-circle' : 'fa-times-circle';
+        
+        modal.innerHTML = `
+            <div class="modal-content" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h3 class="modal-title">
+                        <i class="fas ${statusIcon} ${statusClass === 'success' ? 'text-success' : 'text-danger'}"></i>
+                        Connection Test Results - ${device.name}
+                    </h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="test-result ${statusClass}" style="margin-bottom: 20px;">
+                        <strong>${isSuccess ? 'Connection Successful!' : 'Connection Failed'}</strong>
+                        <br>IP: ${device.config.ip} | Port: ${device.config.port || 22}
+                    </div>
+                    
+                    ${this.generateTestResultsHTML(result)}
+                    
+                    <div style="margin-top: 20px; font-size: 0.875rem; color: var(--text-secondary);">
+                        Test completed: ${new Date().toLocaleString()}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="this.closest('.modal').remove()">Close</button>
+                </div>
+            </div>
+        `;
+
+        // Close button handler
+        modal.querySelector('.modal-close').onclick = () => modal.remove();
+        
+        // Close on backdrop click
+        modal.onclick = (e) => {
+            if (e.target === modal) modal.remove();
+        };
+
+        document.body.appendChild(modal);
+    }
+
+    // Generate HTML for test results
+    generateTestResultsHTML(result) {
+        const testResults = result.test_results;
+        if (!testResults) return '';
+
+        return `
+            <div class="test-details-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 16px 0;">
+                <div class="test-detail-card">
+                    <div class="test-icon ${testResults.ping.success ? 'success' : 'failed'}">
+                        <i class="fas ${testResults.ping.success ? 'fa-check' : 'fa-times'}"></i>
+                    </div>
+                    <h6>Network Connectivity</h6>
+                    <p>${testResults.ping.message}</p>
+                    ${testResults.ping.response_time ? `<small>Response: ${testResults.ping.response_time}ms</small>` : ''}
+                </div>
+                
+                <div class="test-detail-card">
+                    <div class="test-icon ${testResults.ssh_port.success ? 'success' : 'failed'}">
+                        <i class="fas ${testResults.ssh_port.success ? 'fa-check' : 'fa-times'}"></i>
+                    </div>
+                    <h6>SSH Port</h6>
+                    <p>${testResults.ssh_port.message}</p>
+                    ${testResults.ssh_port.connection_time ? `<small>Time: ${testResults.ssh_port.connection_time}ms</small>` : ''}
+                </div>
+                
+                <div class="test-detail-card">
+                    <div class="test-icon ${testResults.authentication.success ? 'success' : 'failed'}">
+                        <i class="fas ${testResults.authentication.success ? 'fa-check' : 'fa-times'}"></i>
+                    </div>
+                    <h6>Authentication</h6>
+                    <p>${testResults.authentication.message}</p>
+                    ${testResults.authentication.device_prompt ? `<small>Device: ${testResults.authentication.device_prompt}</small>` : ''}
+                </div>
+            </div>
+            
+            ${result.device_info && result.device_info.success ? `
+                <div class="device-info-section" style="margin-top: 20px; padding: 12px; background: var(--background-color); border-radius: 6px;">
+                    <h6><i class="fas fa-info-circle"></i> Device Information</h6>
+                    ${result.device_info.system_info ? `<p><strong>System:</strong> ${JSON.stringify(result.device_info.system_info)}</p>` : ''}
+                    ${result.device_info.version_info ? `<p><strong>Version:</strong> ${JSON.stringify(result.device_info.version_info)}</p>` : ''}
+                </div>
+            ` : ''}
+            
+            ${result.recommendations && result.recommendations.length > 0 ? `
+                <div class="recommendations-section" style="margin-top: 16px;">
+                    <h6><i class="fas fa-lightbulb"></i> Recommendations</h6>
+                    <ul style="margin: 0; padding-left: 20px;">
+                        ${result.recommendations.map(rec => `<li style="font-size: 0.875rem;">${rec}</li>`).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+        `;
+    }
+
+    // Update device visual status based on connection results
+    updateDeviceVisualStatus(device, status) {
+        const deviceEl = document.querySelector(`[data-device-id="${device.id}"]`);
+        if (!deviceEl) return;
+
+        // Remove existing status classes
+        deviceEl.classList.remove('status-connected', 'status-disconnected', 'status-error');
+        
+        // Add new status class
+        deviceEl.classList.add(`status-${status}`);
+        
+        // Update device object
+        device.connectionStatus = status;
+        device.lastTested = new Date().toISOString();
+    }
+
+    // Enhanced save device configuration
+    async saveDeviceConfig() {
+        const modal = document.getElementById('deviceConfigModal');
+        const deviceId = parseInt(modal.getAttribute('data-device-id'));
+        const device = this.devices.find(d => d.id === deviceId);
+
+        if (!device) return;
+
+        const config = {
+            ip: document.getElementById('configDeviceIP').value.trim(),
+            username: document.getElementById('configDeviceUsername').value.trim(),
+            password: document.getElementById('configDevicePassword').value,
+            port: document.getElementById('configDevicePort').value || '22',
+            description: document.getElementById('configDeviceDescription').value.trim()
+        };
+
+        const newName = document.getElementById('configDeviceName').value.trim();
+        
+        // Validate required fields
+        if (!config.ip || !config.username) {
+            this.showTestResult('error', 'IP address and username are required');
+            return;
+        }
+
+        // Update device locally
+        if (newName && newName !== device.name) {
+            device.name = newName;
+            const deviceEl = document.querySelector(`[data-device-id="${deviceId}"] .device-label`);
+            if (deviceEl) deviceEl.textContent = device.name;
+        }
+
+        device.config = config;
+        
+        // Try to save to backend if we have auth
+        if (this.authToken) {
+            try {
+                const deviceData = {
+                    name: device.name,
+                    device_type: device.type,
+                    ip_address: config.ip,
+                    username: config.username,
+                    password: config.password,
+                    ssh_port: parseInt(config.port),
+                    description: config.description
+                };
+
+                let response;
+                if (device.backendId) {
+                    // Update existing device
+                    response = await fetch(`${this.apiBaseUrl}/devices/${device.backendId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.authToken}`
+                        },
+                        body: JSON.stringify(deviceData)
+                    });
+                } else {
+                    // Create new device
+                    response = await fetch(`${this.apiBaseUrl}/devices/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.authToken}`
+                        },
+                        body: JSON.stringify(deviceData)
+                    });
+                }
+
+                if (response.ok) {
+                    const result = await response.json();
+                    device.backendId = result.id;
+                    this.updateStatus(`${device.name} saved to backend`);
+                } else {
+                    console.warn('Failed to save to backend:', await response.text());
+                    this.updateStatus(`${device.name} saved locally only`);
+                }
+            } catch (error) {
+                console.warn('Backend save error:', error);
+                this.updateStatus(`${device.name} saved locally only`);
+            }
+        }
+        
+        // Update properties panel if this device is selected
+        if (this.selectedDevice && this.selectedDevice.id === deviceId) {
+            this.updatePropertiesPanel();
+        }
+
+        this.hideConfigModal();
+        this.updateStatus(`${device.name} configuration saved`);
+    }
+
+    // Utility function to validate IP address
+    validateIPAddress(ip) {
+        const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+        return ipRegex.test(ip);
+    }
+
+    // Enhanced bulk testing functionality
+    async bulkTestAllDevices() {
+        const devicesWithConfig = this.devices.filter(d => d.config && d.config.ip);
+        
+        if (devicesWithConfig.length === 0) {
+            alert('No devices with configuration found. Please configure devices first.');
+            return;
+        }
+
+        if (!confirm(`Test connection to ${devicesWithConfig.length} configured devices?`)) {
+            return;
+        }
+
+        this.updateStatus('Running bulk device test...');
+        
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const device of devicesWithConfig) {
+            try {
+                this.updateStatus(`Testing ${device.name}...`);
+                
+                const response = await fetch(`${this.apiBaseUrl}/devices/test-credentials`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${this.authToken}`
+                    },
+                    body: JSON.stringify({
+                        ip_address: device.config.ip,
+                        username: device.config.username,
+                        password: device.config.password,
+                        ssh_port: parseInt(device.config.port || 22),
+                        device_type: device.type
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.credentials_valid) {
+                    this.updateDeviceVisualStatus(device, 'connected');
+                    successCount++;
+                } else {
+                    this.updateDeviceVisualStatus(device, 'disconnected');
+                    failCount++;
+                }
+
+                // Small delay to prevent overwhelming the backend
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+            } catch (error) {
+                console.error(`Test failed for ${device.name}:`, error);
+                this.updateDeviceVisualStatus(device, 'error');
+                failCount++;
+            }
+        }
+
+        this.updateStatus(`Bulk test complete: ${successCount} successful, ${failCount} failed`);
+        
+        // Show summary
+        alert(`Bulk Test Complete\n\nSuccessful: ${successCount}\nFailed: ${failCount}\nTotal: ${devicesWithConfig.length}`);
+    }
+
+    // Add method to check authentication
+    checkAuthentication() {
+        this.authToken = localStorage.getItem('auth_token');
+        //Uncomment this when authentication is implemented
+        /*if (!this.authToken) {
+            console.warn('No authentication token found. Some features may not work.');
+            return false;
+        }*/
+        
+        return true;
+    }
+
+  
+}
+
+// Enhanced device rendering with status indicators
+TopologyBuilder.prototype.renderDevice = function(device) {
+    const deviceEl = document.createElement('div');
+    deviceEl.className = 'network-device';
+    deviceEl.style.left = device.x + 'px';
+    deviceEl.style.top = device.y + 'px';
+    deviceEl.setAttribute('data-device-id', device.id);
+
+    // Add connection status class if available
+    if (device.connectionStatus) {
+        deviceEl.classList.add(`status-${device.connectionStatus}`);
+    }
+
+    const icon = this.getDeviceIcon(device.type);
+    deviceEl.innerHTML = `
+        <div class="device-icon">
+            <i class="${icon}"></i>
+        </div>
+        <div class="device-label">${device.name}</div>
+        ${device.config ? '<div class="device-status-indicator configured"></div>' : '<div class="device-status-indicator unconfigured"></div>'}
+    `;
+
+    // Add event listeners
+    deviceEl.addEventListener('click', (e) => this.handleDeviceClick(device, e));
+    deviceEl.addEventListener('dblclick', (e) => this.handleDeviceDoubleClick(device, e));
+    deviceEl.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.showContextMenu(e, device);
+    });
+    
+    this.makeDeviceDraggable(deviceEl, device);
+    this.addDevicePorts(deviceEl, device);
+
+    this.canvas.appendChild(deviceEl);
+};
+
+// Initialize with authentication check
+document.addEventListener('DOMContentLoaded', function() {
+    const topology = new TopologyBuilder();
+    topology.checkAuthentication();
+    
+    // Make topology globally available
+    window.topology = topology;
+    
+    // Add bulk test button
+    const toolsSection = document.querySelector('.tools-section');
+    if (toolsSection) {
+        const bulkTestBtn = document.createElement('button');
+        bulkTestBtn.className = 'tool-btn';
+        bulkTestBtn.innerHTML = '<i class="fas fa-network-wired"></i> Bulk Test';
+        bulkTestBtn.onclick = () => topology.bulkTestAllDevices();
+        toolsSection.appendChild(bulkTestBtn);
+    }
+
+
+    // Password toggle functionality
+    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+    const passwordInput = document.getElementById('configDevicePassword');
+    
+    if (togglePasswordBtn && passwordInput) {
+        togglePasswordBtn.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            const icon = this.querySelector('i');
+            icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+        });
+    }
+    
+    // Real-time validation
+    const ipInput = document.getElementById('configDeviceIP');
+    const usernameInput = document.getElementById('configDeviceUsername');
+    const portInput = document.getElementById('configDevicePort');
+    
+    function validateForm() {
+        const validationDiv = document.getElementById('configValidationMessages');
+        const messages = [];
+        
+        // Validate IP
+        if (ipInput.value && !topology.validateIPAddress(ipInput.value)) {
+            messages.push('Invalid IP address format');
+        }
+        
+        // Validate port
+        if (portInput.value) {
+            const port = parseInt(portInput.value);
+            if (port < 1 || port > 65535) {
+                messages.push('SSH port must be between 1 and 65535');
+            }
+        }
+        
+        // Show/hide validation messages
+        if (messages.length > 0) {
+            validationDiv.innerHTML = `
+                <div class="validation-error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    ${messages.join('<br>')}
+                </div>
+            `;
+            validationDiv.classList.remove('hidden');
+        } else {
+            validationDiv.classList.add('hidden');
+        }
+        
+        // Enable/disable test button
+        const testBtn = document.getElementById('testConfigBtn');
+        const canTest = ipInput.value && usernameInput.value && passwordInput.value && messages.length === 0;
+        testBtn.disabled = !canTest;
+    }
+    
+    // Add validation listeners
+    [ipInput, usernameInput, passwordInput, portInput].forEach(input => {
+        if (input) {
+            input.addEventListener('input', validateForm);
+            input.addEventListener('blur', validateForm);
+        }
+    });
+});
+
+// Authentication functions
+async function performAuth() {
+    const username = document.getElementById('authUsername').value;
+    const password = document.getElementById('authPassword').value;
+    const errorDiv = document.getElementById('authError');
+    
+    if (!username || !password) {
+        errorDiv.innerHTML = 'Please enter both username and password';
+        errorDiv.classList.remove('hidden');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            localStorage.setItem('auth_token', result.access_token);
+            topology.authToken = result.access_token;
+            hideAuthModal();
+            topology.updateStatus('Authentication successful');
+        } else {
+            throw new Error(result.message || 'Authentication failed');
+        }
+    } catch (error) {
+        errorDiv.innerHTML = `Authentication failed: ${error.message}`;
+        errorDiv.classList.remove('hidden');
+    }
+}
+
+function hideAuthModal() {
+    document.getElementById('authModal').classList.remove('show');
+}
+
+function showAuthModal() {
+    document.getElementById('authModal').classList.add('show');
+}
+
+function hideBulkTestModal() {
+    document.getElementById('bulkTestModal').classList.remove('show');
+}
+
+// Check if user needs to authenticate
+function checkAuthAndPrompt() {
+    if (!topology.authToken) {
+        showAuthModal();
+        return false;
+    }
+    return true;
+}
+
+// Enhanced context menu with auth check
+topology.testDeviceConnection = function(device) {
+    if (!checkAuthAndPrompt()) return;
+    
+    // Original testDeviceConnection logic here
+    // ... (use the enhanced version from the JavaScript artifact above)
+};
+
+// Enhanced bulk test with auth check
+topology.bulkTestAllDevices = function() {
+    if (!checkAuthAndPrompt()) return;
+    
+    // Original bulkTestAllDevices logic here
+    // ... (use the enhanced version from the JavaScript artifact above)
+};
+
+
     </script>
 </body>
 </html>
