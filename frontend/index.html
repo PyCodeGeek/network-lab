@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -165,6 +166,50 @@
             border-color: var(--primary-color);
         }
 
+        /* View Toggle Buttons */
+        .view-toggle-section {
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            background: var(--background-color);
+        }
+
+        .view-toggle-btn {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--surface-color);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .view-toggle-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .view-toggle-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .view-toggle-btn i {
+            font-size: 1.1rem;
+        }
+
         .properties-panel {
             padding: 20px;
             border-top: 1px solid var(--border-color);
@@ -224,7 +269,7 @@
         .canvas {
             width: 100%;
             height: 100%;
-            background-image: 
+            background-image:
                 radial-gradient(circle, var(--border-color) 1px, transparent 1px);
             background-size: 20px 20px;
             background-position: 0 0, 10px 10px;
@@ -234,6 +279,192 @@
 
         .canvas.drag-over {
             background-color: rgba(37, 99, 235, 0.05);
+        }
+
+        /* Inventory View Styles */
+        .inventory-container {
+            flex: 1;
+            position: relative;
+            background: var(--surface-color);
+            overflow: hidden;
+            display: none;
+        }
+
+        .inventory-container.active {
+            display: block;
+        }
+
+        .inventory-header {
+            position: sticky;
+            top: 0;
+            background: var(--surface-color);
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow);
+            z-index: 50;
+        }
+
+        .inventory-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .inventory-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .inventory-content {
+            padding: 20px;
+            height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+
+        .inventory-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-input {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            min-width: 200px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            min-width: 150px;
+        }
+
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .inventory-table th,
+        .inventory-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .inventory-table th {
+            background: var(--background-color);
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .inventory-table tr:hover {
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-badge.online {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-badge.offline {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .status-badge.unknown {
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .inventory-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .action-btn.edit {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+
+        .action-btn.test {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .action-btn.delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            color: var(--border-color);
+        }
+
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Network Devices on Canvas */
@@ -271,7 +502,7 @@
             z-index: 1000;
             transform: rotate(5deg) scale(1.05);
         }
-        
+
         .network-device.connected {
             border-color: var(--success-color);
         }
@@ -501,7 +732,7 @@
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        
+
         /* File Upload Styles */
         .file-upload-area {
             border: 2px dashed var(--border-color);
@@ -787,546 +1018,585 @@
 
 
         /* Utilities */
-        .hidden { display: none !important; }
-        
+        .hidden {
+            display: none !important;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .device-palette {
                 width: 280px;
             }
-            
+
             .device-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .canvas-header {
                 flex-direction: column;
                 gap: 12px;
             }
+
+            .inventory-filters {
+                flex-direction: column;
+            }
+
+            .inventory-table {
+                font-size: 0.875rem;
+            }
+
         }
-/* Enhanced CSS for PIXI Topology Builder with Connection Testing */
-/* Add these styles to your existing CSS */
-
-/* Device Status Indicators */
-.device-status-indicator {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 2px solid var(--surface-color);
-    z-index: 30;
-}
-
-.device-status-indicator.configured {
-    background: var(--warning-color);
-}
-
-.device-status-indicator.unconfigured {
-    background: var(--secondary-color);
-}
-
-/* Connection Status Classes for Devices */
-.network-device.status-connected {
-    border-color: var(--success-color);
-    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
-}
-
-.network-device.status-connected .device-status-indicator {
-    background: var(--success-color);
-}
-
-.network-device.status-disconnected {
-    border-color: var(--danger-color);
-    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
-}
-
-.network-device.status-disconnected .device-status-indicator {
-    background: var(--danger-color);
-}
-
-.network-device.status-error {
-    border-color: var(--warning-color);
-    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
-    animation: pulse-warning 2s infinite;
-}
-
-.network-device.status-error .device-status-indicator {
-    background: var(--warning-color);
-}
-
-@keyframes pulse-warning {
-    0%, 100% { 
-        box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
-    }
-    50% { 
-        box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.1);
-    }
-}
-
-/* Enhanced Test Result Styles */
-.test-result {
-    margin-top: 16px;
-    padding: 16px;
-    border-radius: 8px;
-    border-left: 4px solid;
-    font-size: 0.875rem;
-    line-height: 1.5;
-}
-
-.test-result.success {
-    background: rgba(16, 185, 129, 0.1);
-    border-color: var(--success-color);
-    color: var(--success-color);
-}
-
-.test-result.error {
-    background: rgba(239, 68, 68, 0.1);
-    border-color: var(--danger-color);
-    color: var(--danger-color);
-}
-
-.test-result.info {
-    background: rgba(37, 99, 235, 0.1);
-    border-color: var(--primary-color);
-    color: var(--primary-color);
-}
-
-/* Test Status Headers */
-.test-status-success {
-    color: var(--success-color);
-    margin-bottom: 12px;
-    font-weight: 600;
-}
-
-.test-status-error {
-    color: var(--danger-color);
-    margin-bottom: 12px;
-    font-weight: 600;
-}
-
-/* Test Details Grid */
-.test-details {
-    margin: 12px 0;
-}
-
-.test-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.test-item:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-}
-
-.test-item i {
-    width: 20px;
-    margin-right: 12px;
-    text-align: center;
-}
-
-.test-item.success {
-    color: var(--success-color);
-}
-
-.test-item.failed {
-    color: var(--danger-color);
-}
-
-.test-item small {
-    margin-left: auto;
-    opacity: 0.7;
-}
-
-/* Test Detail Cards for Modal */
-.test-details-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin: 16px 0;
-}
-
-.test-detail-card {
-    background: var(--background-color);
-    padding: 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    text-align: center;
-}
-
-.test-detail-card h6 {
-    margin: 8px 0 4px;
-    font-size: 0.875rem;
-    font-weight: 600;
-}
-
-.test-detail-card p {
-    margin: 0 0 8px;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-}
-
-.test-detail-card small {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-}
-
-.test-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 8px;
-    font-size: 1.2rem;
-}
-
-.test-icon.success {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--success-color);
-}
-
-.test-icon.failed {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--danger-color);
-}
-
-/* Device Info Section */
-.device-info {
-    margin-top: 12px;
-    padding: 12px;
-    background: rgba(37, 99, 235, 0.05);
-    border-radius: 6px;
-    border: 1px solid rgba(37, 99, 235, 0.2);
-}
-
-.device-info-section {
-    margin-top: 20px;
-    padding: 12px;
-    background: var(--background-color);
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
-}
-
-.device-info-section h6 {
-    margin: 0 0 8px;
-    color: var(--text-primary);
-}
-
-.device-info-section p {
-    margin: 4px 0;
-    font-size: 0.875rem;
-}
-
-/* Recommendations Section */
-.recommendations {
-    margin-top: 12px;
-    padding: 8px 0;
-}
-
-.recommendations small {
-    display: block;
-    margin: 4px 0;
-    padding: 4px 0;
-    color: var(--text-secondary);
-}
-
-.recommendations-section {
-    margin-top: 16px;
-    padding: 12px;
-    background: rgba(245, 158, 11, 0.05);
-    border-radius: 6px;
-    border: 1px solid rgba(245, 158, 11, 0.2);
-}
-
-.recommendations-section h6 {
-    margin: 0 0 8px;
-    color: var(--warning-color);
-}
-
-.recommendations-section ul {
-    margin: 0;
-    padding-left: 20px;
-}
-
-.recommendations-section li {
-    font-size: 0.875rem;
-    margin: 4px 0;
-    color: var(--text-secondary);
-}
-
-/* Enhanced Modal Styles */
-.modal-content {
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-body {
-    max-height: 60vh;
-    overflow-y: auto;
-}
-
-/* Loading States */
-.btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.btn:disabled .fa-spinner {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/* Enhanced Tool Buttons */
-.tool-btn:hover {
-    background: var(--primary-color);
-    color: white;
-    transform: translateY(-1px);
-}
-
-.tool-btn i {
-    margin-right: 8px;
-}
-
-/* Text Utilities */
-.text-success {
-    color: var(--success-color) !important;
-}
-
-.text-danger {
-    color: var(--danger-color) !important;
-}
-
-.text-warning {
-    color: var(--warning-color) !important;
-}
-
-.text-info {
-    color: var(--primary-color) !important;
-}
-
-/* Status Badge Styles */
-.status-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-}
-
-.status-badge.connected {
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--success-color);
-}
-
-.status-badge.disconnected {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--danger-color);
-}
-
-.status-badge.error {
-    background: rgba(245, 158, 11, 0.1);
-    color: var(--warning-color);
-}
-
-.status-badge.unconfigured {
-    background: rgba(100, 116, 139, 0.1);
-    color: var(--secondary-color);
-}
-
-/* Properties Panel Enhancements */
-.properties-panel .btn {
-    font-size: 0.75rem;
-    padding: 8px 12px;
-    border-radius: 6px;
-    transition: all 0.2s;
-}
-
-.properties-panel .btn:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow);
-}
-
-/* Device Label Enhancements */
-.device-label {
-    position: relative;
-    z-index: 5;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-top: 4px;
-}
-
-/* Context Menu Enhancements */
-.context-menu-item i {
-    color: var(--primary-color);
-}
-
-.context-menu-item.danger i {
-    color: var(--danger-color);
-}
-
-/* Responsive Enhancements */
-@media (max-width: 768px) {
-    .test-details-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .modal-content {
-        margin: 10px;
-        max-width: calc(100vw - 20px);
-    }
-    
-    .test-detail-card {
-        padding: 12px;
-    }
-}
-
-/* Animation for successful connection test */
-@keyframes success-pulse {
-    0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-}
-
-.network-device.test-success {
-    animation: success-pulse 1s ease-out;
-}
-
-/* Animation for failed connection test */
-@keyframes error-shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
-}
-
-.network-device.test-failed {
-    animation: error-shake 0.5s ease-in-out;
-}
-        
-
-
-/* Additional CSS for enhanced modals */
-.form-help {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-top: 4px;
-    display: block;
-}
-
-.validation-messages {
-    margin-top: 12px;
-}
-
-.validation-error {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid var(--danger-color);
-    border-radius: 6px;
-    padding: 8px 12px;
-    color: var(--danger-color);
-    font-size: 0.875rem;
-}
-
-.validation-error i {
-    margin-right: 8px;
-}
-
-.test-summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 16px;
-    margin-bottom: 20px;
-}
-
-.summary-card {
-    text-align: center;
-    padding: 16px;
-    background: var(--background-color);
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-}
-
-.summary-card .number {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 4px;
-}
-
-.summary-card .label {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-}
-
-.bulk-test-details {
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.bulk-test-item {
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    margin-bottom: 8px;
-}
-
-.bulk-test-item.success {
-    background: rgba(16, 185, 129, 0.05);
-    border-color: var(--success-color);
-}
-
-.bulk-test-item.failed {
-    background: rgba(239, 68, 68, 0.05);
-    border-color: var(--danger-color);
-}
-
-.bulk-test-item .device-info {
-    flex: 1;
-    margin-left: 12px;
-}
-
-.bulk-test-item .device-name {
-    font-weight: 600;
-    margin-bottom: 2px;
-}
-
-.bulk-test-item .device-details {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-}
-
-.bulk-test-item .status-icon {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.bulk-test-item.success .status-icon {
-    background: var(--success-color);
-    color: white;
-}
-
-.bulk-test-item.failed .status-icon {
-    background: var(--danger-color);
-    color: white;
-}
+
+        /* Enhanced CSS for PIXI Topology Builder with Connection Testing */
+        /* Add these styles to your existing CSS */
+
+        /* Device Status Indicators */
+        .device-status-indicator {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid var(--surface-color);
+            z-index: 30;
+        }
+
+        .device-status-indicator.configured {
+            background: var(--warning-color);
+        }
+
+        .device-status-indicator.unconfigured {
+            background: var(--secondary-color);
+        }
+
+        /* Connection Status Classes for Devices */
+        .network-device.status-connected {
+            border-color: var(--success-color);
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+        }
+
+        .network-device.status-connected .device-status-indicator {
+            background: var(--success-color);
+        }
+
+        .network-device.status-disconnected {
+            border-color: var(--danger-color);
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
+        }
+
+        .network-device.status-disconnected .device-status-indicator {
+            background: var(--danger-color);
+        }
+
+        .network-device.status-error {
+            border-color: var(--warning-color);
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+            animation: pulse-warning 2s infinite;
+        }
+
+        .network-device.status-error .device-status-indicator {
+            background: var(--warning-color);
+        }
+
+        @keyframes pulse-warning {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.1);
+            }
+        }
+
+        /* Enhanced Test Result Styles */
+        .test-result {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 8px;
+            border-left: 4px solid;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .test-result.success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--success-color);
+            color: var(--success-color);
+        }
+
+        .test-result.error {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .test-result.info {
+            background: rgba(37, 99, 235, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        /* Test Status Headers */
+        .test-status-success {
+            color: var(--success-color);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .test-status-error {
+            color: var(--danger-color);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        /* Test Details Grid */
+        .test-details {
+            margin: 12px 0;
+        }
+
+        .test-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .test-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .test-item i {
+            width: 20px;
+            margin-right: 12px;
+            text-align: center;
+        }
+
+        .test-item.success {
+            color: var(--success-color);
+        }
+
+        .test-item.failed {
+            color: var(--danger-color);
+        }
+
+        .test-item small {
+            margin-left: auto;
+            opacity: 0.7;
+        }
+
+        /* Test Detail Cards for Modal */
+        .test-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .test-detail-card {
+            background: var(--background-color);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .test-detail-card h6 {
+            margin: 8px 0 4px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .test-detail-card p {
+            margin: 0 0 8px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .test-detail-card small {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .test-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-size: 1.2rem;
+        }
+
+        .test-icon.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .test-icon.failed {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Device Info Section */
+        .device-info {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(37, 99, 235, 0.05);
+            border-radius: 6px;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+
+        .device-info-section {
+            margin-top: 20px;
+            padding: 12px;
+            background: var(--background-color);
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .device-info-section h6 {
+            margin: 0 0 8px;
+            color: var(--text-primary);
+        }
+
+        .device-info-section p {
+            margin: 4px 0;
+            font-size: 0.875rem;
+        }
+
+        /* Recommendations Section */
+        .recommendations {
+            margin-top: 12px;
+            padding: 8px 0;
+        }
+
+        .recommendations small {
+            display: block;
+            margin: 4px 0;
+            padding: 4px 0;
+            color: var(--text-secondary);
+        }
+
+        .recommendations-section {
+            margin-top: 16px;
+            padding: 12px;
+            background: rgba(245, 158, 11, 0.05);
+            border-radius: 6px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .recommendations-section h6 {
+            margin: 0 0 8px;
+            color: var(--warning-color);
+        }
+
+        .recommendations-section ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .recommendations-section li {
+            font-size: 0.875rem;
+            margin: 4px 0;
+            color: var(--text-secondary);
+        }
+
+        /* Enhanced Modal Styles */
+        .modal-content {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        /* Loading States */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn:disabled .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Enhanced Tool Buttons */
+        .tool-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .tool-btn i {
+            margin-right: 8px;
+        }
+
+        /* Text Utilities */
+        .text-success {
+            color: var(--success-color) !important;
+        }
+
+        .text-danger {
+            color: var(--danger-color) !important;
+        }
+
+        .text-warning {
+            color: var(--warning-color) !important;
+        }
+
+        .text-info {
+            color: var(--primary-color) !important;
+        }
+
+        /* Status Badge Styles */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .status-badge.connected {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-badge.disconnected {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .status-badge.error {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+        }
+
+        .status-badge.unconfigured {
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--secondary-color);
+        }
+
+        /* Properties Panel Enhancements */
+        .properties-panel .btn {
+            font-size: 0.75rem;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .properties-panel .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Device Label Enhancements */
+        .device-label {
+            position: relative;
+            z-index: 5;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-top: 4px;
+        }
+
+        /* Context Menu Enhancements */
+        .context-menu-item i {
+            color: var(--primary-color);
+        }
+
+        .context-menu-item.danger i {
+            color: var(--danger-color);
+        }
+
+        /* Responsive Enhancements */
+        @media (max-width: 768px) {
+            .test-details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                margin: 10px;
+                max-width: calc(100vw - 20px);
+            }
+
+            .test-detail-card {
+                padding: 12px;
+            }
+        }
+
+        /* Animation for successful connection test */
+        @keyframes success-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .network-device.test-success {
+            animation: success-pulse 1s ease-out;
+        }
+
+        /* Animation for failed connection test */
+        @keyframes error-shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .network-device.test-failed {
+            animation: error-shake 0.5s ease-in-out;
+        }
+
+
+
+        /* Additional CSS for enhanced modals */
+        .form-help {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            display: block;
+        }
+
+        .validation-messages {
+            margin-top: 12px;
+        }
+
+        .validation-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger-color);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: var(--danger-color);
+            font-size: 0.875rem;
+        }
+
+        .validation-error i {
+            margin-right: 8px;
+        }
+
+        .test-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            text-align: center;
+            padding: 16px;
+            background: var(--background-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .summary-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .summary-card .label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .bulk-test-details {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .bulk-test-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .bulk-test-item.success {
+            background: rgba(16, 185, 129, 0.05);
+            border-color: var(--success-color);
+        }
+
+        .bulk-test-item.failed {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: var(--danger-color);
+        }
+
+        .bulk-test-item .device-info {
+            flex: 1;
+            margin-left: 12px;
+        }
+
+        .bulk-test-item .device-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .bulk-test-item .device-details {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .bulk-test-item .status-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bulk-test-item.success .status-icon {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .bulk-test-item.failed .status-icon {
+            background: var(--danger-color);
+            color: white;
+        }
     </style>
 </head>
+
 <body>
     <div class="topology-container">
         <!-- Device Palette -->
@@ -1335,7 +1605,7 @@
                 <h2 class="palette-title">PIXI Device Library</h2>
                 <p class="palette-subtitle">Drag devices to canvas to build your network</p>
             </div>
-            
+
             <div class="device-library">
                 <div class="device-category">
                     <h3 class="category-title">Network Infrastructure</h3>
@@ -1354,20 +1624,32 @@
                         </div>
                         <div class="device-item" draggable="true" data-device-type="g34c" data-ports="8">
                             <div class="device-icon">
-                                 <i class="fas fa-server"></i>
+                                <i class="fas fa-server"></i>
                             </div>
                             <div class="device-name">G34C</div>
                         </div>
                         <div class="device-item" draggable="true" data-device-type="g42" data-ports="8">
                             <div class="device-icon">
-                                 <i class="fas fa-server"></i>
+                                <i class="fas fa-server"></i>
                             </div>
                             <div class="device-name">G42</div>
                         </div>
                     </div>
                 </div>
             </div>
-            
+            <!-- View Toggle Section -->
+            <div class="view-toggle-section">
+                <h3 class="category-title">Views</h3>
+                <button id="networkCanvasBtn" class="view-toggle-btn active">
+                    <i class="fas fa-project-diagram"></i>
+                    Network Canvas
+                </button>
+                <button id="inventoryListBtn" class="view-toggle-btn">
+                    <i class="fas fa-list-alt"></i>
+                    Inventory List
+                </button>
+            </div>
+
             <div class="tools-section">
                 <h3 class="category-title">Tools</h3>
                 <button id="selectTool" class="tool-btn active">
@@ -1387,7 +1669,7 @@
                     Clear All
                 </button>
             </div>
-            
+
             <div class="properties-panel">
                 <h3 class="category-title">Properties</h3>
                 <div id="deviceProperties">
@@ -1399,7 +1681,8 @@
         </div>
 
         <!-- Canvas Area -->
-        <div class="canvas-container">
+        <!-- <div class="canvas-container"> -->
+        <div id="canvasArea" class="canvas-container">
             <div class="canvas-header">
                 <span id="canvasStatus" class="canvas-status">
                     Drag devices from the library to get started
@@ -1416,11 +1699,55 @@
                     </button>
                 </div>
             </div>
-            
-            <svg id="connectionSvg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none;">
+
+            <svg id="connectionSvg"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none;">
             </svg>
-            
+
             <div id="topologyCanvas" class="canvas"></div>
+        </div>
+
+        <!-- Inventory Area -->
+        <div id="inventoryArea" class="inventory-container">
+            <div class="inventory-header">
+                <h1 class="inventory-title">
+                    <i class="fas fa-warehouse"></i> Device Inventory
+                </h1>
+                <p class="inventory-subtitle">Manage and monitor all network devices</p>
+            </div>
+
+            <div class="inventory-content">
+                <div class="inventory-filters">
+                    <input type="text" id="searchFilter" class="filter-input" placeholder="Search devices...">
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="online">Connected</option>
+                        <option value="offline">Offline</option>
+                        <option value="unknown">Unknown</option>
+                    </select>
+                    <select id="typeFilter" class="filter-select">
+                        <option value="">All Types</option>
+                        <option value="g31">G31</option>
+                        <option value="g32">G32</option>
+                        <option value="g34c">G34C</option>
+                        <option value="g42">G42</option>
+                        <option value="router">Router</option>
+                        <option value="switch">Switch</option>
+                        <option value="server">Server</option>
+                    </select>
+                    <button id="refreshInventory" class="canvas-btn">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button id="addDeviceBtn" class="canvas-btn"
+                        style="background: var(--success-color); color: white;">
+                        <i class="fas fa-plus"></i> Add Device
+                    </button>
+                </div>
+
+                <div id="inventoryTableContainer">
+                    <!-- Inventory table will be populated here -->
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1502,127 +1829,125 @@
             </div>
         </div>
     </div> -->
-<div id="deviceConfigModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 class="modal-title">
-                <i class="fas fa-cog"></i>
-                Configure Device
-            </h3>
-            <button class="modal-close" id="configModalClose">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label class="form-label">
-                    <i class="fas fa-tag"></i>
-                    Device Name
-                </label>
-                <input type="text" id="configDeviceName" class="form-input" 
-                       placeholder="Enter device name" required>
+    <div id="deviceConfigModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-cog"></i>
+                    Configure Device
+                </h3>
+                <button class="modal-close" id="configModalClose">&times;</button>
             </div>
-            
-            <div class="form-group">
-                <label class="form-label">
-                    <i class="fas fa-network-wired"></i>
-                    IP Address
-                </label>
-                <input type="text" id="configDeviceIP" class="form-input" 
-                       placeholder="192.168.1.1" required
-                       pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$">
-                <small class="form-help">Enter a valid IPv4 address</small>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="modal-body">
                 <div class="form-group">
                     <label class="form-label">
-                        <i class="fas fa-user"></i>
-                        Username
+                        <i class="fas fa-tag"></i>
+                        Device Name
                     </label>
-                    <input type="text" id="configDeviceUsername" class="form-input" 
-                           placeholder="admin" required>
+                    <input type="text" id="configDeviceName" class="form-input" placeholder="Enter device name"
+                        required>
                 </div>
-                
+
                 <div class="form-group">
                     <label class="form-label">
-                        <i class="fas fa-lock"></i>
-                        Password
+                        <i class="fas fa-network-wired"></i>
+                        IP Address
                     </label>
-                    <div style="position: relative;">
-                        <input type="password" id="configDevicePassword" class="form-input" 
-                               placeholder="••••••••" required>
-                        <button type="button" id="togglePasswordBtn" 
+                    <input type="text" id="configDeviceIP" class="form-input" placeholder="192.168.1.1" required
+                        pattern="^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$">
+                    <small class="form-help">Enter a valid IPv4 address</small>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-user"></i>
+                            Username
+                        </label>
+                        <input type="text" id="configDeviceUsername" class="form-input" placeholder="admin" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-lock"></i>
+                            Password
+                        </label>
+                        <div style="position: relative;">
+                            <input type="password" id="configDevicePassword" class="form-input" placeholder="••••••••"
+                                required>
+                            <button type="button" id="togglePasswordBtn"
                                 style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-secondary); cursor: pointer;">
-                            <i class="fas fa-eye"></i>
-                        </button>
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-plug"></i>
+                            SSH Port
+                        </label>
+                        <input type="number" id="configDevicePort" class="form-input" placeholder="22" value="22"
+                            min="1" max="65535">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-server"></i>
+                            Device Type
+                        </label>
+                        <select id="configDeviceType" class="form-select">
+                            <option value="g31">G31</option>
+                            <option value="g32">G32</option>
+                            <option value="g34c">G34C</option>
+                            <option value="g42">G42</option>
+                            <option value="router">Router</option>
+                            <option value="switch">Switch</option>
+                            <option value="server">Server</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label class="form-label">
-                        <i class="fas fa-plug"></i>
-                        SSH Port
+                        <i class="fas fa-info-circle"></i>
+                        Description
                     </label>
-                    <input type="number" id="configDevicePort" class="form-input" 
-                           placeholder="22" value="22" min="1" max="65535">
+                    <input type="text" id="configDeviceDescription" class="form-input"
+                        placeholder="Device description (optional)">
                 </div>
-                
-                <div class="form-group">
-                    <label class="form-label">
-                        <i class="fas fa-server"></i>
-                        Device Type
-                    </label>
-                    <select id="configDeviceType" class="form-select">
-                        <option value="g31">G31</option>
-                        <option value="g32">G32</option>
-                        <option value="g34c">G34C</option>
-                        <option value="g42">G42</option>
-                        <option value="router">Router</option>
-                        <option value="switch">Switch</option>
-                        <option value="server">Server</option>
-                    </select>
+
+                <!-- Connection Test Results Area -->
+                <div id="configTestResult" class="test-result hidden">
+                    <!-- Test results will be displayed here -->
+                </div>
+
+                <!-- Real-time Validation Messages -->
+                <div id="configValidationMessages" class="validation-messages hidden">
+                    <!-- Validation messages will appear here -->
                 </div>
             </div>
-            
-            <div class="form-group">
-                <label class="form-label">
-                    <i class="fas fa-info-circle"></i>
-                    Description
-                </label>
-                <input type="text" id="configDeviceDescription" class="form-input" 
-                       placeholder="Device description (optional)">
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="configCancelBtn">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button id="testConfigBtn" class="btn btn-secondary">
+                    <i class="fas fa-plug"></i>
+                    Test Connection
+                </button>
+                <button id="saveConfigBtn" class="btn btn-primary">
+                    <i class="fas fa-save"></i>
+                    Save Configuration
+                </button>
             </div>
-            
-            <!-- Connection Test Results Area -->
-            <div id="configTestResult" class="test-result hidden">
-                <!-- Test results will be displayed here -->
-            </div>
-            
-            <!-- Real-time Validation Messages -->
-            <div id="configValidationMessages" class="validation-messages hidden">
-                <!-- Validation messages will appear here -->
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" id="configCancelBtn">
-                <i class="fas fa-times"></i>
-                Cancel
-            </button>
-            <button id="testConfigBtn" class="btn btn-secondary">
-                <i class="fas fa-plug"></i>
-                Test Connection
-            </button>
-            <button id="saveConfigBtn" class="btn btn-primary">
-                <i class="fas fa-save"></i>
-                Save Configuration
-            </button>
         </div>
     </div>
-</div>
 
 
-<!-- CLI Script Upload Modal -->
+    <!-- CLI Script Upload Modal -->
     <div id="cliScriptModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1634,7 +1959,8 @@
                     <label class="form-label">Select CLI Script File</label>
                     <div class="file-upload-area" id="scriptFileUpload">
                         <div class="file-upload-text">
-                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 8px;"></i><br>
+                            <i class="fas fa-cloud-upload-alt"
+                                style="font-size: 2rem; color: var(--primary-color); margin-bottom: 8px;"></i><br>
                             Click to browse or drag and drop CLI script file
                         </div>
                         <div class="file-upload-hint">
@@ -1655,7 +1981,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <div class="form-group" id="scriptPreviewGroup" style="display: none;">
                     <label class="form-label">Script Preview</label>
                     <div id="scriptPreview" class="cli-preview">
@@ -1699,8 +2025,8 @@
         </div>
     </div>
 
-<!-- Authentication Setup Modal (if needed) -->
-<!-- <div id="authModal" class="modal">
+    <!-- Authentication Setup Modal (if needed) -->
+    <!-- <div id="authModal" class="modal">
     <div class="modal-content" style="max-width: 400px;">
         <div class="modal-header">
             <h3 class="modal-title">
@@ -1738,32 +2064,32 @@
     </div>
 </div> -->
 
-<!-- Bulk Test Results Modal -->
-<div id="bulkTestModal" class="modal">
-    <div class="modal-content" style="max-width: 800px;">
-        <div class="modal-header">
-            <h3 class="modal-title">
-                <i class="fas fa-network-wired"></i>
-                Bulk Connection Test Results
-            </h3>
-            <button class="modal-close" onclick="hideBulkTestModal()">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div id="bulkTestSummary" class="test-summary">
-                <!-- Summary stats will be populated here -->
+    <!-- Bulk Test Results Modal -->
+    <div id="bulkTestModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-network-wired"></i>
+                    Bulk Connection Test Results
+                </h3>
+                <button class="modal-close" onclick="hideBulkTestModal()">&times;</button>
             </div>
-            
-            <div id="bulkTestDetails" class="bulk-test-details">
-                <!-- Individual device results will be populated here -->
+            <div class="modal-body">
+                <div id="bulkTestSummary" class="test-summary">
+                    <!-- Summary stats will be populated here -->
+                </div>
+
+                <div id="bulkTestDetails" class="bulk-test-details">
+                    <!-- Individual device results will be populated here -->
+                </div>
             </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" onclick="hideBulkTestModal()">
-                Close
-            </button>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="hideBulkTestModal()">
+                    Close
+                </button>
+            </div>
         </div>
     </div>
-</div>
 
 
 
@@ -1777,11 +2103,11 @@
                 <h3 class="port-modal-title">Select Port for Connection</h3>
                 <p id="portModalSubtitle" style="color: var(--text-secondary);">Choose a port on the device</p>
             </div>
-            
+
             <div id="portList" class="port-list">
                 <!-- Ports will be populated dynamically -->
             </div>
-            
+
             <div class="modal-actions">
                 <button id="cancelPortSelection" class="btn btn-outline">Cancel</button>
                 <button id="confirmPortSelection" class="btn btn-primary">Connect</button>
@@ -1789,39 +2115,447 @@
         </div>
     </div>
 
-   <script>
+    <script>
         class TopologyBuilder {
-    constructor() {
-        this.devices = [];
-        this.connections = [];
-        this.selectedDevice = null;
-        this.selectedConnection = null;
-        this.currentTool = 'select';
-        this.connectionInProgress = null;
-        this.deviceCounter = 1;
-        this.isDragging = false;
-        this.draggedDeviceType = null;
-        this.contextMenuDevice = null;
-        this.uploadedScript = null;
-        //this.backendUrl = 'http://localhost:8000'; // Backend API URL
-        
-        this.canvas = document.getElementById('topologyCanvas');
-        this.svg = document.getElementById('connectionSvg');
-        
-        // API configuration
-        this.apiBaseUrl = '/api';
-        this.authToken = localStorage.getItem('auth_token');
-        
-        this.init();
-    }
+            constructor() {
+                this.devices = [];
+                this.connections = [];
+                this.selectedDevice = null;
+                this.selectedConnection = null;
+                this.currentTool = 'select';
+                this.connectionInProgress = null;
+                this.deviceCounter = 1;
+                this.isDragging = false;
+                this.draggedDeviceType = null;
+                this.contextMenuDevice = null;
+                this.uploadedScript = null;
+                this.currentView = 'canvas'; // 'canvas' or 'inventory'
+                this.inventoryData = []; // Store inventory data
+                //this.backendUrl = 'http://localhost:8000'; // Backend API URL
 
-    init() {
+                this.canvas = document.getElementById('topologyCanvas');
+                this.svg = document.getElementById('connectionSvg');
+
+                // API configuration
+                this.apiBaseUrl = '/api';
+                this.authToken = localStorage.getItem('auth_token');
+
+                this.init();
+            }
+
+            init() {
                 this.setupEventListeners();
                 this.setupDragAndDrop();
                 this.setupContextMenu();
                 this.setupFileUpload();
+                this.setupViewToggle();
                 this.updateStatus('Ready - Drag devices from the library to start building');
             }
+
+            setupViewToggle() {
+                const networkCanvasBtn = document.getElementById('networkCanvasBtn');
+                const inventoryListBtn = document.getElementById('inventoryListBtn');
+                const canvasArea = document.getElementById('canvasArea');
+                const inventoryArea = document.getElementById('inventoryArea');
+
+                networkCanvasBtn.addEventListener('click', () => {
+                    this.switchToCanvasView();
+                });
+
+                inventoryListBtn.addEventListener('click', () => {
+                    this.switchToInventoryView();
+                });
+
+                // Setup inventory controls
+                document.getElementById('refreshInventory').addEventListener('click', () => {
+                    this.loadInventoryData();
+                });
+
+                document.getElementById('addDeviceBtn').addEventListener('click', () => {
+                    this.showAddDeviceModal();
+                });
+
+                // Setup inventory filters
+                document.getElementById('searchFilter').addEventListener('input', () => {
+                    this.filterInventory();
+                });
+
+                document.getElementById('statusFilter').addEventListener('change', () => {
+                    this.filterInventory();
+                });
+
+                document.getElementById('typeFilter').addEventListener('change', () => {
+                    this.filterInventory();
+                });
+            }
+
+            switchToCanvasView() {
+                this.currentView = 'canvas';
+
+                // Update button states
+                document.getElementById('networkCanvasBtn').classList.add('active');
+                document.getElementById('inventoryListBtn').classList.remove('active');
+
+                // Show/hide areas
+                document.getElementById('canvasArea').style.display = 'block';
+                document.getElementById('inventoryArea').style.display = 'none';
+
+                this.updateStatus('Network Canvas View - Drag devices to build topology');
+            }
+
+            switchToInventoryView() {
+                this.currentView = 'inventory';
+
+                // Update button states
+                document.getElementById('networkCanvasBtn').classList.remove('active');
+                document.getElementById('inventoryListBtn').classList.add('active');
+
+                // Show/hide areas
+                document.getElementById('canvasArea').style.display = 'none';
+                document.getElementById('inventoryArea').style.display = 'block';
+
+                // Load inventory data
+                this.loadInventoryData();
+            }
+
+            async loadInventoryData() {
+                const container = document.getElementById('inventoryTableContainer');
+
+                // Show loading state
+                container.innerHTML = `
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span style="margin-left: 12px;">Loading inventory...</span>
+            </div>
+        `;
+
+                try {
+                    // Try to fetch from backend first
+                    if (this.authToken) {
+                        const response = await fetch(`${this.apiBaseUrl}/devices/`, {
+                            headers: {
+                                'Authorization': `Bearer ${this.authToken}`
+                            }
+                        });
+
+                        if (response.ok) {
+                            const backendDevices = await response.json();
+                            this.inventoryData = backendDevices.map(device => ({
+                                id: device.id,
+                                name: device.name,
+                                type: device.device_type,
+                                ip: device.ip_address,
+                                status: device.status || 'unknown',
+                                location: device.location || 'Unknown',
+                                description: device.description || '',
+                                lastSeen: device.updated_at || device.created_at,
+                                source: 'backend'
+                            }));
+                        } else {
+                            throw new Error('Backend fetch failed');
+                        }
+                    } else {
+                        throw new Error('No auth token');
+                    }
+                } catch (error) {
+                    console.warn('Failed to fetch from backend, using local data:', error);
+
+                    // Fallback to local canvas devices
+                    this.inventoryData = this.devices.map(device => ({
+                        id: device.id,
+                        name: device.name,
+                        type: device.type,
+                        ip: device.config?.ip || 'Not configured',
+                        status: device.connectionStatus || 'unknown',
+                        location: 'Canvas',
+                        description: device.config?.description || '',
+                        lastSeen: device.lastTested || 'Never',
+                        source: 'canvas'
+                    }));
+                }
+
+                this.renderInventoryTable();
+            }
+
+            renderInventoryTable() {
+                const container = document.getElementById('inventoryTableContainer');
+
+                if (this.inventoryData.length === 0) {
+                    container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-server"></i>
+                    <h3>No Devices Found</h3>
+                    <p>Start by adding devices to your inventory or create devices on the canvas.</p>
+                    <button onclick="topology.showAddDeviceModal()" class="btn btn-primary" style="margin-top: 16px;">
+                        <i class="fas fa-plus"></i> Add First Device
+                    </button>
+                </div>
+            `;
+                    return;
+                }
+
+                let tableHTML = `
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Device Name</th>
+                        <th>Type</th>
+                        <th>IP Address</th>
+                        <th>Status</th>
+                        <th>Location</th>
+                        <th>Last Seen</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+                this.inventoryData.forEach(device => {
+                    const statusClass = device.status === 'active' ? 'online' :
+                        device.status === 'inactive' ? 'offline' : 'unknown';
+
+                    const lastSeen = device.lastSeen !== 'Never' ?
+                        new Date(device.lastSeen).toLocaleString() : 'Never';
+
+                    tableHTML += `
+                <tr data-device-id="${device.id}">
+                    <td>
+                        <strong>${device.name}</strong>
+                        ${device.description ? `<br><small style="color: var(--text-secondary);">${device.description}</small>` : ''}
+                    </td>
+                    <td>
+                        <span style="text-transform: uppercase; font-weight: 500;">
+                            ${device.type}
+                        </span>
+                    </td>
+                    <td>
+                        <code style="background: var(--background-color); padding: 2px 6px; border-radius: 4px;">
+                            ${device.ip}
+                        </code>
+                    </td>
+                    <td>
+                        <span class="status-badge ${statusClass}">
+                            ${device.status}
+                        </span>
+                    </td>
+                    <td>${device.location}</td>
+                    <td>
+                        <small>${lastSeen}</small>
+                    </td>
+                    <td>
+                        <div class="inventory-actions">
+                            <button class="action-btn edit" onclick="topology.editInventoryDevice(${device.id})" title="Edit Device">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn test" onclick="topology.testInventoryDevice(${device.id})" title="Test Connection">
+                                <i class="fas fa-plug"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="topology.deleteInventoryDevice(${device.id})" title="Delete Device">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+                });
+
+                tableHTML += `
+                </tbody>
+            </table>
+        `;
+
+                container.innerHTML = tableHTML;
+            }
+
+            filterInventory() {
+                const searchTerm = document.getElementById('searchFilter').value.toLowerCase();
+                const statusFilter = document.getElementById('statusFilter').value;
+                const typeFilter = document.getElementById('typeFilter').value;
+
+                const rows = document.querySelectorAll('.inventory-table tbody tr');
+
+                rows.forEach(row => {
+                    const deviceId = parseInt(row.dataset.deviceId);
+                    const device = this.inventoryData.find(d => d.id === deviceId);
+
+                    if (!device) return;
+
+                    let show = true;
+
+                    // Search filter
+                    if (searchTerm) {
+                        const searchableText = `${device.name} ${device.type} ${device.ip} ${device.description}`.toLowerCase();
+                        if (!searchableText.includes(searchTerm)) {
+                            show = false;
+                        }
+                    }
+
+                    // Status filter
+                    if (statusFilter && device.status !== statusFilter) {
+                        show = false;
+                    }
+
+                    // Type filter
+                    if (typeFilter && device.type !== typeFilter) {
+                        show = false;
+                    }
+
+                    row.style.display = show ? '' : 'none';
+                });
+            }
+            showAddDeviceModal() {
+                // Reset form and show modal
+                document.getElementById('configDeviceName').value = '';
+                document.getElementById('configDeviceIP').value = '';
+                document.getElementById('configDeviceUsername').value = '';
+                document.getElementById('configDevicePassword').value = '';
+                document.getElementById('configDevicePort').value = '22';
+                document.getElementById('configDeviceType').value = 'g31';
+                document.getElementById('configDeviceDescription').value = '';
+
+                // Clear any existing device ID to indicate new device
+                document.getElementById('deviceConfigModal').removeAttribute('data-device-id');
+
+                // Show modal
+                document.getElementById('deviceConfigModal').classList.add('show');
+            }
+
+            async editInventoryDevice(deviceId) {
+                const device = this.inventoryData.find(d => d.id === deviceId);
+                if (!device) return;
+
+                try {
+                    let deviceDetails = device;
+
+                    // If it's a backend device, fetch full details
+                    if (device.source === 'backend' && this.authToken) {
+                        const response = await fetch(`${this.apiBaseUrl}/devices/${deviceId}`, {
+                            headers: {
+                                'Authorization': `Bearer ${this.authToken}`
+                            }
+                        });
+
+                        if (response.ok) {
+                            deviceDetails = await response.json();
+                        }
+                    }
+
+                    // Populate form
+                    document.getElementById('configDeviceName').value = deviceDetails.name || '';
+                    document.getElementById('configDeviceIP').value = deviceDetails.ip_address || deviceDetails.ip || '';
+                    document.getElementById('configDeviceUsername').value = deviceDetails.username || '';
+                    document.getElementById('configDevicePassword').value = ''; // Don't show password
+                    document.getElementById('configDevicePort').value = deviceDetails.ssh_port || '22';
+                    document.getElementById('configDeviceType').value = deviceDetails.device_type || deviceDetails.type || 'g31';
+                    document.getElementById('configDeviceDescription').value = deviceDetails.description || '';
+
+                    // Set device ID for editing
+                    document.getElementById('deviceConfigModal').setAttribute('data-device-id', deviceId);
+                    document.getElementById('deviceConfigModal').setAttribute('data-device-source', device.source);
+
+                    // Show modal
+                    document.getElementById('deviceConfigModal').classList.add('show');
+
+                } catch (error) {
+                    console.error('Error loading device details:', error);
+                    alert('Failed to load device details');
+                }
+            }
+
+            async testInventoryDevice(deviceId) {
+                const device = this.inventoryData.find(d => d.id === deviceId);
+                if (!device) return;
+
+                if (device.ip === 'Not configured') {
+                    alert('Device is not configured. Please edit the device and add connection details.');
+                    return;
+                }
+
+                const row = document.querySelector(`tr[data-device-id="${deviceId}"]`);
+                const statusCell = row.querySelector('.status-badge');
+                const originalStatus = statusCell.textContent;
+
+                // Show testing state
+                statusCell.textContent = 'Testing...';
+                statusCell.className = 'status-badge unknown';
+
+                try {
+                    if (device.source === 'backend' && this.authToken) {
+                        // Test backend device
+                        const response = await fetch(`${this.apiBaseUrl}/devices/${deviceId}/test-connection`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${this.authToken}`
+                            }
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok && result.success) {
+                            statusCell.textContent = 'Online';
+                            statusCell.className = 'status-badge online';
+                            device.status = 'active';
+                        } else {
+                            statusCell.textContent = 'Offline';
+                            statusCell.className = 'status-badge offline';
+                            device.status = 'inactive';
+                        }
+                    } else {
+                        // For canvas devices, we need credentials
+                        alert('Please configure device credentials first to test connection.');
+                        statusCell.textContent = originalStatus;
+                        statusCell.className = `status-badge ${device.status === 'active' ? 'online' : device.status === 'inactive' ? 'offline' : 'unknown'}`;
+                    }
+
+                } catch (error) {
+                    console.error('Connection test failed:', error);
+                    statusCell.textContent = 'Error';
+                    statusCell.className = 'status-badge offline';
+                    device.status = 'inactive';
+                }
+            }
+
+            async deleteInventoryDevice(deviceId) {
+                const device = this.inventoryData.find(d => d.id === deviceId);
+                if (!device) return;
+
+                if (!confirm(`Are you sure you want to delete "${device.name}"? This action cannot be undone.`)) {
+                    return;
+                }
+
+                try {
+                    if (device.source === 'backend' && this.authToken) {
+                        // Delete from backend
+                        const response = await fetch(`${this.apiBaseUrl}/devices/${deviceId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Authorization': `Bearer ${this.authToken}`
+                            }
+                        });
+
+                        if (!response.ok) {
+                            throw new Error('Failed to delete from backend');
+                        }
+                    } else {
+                        // Delete from canvas devices
+                        this.devices = this.devices.filter(d => d.id !== deviceId);
+                        const deviceEl = document.querySelector(`[data-device-id="${deviceId}"]`);
+                        if (deviceEl) deviceEl.remove();
+                    }
+
+                    // Remove from inventory data
+                    this.inventoryData = this.inventoryData.filter(d => d.id !== deviceId);
+
+                    // Remove table row
+                    const row = document.querySelector(`tr[data-device-id="${deviceId}"]`);
+                    if (row) row.remove();
+
+                } catch (error) {
+                    console.error('Delete failed:', error);
+                    alert('Failed to delete device');
+                }
+            }
+
 
             setupEventListeners() {
                 // Tool buttons
@@ -1829,14 +2563,14 @@
                 document.getElementById('connectTool').addEventListener('click', () => this.setTool('connect'));
                 document.getElementById('deleteTool').addEventListener('click', () => this.setTool('delete'));
                 document.getElementById('clearCanvas').addEventListener('click', () => this.clearCanvas());
-                
+
                 // Canvas controls
                 document.getElementById('saveTopology').addEventListener('click', () => this.saveTopology());
                 document.getElementById('exportTopology').addEventListener('click', () => this.exportTopology());
-                
+
                 // Canvas click
                 this.canvas.addEventListener('click', (e) => this.handleCanvasClick(e));
-                
+
                 // Port modal
                 document.getElementById('cancelPortSelection').addEventListener('click', () => this.hidePortModal());
                 document.getElementById('confirmPortSelection').addEventListener('click', () => this.confirmPortSelection());
@@ -1866,7 +2600,7 @@
                     e.preventDefault();
                 });
             }
-            
+
             setupFileUpload() {
                 const uploadArea = document.getElementById('scriptFileUpload');
                 const fileInput = document.getElementById('scriptFileInput');
@@ -1964,7 +2698,7 @@
             showScriptPreview() {
                 const previewGroup = document.getElementById('scriptPreviewGroup');
                 const preview = document.getElementById('scriptPreview');
-                
+
                 previewGroup.style.display = 'block';
                 preview.innerHTML = this.uploadedScript.commands
                     .slice(0, 10) // Show first 10 commands
@@ -2007,8 +2741,8 @@
                 return div.innerHTML;
             }
 
-            
-            
+
+
             setupContextMenu() {
                 // Context menu items
                 document.getElementById('contextRename').addEventListener('click', () => {
@@ -2067,9 +2801,9 @@
                         }
                     }*/
                     const device = this.contextMenuDevice;
-                    this.hideContextMenu();                    
-                        if (confirm(`Delete ${device.name} and all its connections?`)) {
-                            this.deleteDevice(device.id);      
+                    this.hideContextMenu();
+                    if (confirm(`Delete ${device.name} and all its connections?`)) {
+                        this.deleteDevice(device.id);
                     }
                 });
             }
@@ -2077,7 +2811,7 @@
             showContextMenu(e, device) {
                 const contextMenu = document.getElementById('deviceContextMenu');
                 this.contextMenuDevice = device;
-                
+
                 // Position the context menu
                 contextMenu.style.left = e.pageX + 'px';
                 contextMenu.style.top = e.pageY + 'px';
@@ -2100,7 +2834,7 @@
 
             showConfigModal(device) {
                 const modal = document.getElementById('deviceConfigModal');
-                
+
                 // Populate form with device data
                 document.getElementById('configDeviceName').value = device.name || '';
                 document.getElementById('configDeviceIP').value = device.config?.ip || '';
@@ -2111,10 +2845,10 @@
 
                 // Store device reference
                 modal.setAttribute('data-device-id', device.id);
-                
+
                 // Hide test result
                 document.getElementById('configTestResult').classList.add('hidden');
-                
+
                 modal.classList.add('show');
             }
 
@@ -2122,15 +2856,15 @@
                 document.getElementById('deviceConfigModal').classList.remove('show');
             }
 
-    showScriptModal(device) {
+            showScriptModal(device) {
                 const modal = document.getElementById('cliScriptModal');
                 modal.setAttribute('data-device-id', device.id);
-                
+
                 // Reset modal state
                 this.removeScriptFile();
                 document.getElementById('executionMode').value = 'sequential';
                 document.getElementById('commandTimeout').value = '30';
-                
+
                 modal.classList.add('show');
             }
 
@@ -2177,22 +2911,22 @@
                     const result = await response.json();
 
                     if (response.ok && result.success) {
-                        this.showTestResult('success', 
+                        this.showTestResult('success',
                             `Connection successful!<br>` +
                             `Device Type: ${result.device_type || 'Unknown'}<br>` +
                             `Response Time: ${result.response_time || 'N/A'}ms<br>` +
                             `OS Version: ${result.os_version || 'N/A'}`
                         );
-                        
+
                         // Update device visual status
                         const deviceId = parseInt(document.getElementById('deviceConfigModal').getAttribute('data-device-id'));
                         this.updateDeviceStatus(deviceId, 'connected');
                     } else {
-                        this.showTestResult('error', 
+                        this.showTestResult('error',
                             `Connection failed: ${result.error || 'Unknown error'}<br>` +
                             `Details: ${result.details || 'No additional details'}`
                         );
-                        
+
                         // Update device visual status
                         const deviceId = parseInt(document.getElementById('deviceConfigModal').getAttribute('data-device-id'));
                         this.updateDeviceStatus(deviceId, 'error');
@@ -2200,7 +2934,7 @@
                 } catch (error) {
                     this.showTestResult('error', `Connection test failed: ${error.message}`);
                     console.error('Connection test error:', error);
-                    
+
                     // Update device visual status
                     const deviceId = parseInt(document.getElementById('deviceConfigModal').getAttribute('data-device-id'));
                     this.updateDeviceStatus(deviceId, 'error');
@@ -2240,14 +2974,14 @@
                 const executeBtn = document.getElementById('executeScriptBtn');
                 const resultDiv = document.getElementById('scriptExecutionResult');
                 const commandResults = document.getElementById('commandResults');
-                
+
                 executeBtn.disabled = true;
                 executeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Executing...';
-                
+
                 resultDiv.className = 'test-result info';
                 resultDiv.innerHTML = 'Executing script commands...';
                 resultDiv.classList.remove('hidden');
-                
+
                 commandResults.innerHTML = '';
                 commandResults.classList.remove('hidden');
 
@@ -2286,7 +3020,7 @@
 
                         // Display command results
                         this.displayCommandResults(result.results);
-                        
+
                         // Update script commands with results
                         this.uploadedScript.commands.forEach((cmd, index) => {
                             if (result.results[index]) {
@@ -2299,7 +3033,7 @@
                     } else {
                         resultDiv.className = 'test-result error';
                         resultDiv.innerHTML = `Script execution failed: ${result.error}`;
-                        
+
                         if (result.partial_results) {
                             this.displayCommandResults(result.partial_results);
                         }
@@ -2317,24 +3051,24 @@
 
             displayCommandResults(results) {
                 const commandResults = document.getElementById('commandResults');
-                
+
                 results.forEach((result, index) => {
                     const commandDiv = document.createElement('div');
                     commandDiv.className = 'command-output';
-                    
+
                     const promptDiv = document.createElement('div');
                     promptDiv.className = 'command-prompt';
                     promptDiv.textContent = `[${index + 1}] ${result.command}`;
-                    
+
                     const responseDiv = document.createElement('div');
                     responseDiv.className = result.status === 'success' ? 'command-response' : 'command-error';
                     responseDiv.textContent = result.output || result.error || 'No output';
-                    
+
                     commandDiv.appendChild(promptDiv);
                     commandDiv.appendChild(responseDiv);
                     commandResults.appendChild(commandDiv);
                 });
-                
+
                 // Scroll to bottom
                 commandResults.scrollTop = commandResults.scrollHeight;
             }
@@ -2366,7 +3100,7 @@
                 };
 
                 device.scripts.push(script);
-                
+
                 this.updateStatus(`Script ${script.name} saved to ${device.name}`);
                 this.updatePropertiesPanel();
                 this.hideScriptModal();
@@ -2384,6 +3118,7 @@
                 const deviceId = parseInt(modal.getAttribute('data-device-id'));
                 const device = this.devices.find(d => d.id === deviceId);
 
+
                 if (!device) return;
 
                 const config = {
@@ -2396,7 +3131,7 @@
                 };
 
                 const newName = document.getElementById('configDeviceName').value;
-                
+
                 // Update device
                 if (newName && newName !== device.name) {
                     device.name = newName;
@@ -2405,7 +3140,7 @@
                 }
 
                 device.config = config;
-                
+
                 // Update properties panel if this device is selected
                 if (this.selectedDevice && this.selectedDevice.id === deviceId) {
                     this.updatePropertiesPanel();
@@ -2422,7 +3157,7 @@
                 }
 
                 this.updateStatus(`Testing connection to ${device.name}...`);
-                
+
                 try {
                     const response = await fetch(`${this.backendUrl}/api/test-connection`, {
                         method: 'POST',
@@ -2442,14 +3177,14 @@
 
                     if (response.ok && result.success) {
                         alert(`✅ Connection to ${device.name} (${device.config.ip}) successful!\n` +
-                              `Device Type: ${result.device_type || 'Unknown'}\n` +
-                              `Response Time: ${result.response_time || 'N/A'}ms`);
+                            `Device Type: ${result.device_type || 'Unknown'}\n` +
+                            `Response Time: ${result.response_time || 'N/A'}ms`);
                         this.updateStatus(`${device.name} is reachable`);
                         this.updateDeviceStatus(device.id, 'connected');
                     } else {
                         alert(`❌ Connection to ${device.name} (${device.config.ip}) failed!\n` +
-                              `Error: ${result.error}\n` +
-                              `Details: ${result.details || 'No additional details'}`);
+                            `Error: ${result.error}\n` +
+                            `Details: ${result.details || 'No additional details'}`);
                         this.updateStatus(`${device.name} connection failed`);
                         this.updateDeviceStatus(device.id, 'error');
                     }
@@ -2462,7 +3197,7 @@
 
             duplicateDevice(device) {
                 const rect = this.canvas.getBoundingClientRect();
-                
+
                 const newDevice = {
                     id: Date.now(),
                     name: device.name + '-Copy',
@@ -2486,7 +3221,7 @@
                 this.updateStatus(`${newDevice.name} created`);
             }
 
-    setupDragAndDrop() {
+            setupDragAndDrop() {
                 // Device palette drag start
                 document.querySelectorAll('.device-item').forEach(item => {
                     item.addEventListener('dragstart', (e) => {
@@ -2574,11 +3309,11 @@
 
                 const icon = this.getDeviceIcon(device.type);
                 deviceEl.innerHTML = `
-                    <div class="device-icon">
-                        <i class="${icon}"></i>
-                    </div>
-                    <div class="device-label">${device.name}</div>
-                `;
+            <div class="device-icon">
+                <i class="${icon}"></i>
+            </div>
+            <div class="device-label">${device.name}</div>
+        `;
 
                 // Add event listeners
                 deviceEl.addEventListener('click', (e) => this.handleDeviceClick(device, e));
@@ -2588,7 +3323,7 @@
                     e.stopPropagation();
                     this.showContextMenu(e, device);
                 });
-                
+
                 this.makeDeviceDraggable(deviceEl, device);
                 this.addDevicePorts(deviceEl, device);
 
@@ -2632,7 +3367,7 @@
 
             addDevicePorts(deviceEl, device) {
                 const portPositions = this.getPortPositions(device.ports.length);
-                
+
                 device.ports.forEach((port, index) => {
                     const portEl = document.createElement('div');
                     portEl.className = 'device-port';
@@ -2741,9 +3476,9 @@
 
                 this.renderConnection(connection);
                 this.updatePortVisuals();
-                
+
                 this.updateStatus(`Connected ${this.connectionInProgress.fromDevice.name}:${this.connectionInProgress.fromPort.name} to ${toDevice.name}:${toPort.name}`);
-                
+
                 this.connectionInProgress = null;
                 this.clearPortHighlights();
             }
@@ -2751,7 +3486,7 @@
             renderConnection(connection) {
                 const fromDevice = this.devices.find(d => d.id === connection.fromDevice);
                 const toDevice = this.devices.find(d => d.id === connection.toDevice);
-                
+
                 if (!fromDevice || !toDevice) return;
 
                 const fromPort = fromDevice.ports.find(p => p.id === connection.fromPort);
@@ -2782,7 +3517,7 @@
                 // Calculate port positions relative to canvas
                 const fromPortIndex = fromDevice.ports.indexOf(fromPort);
                 const toPortIndex = toDevice.ports.indexOf(toPort);
-                
+
                 const fromPortPos = this.getPortPositions(fromDevice.ports.length)[fromPortIndex];
                 const toPortPos = this.getPortPositions(toDevice.ports.length)[toPortIndex];
 
@@ -2872,11 +3607,11 @@
                 // Update port status
                 const fromDevice = this.devices.find(d => d.id === connection.fromDevice);
                 const toDevice = this.devices.find(d => d.id === connection.toDevice);
-                
+
                 if (fromDevice && toDevice) {
                     const fromPort = fromDevice.ports.find(p => p.id === connection.fromPort);
                     const toPort = toDevice.ports.find(p => p.id === connection.toPort);
-                    
+
                     if (fromPort) {
                         fromPort.connected = false;
                         fromPort.connectedTo = null;
@@ -2900,10 +3635,10 @@
                 document.querySelectorAll('.device-port').forEach(portEl => {
                     const deviceId = parseInt(portEl.dataset.deviceId);
                     const portId = portEl.dataset.portId;
-                    
+
                     const device = this.devices.find(d => d.id === deviceId);
                     const port = device?.ports.find(p => p.id === portId);
-                    
+
                     if (port) {
                         portEl.classList.toggle('connected', port.connected);
                     }
@@ -2914,11 +3649,11 @@
                 document.querySelectorAll('.device-port').forEach(portEl => {
                     const deviceId = parseInt(portEl.dataset.deviceId);
                     const portId = portEl.dataset.portId;
-                    
+
                     if (deviceId !== this.connectionInProgress.fromDevice.id) {
                         const device = this.devices.find(d => d.id === deviceId);
                         const port = device?.ports.find(p => p.id === portId);
-                        
+
                         if (port && !port.connected) {
                             portEl.style.borderColor = 'var(--warning-color)';
                             portEl.style.backgroundColor = 'var(--warning-color)';
@@ -2980,119 +3715,121 @@
 
             updatePropertiesPanel() {
                 const panel = document.getElementById('deviceProperties');
-                
+
                 if (this.selectedDevice) {
                     const device = this.selectedDevice;
                     const connectedPorts = device.ports.filter(p => p.connected).length;
                     const scriptCount = device.scripts ? device.scripts.length : 0;
-                    
+
                     panel.innerHTML = `
-                        <div style="margin-bottom: 16px;">
-                            <h4 style="margin-bottom: 8px; font-weight: 600;">${device.name}</h4>
-                            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 12px;">
-                                ${device.type.charAt(0).toUpperCase() + device.type.slice(1)}
+                <div style="margin-bottom: 16px;">
+                    <h4 style="margin-bottom: 8px; font-weight: 600;">${device.name}</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 12px;">
+                        ${device.type.charAt(0).toUpperCase() + device.type.slice(1)}
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                        <strong>Position:</strong> (${Math.round(device.x)}, ${Math.round(device.y)})
+                    </p>
+                    <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                        <strong>Total Ports:</strong> ${device.ports.length}
+                    </p>
+                    <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                        <strong>Connected:</strong> ${connectedPorts}
+                    </p>
+                    <p style="font-size: 0.875rem; margin-bottom: 12px;">
+                        <strong>Available:</strong> ${device.ports.length - connectedPorts}
+                    </p>
+                    <p style="font-size: 0.875rem; margin-bottom: 12px;">
+                        <strong>CLI Scripts:</strong> ${scriptCount}
+                    </p>
+                    ${device.config ? `
+                        <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                            <strong>IP Address:</strong> ${device.config.ip || 'Not set'}
+                        </p>
+                        <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                            <strong>Username:</strong> ${device.config.username || 'Not set'}
+                        </p>
+                        <p style="font-size: 0.875rem; margin-bottom: 4px;">
+                            <strong>SSH Port:</strong> ${device.config.port || '22'}
+                        </p>
+                        ${device.config.description ? `
+                            <p style="font-size: 0.875rem;">
+                                <strong>Description:</strong> ${device.config.description}
                             </p>
-                        </div>
-                        
-                        <div style="margin-bottom: 16px;">
-                            <p style="font-size: 0.875rem; margin-bottom: 4px;">
-                                <strong>Position:</strong> (${Math.round(device.x)}, ${Math.round(device.y)})
-                            </p>
-                            <p style="font-size: 0.875rem; margin-bottom: 4px;">
-                                <strong>Total Ports:</strong> ${device.ports.length}
-                            </p>
-                            <p style="font-size: 0.875rem; margin-bottom: 4px;">
-                                <strong>Connected:</strong> ${connectedPorts}
-                            </p>
-                            <p style="font-size: 0.875rem; margin-bottom: 12px;">
-                                <strong>Available:</strong> ${device.ports.length - connectedPorts}
-                            </p>
-                            <p style="font-size: 0.875rem; margin-bottom: 12px;">
-                                <strong>CLI Scripts:</strong> ${scriptCount}
-                            </p>
-                            ${device.config ? `
-                                <p style="font-size: 0.875rem; margin-bottom: 4px;">
-                                    <strong>IP Address:</strong> ${device.config.ip || 'Not set'}
-                                </p>
-                                <p style="font-size: 0.875rem; margin-bottom: 4px;">
-                                    <strong>Username:</strong> ${device.config.username || 'Not set'}
-                                </p>
-                                <p style="font-size: 0.875rem; margin-bottom: 4px;">
-                                    <strong>SSH Port:</strong> ${device.config.port || '22'}
-                                </p>
-                                ${device.config.description ? `
-                                    <p style="font-size: 0.875rem;">
-                                        <strong>Description:</strong> ${device.config.description}
-                                    </p>
-                                ` : ''}
-                            ` : `
-                                <p style="font-size: 0.875rem; color: var(--warning-color);">
-                                    <i class="fas fa-exclamation-triangle"></i> Device not configured
-                                </p>
-                            `}
-                        </div>
-                        
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <button onclick="topology.editDeviceName(topology.selectedDevice)" class="btn btn-outline" style="padding: 8px; font-size: 0.75rem;">
-                                <i class="fas fa-edit"></i> Rename
-                            </button>
-                            <button onclick="topology.showConfigModal(topology.selectedDevice)" class="btn btn-outline" style="padding: 8px; font-size: 0.75rem;">
-                                <i class="fas fa-cog"></i> Configure
-                            </button>
-                        </div>
-                        <button onclick="topology.deleteDevice(${device.id})" class="btn" style="width: 100%; margin-top: 8px; padding: 8px; font-size: 0.75rem; background: var(--danger-color); color: white;">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
-                    `;
+                        ` : ''}
+                    ` : `
+                        <p style="font-size: 0.875rem; color: var(--warning-color);">
+                            <i class="fas fa-exclamation-triangle"></i> Device not configured
+                        </p>
+                    `}
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <button onclick="topology.editDeviceName(topology.selectedDevice)" class="btn btn-outline" style="padding: 8px; font-size: 0.75rem;">
+                        <i class="fas fa-edit"></i> Rename
+                    </button>
+                    <button onclick="topology.showConfigModal(topology.selectedDevice)" class="btn btn-outline" style="padding: 8px; font-size: 0.75rem;">
+                        <i class="fas fa-cog"></i> Configure
+                    </button>
+                </div>
+                <button onclick="topology.deleteDevice(${device.id})" class="btn" style="width: 100%; margin-top: 8px; padding: 8px; font-size: 0.75rem; background: var(--danger-color); color: white;">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            `;
                 } else if (this.selectedConnection) {
                     const connection = this.selectedConnection;
                     const fromDevice = this.devices.find(d => d.id === connection.fromDevice);
                     const toDevice = this.devices.find(d => d.id === connection.toDevice);
                     const fromPort = fromDevice?.ports.find(p => p.id === connection.fromPort);
                     const toPort = toDevice?.ports.find(p => p.id === connection.toPort);
-                    
+
                     panel.innerHTML = `
-                        <div style="margin-bottom: 16px;">
-                            <h4 style="margin-bottom: 8px; font-weight: 600;">Connection</h4>
-                            <p style="font-size: 0.875rem; color: var(--text-secondary);">
-                                Link between devices
-                            </p>
-                        </div>
-                        
-                        <div style="margin-bottom: 16px;">
-                            <p style="font-size: 0.875rem; margin-bottom: 8px;">
-                                <strong>From:</strong><br>
-                                ${fromDevice?.name} : ${fromPort?.name}
-                            </p>
-                            <p style="font-size: 0.875rem; margin-bottom: 8px;">
-                                <strong>To:</strong><br>
-                                ${toDevice?.name} : ${toPort?.name}
-                            </p>
-                        </div>
-                        
-                        <button onclick="topology.deleteConnection(${connection.id})" class="btn" style="width: 100%; padding: 8px; font-size: 0.75rem; background: var(--danger-color); color: white;">
-                            <i class="fas fa-unlink"></i> Disconnect
-                        </button>
-                    `;
+                <div style="margin-bottom: 16px;">
+                    <h4 style="margin-bottom: 8px; font-weight: 600;">Connection</h4>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                        Link between devices
+                    </p>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <p style="font-size: 0.875rem; margin-bottom: 8px;">
+                        <strong>From:</strong><br>
+                        ${fromDevice?.name} : ${fromPort?.name}
+                    </p>
+                    <p style="font-size: 0.875rem; margin-bottom: 8px;">
+                        <strong>To:</strong><br>
+                        ${toDevice?.name} : ${toPort?.name}
+                    </p>
+                </div>
+                
+                <button onclick="topology.deleteConnection(${connection.id})" class="btn" style="width: 100%; padding: 8px; font-size: 0.75rem; background: var(--danger-color); color: white;">
+                    <i class="fas fa-unlink"></i> Disconnect
+                </button>
+            `;
                 } else {
                     panel.innerHTML = `
-                        <p style="color: var(--text-secondary); font-size: 0.875rem;">
-                            Select a device or connection to view properties
-                        </p>
-                    `;
+                <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                    Select a device or connection to view properties
+                </p>
+            `;
                 }
             }
+
+
 
             handleCanvasClick(e) {
                 if (e.target === this.canvas) {
                     // Deselect all
                     document.querySelectorAll('.network-device').forEach(el => el.classList.remove('selected'));
                     document.querySelectorAll('.connection-line').forEach(el => el.classList.remove('selected'));
-                    
+
                     this.selectedDevice = null;
                     this.selectedConnection = null;
                     this.updatePropertiesPanel();
-                    
+
                     // Cancel connection in progress
                     if (this.connectionInProgress) {
                         this.connectionInProgress = null;
@@ -3101,7 +3838,7 @@
                     }
                 }
             }
-             hidePortModal() {
+            hidePortModal() {
                 document.getElementById('portModal').classList.remove('show');
             }
 
@@ -3114,8 +3851,8 @@
                 const icons = {
                     g31: 'fas fa-server',
                     g32: 'fas fa-server',
-                    g34c: 'fas fa-server',   
-                    g42: 'fas fa-server',   
+                    g34c: 'fas fa-server',
+                    g42: 'fas fa-server',
                 };
                 return icons[type] || 'fas fa-server';
             }
@@ -3130,7 +3867,7 @@
                     connections: this.connections,
                     timestamp: new Date().toISOString()
                 };
-                
+
                 localStorage.setItem('network_topology', JSON.stringify(topology));
                 this.updateStatus('Topology saved locally');
             }
@@ -3145,7 +3882,7 @@
                         connectionCount: this.connections.length
                     }
                 };
-                
+
                 const blob = new Blob([JSON.stringify(topology, null, 2)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -3155,7 +3892,7 @@
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-                
+
                 this.updateStatus('Topology exported');
             }
 
@@ -3165,22 +3902,22 @@
                 if (saved) {
                     try {
                         const topology = JSON.parse(saved);
-                        
+
                         // Clear current topology
                         this.clearCanvas();
-                        
+
                         // Load devices
                         this.devices = topology.devices || [];
                         this.devices.forEach(device => {
                             this.renderDevice(device);
                         });
-                        
+
                         // Load connections
                         this.connections = topology.connections || [];
                         this.connections.forEach(connection => {
                             this.renderConnection(connection);
                         });
-                        
+
                         // Update device counter
                         if (this.devices.length > 0) {
                             const maxCounter = Math.max(...this.devices.map(d => {
@@ -3189,10 +3926,10 @@
                             }));
                             this.deviceCounter = maxCounter + 1;
                         }
-                        
+
                         this.updatePortVisuals();
                         this.updateStatus('Topology loaded successfully');
-                        
+
                     } catch (error) {
                         this.updateStatus('Failed to load topology');
                         console.error('Load error:', error);
@@ -3208,92 +3945,92 @@
                     connections: this.connections
                 };
             }
-    
-    showTestResult(type, message) {
+
+            showTestResult(type, message) {
                 const resultDiv = document.getElementById('configTestResult');
                 resultDiv.className = `test-result ${type}`;
                 resultDiv.innerHTML = message;
                 resultDiv.classList.remove('hidden');
             }
-    // Updated device configuration testing with real backend integration
-    async testDeviceConfig() {
-        const ip = document.getElementById('configDeviceIP').value.trim();
-        const username = document.getElementById('configDeviceUsername').value.trim();
-        const password = document.getElementById('configDevicePassword').value;
-        const port = document.getElementById('configDevicePort').value || '22';
-        const deviceName = document.getElementById('configDeviceName').value.trim();
-        const deviceType = document.getElementById('configDeviceType').value.trim();
+            // Updated device configuration testing with real backend integration
+            async testDeviceConfig() {
+                const ip = document.getElementById('configDeviceIP').value.trim();
+                const username = document.getElementById('configDeviceUsername').value.trim();
+                const password = document.getElementById('configDevicePassword').value;
+                const port = document.getElementById('configDevicePort').value || '22';
+                const deviceName = document.getElementById('configDeviceName').value.trim();
+                const deviceType = document.getElementById('configDeviceType').value.trim();
 
-        const resultDiv = document.getElementById('configTestResult');
-        const testBtn = document.getElementById('testConfigBtn');
+                const resultDiv = document.getElementById('configTestResult');
+                const testBtn = document.getElementById('testConfigBtn');
 
-        if (!ip || !username || !password) {
-            this.showTestResult('error', 'Please fill in IP address, username, and password');
-            return false;
-        }
-
-        // Validate IP format
-        if (!this.validateIPAddress(ip)) {
-            this.showTestResult('error', 'Invalid IP address format');
-            return false;
-        }
-
-        // Show loading state
-        testBtn.disabled = true;
-        testBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing Connection...';
-        this.showTestResult('info', 'Connecting to device, please wait...');
-
-        try {
-            // Call the real backend API
-            const response = await fetch(`${this.apiBaseUrl}/devices/test-credentials`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.authToken}`
-                },
-                body: JSON.stringify({
-                    ip_address: ip,
-                    username: username,
-                    password: password,
-                    ssh_port: parseInt(port),
-                    device_type: deviceType || 'generic'
-                })
-            });
-
-            const result = await response.json();
-            console.log(result);
-            if (response.ok) {
-                if (result.credentials_valid) {
-                    this.showDetailedTestResult('success', result);
-                    this.updateStatus(`${deviceName || ip} connection test passed`);
-                    return true;
-                } else {
-                    this.showDetailedTestResult('error', result);
-                    this.updateStatus(`${deviceName || ip} connection test failed`);
+                if (!ip || !username || !password) {
+                    this.showTestResult('error', 'Please fill in IP address, username, and password');
                     return false;
                 }
-            } else {
-                throw new Error(result.message || 'Connection test failed');
+
+                // Validate IP format
+                if (!this.validateIPAddress(ip)) {
+                    this.showTestResult('error', 'Invalid IP address format');
+                    return false;
+                }
+
+                // Show loading state
+                testBtn.disabled = true;
+                testBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing Connection...';
+                this.showTestResult('info', 'Connecting to device, please wait...');
+
+                try {
+                    // Call the real backend API
+                    const response = await fetch(`${this.apiBaseUrl}/devices/test-credentials`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.authToken}`
+                        },
+                        body: JSON.stringify({
+                            ip_address: ip,
+                            username: username,
+                            password: password,
+                            ssh_port: parseInt(port),
+                            device_type: deviceType || 'generic'
+                        })
+                    });
+
+                    const result = await response.json();
+                    console.log(result);
+                    if (response.ok) {
+                        if (result.credentials_valid) {
+                            this.showDetailedTestResult('success', result);
+                            this.updateStatus(`${deviceName || ip} connection test passed`);
+                            return true;
+                        } else {
+                            this.showDetailedTestResult('error', result);
+                            this.updateStatus(`${deviceName || ip} connection test failed`);
+                            return false;
+                        }
+                    } else {
+                        throw new Error(result.message || 'Connection test failed');
+                    }
+
+                } catch (error) {
+                    console.error('Connection test error:', error);
+                    this.showTestResult('error', `Connection test failed: ${error.message}`);
+                    this.updateStatus('Connection test error');
+                    return false;
+                } finally {
+                    testBtn.disabled = false;
+                    testBtn.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
+                }
             }
 
-        } catch (error) {
-            console.error('Connection test error:', error);
-            this.showTestResult('error', `Connection test failed: ${error.message}`);
-            this.updateStatus('Connection test error');
-            return false;
-        } finally {
-            testBtn.disabled = false;
-            testBtn.innerHTML = '<i class="fas fa-plug"></i> Test Connection';
-        }
-    }
+            // Display detailed test results from backend
+            showDetailedTestResult(type, result) {
+                const resultDiv = document.getElementById('configTestResult');
 
-    // Display detailed test results from backend
-    showDetailedTestResult(type, result) {
-        const resultDiv = document.getElementById('configTestResult');
-        
-        if (type === 'success') {
-            const testResults = result.test_results;
-            let html = `
+                if (type === 'success') {
+                    const testResults = result.test_results;
+                    let html = `
                 <div class="test-status-success">
                     <i class="fas fa-check-circle"></i> <strong>Connection Successful!</strong>
                 </div>
@@ -3306,36 +4043,36 @@
                 </div>
             `;
 
-            // Add device info if available
-            if (result.device_info && result.device_info.success) {
-                html += '<div class="device-info">';
-                if (result.device_info.system_info) {
-                    html += `<small><strong>Device:</strong> ${JSON.stringify(result.device_info.system_info).slice(0, 100)}...</small>`;
-                }
-                html += '</div>';
-            }
+                    // Add device info if available
+                    if (result.device_info && result.device_info.success) {
+                        html += '<div class="device-info">';
+                        if (result.device_info.system_info) {
+                            html += `<small><strong>Device:</strong> ${JSON.stringify(result.device_info.system_info).slice(0, 100)}...</small>`;
+                        }
+                        html += '</div>';
+                    }
 
-            // Add recommendations
-            if (result.recommendations && result.recommendations.length > 0) {
-                html += '<div class="recommendations">';
-                result.recommendations.forEach(rec => {
-                    html += `<small><i class="fas fa-lightbulb"></i> ${rec}</small><br>`;
-                });
-                html += '</div>';
-            }
+                    // Add recommendations
+                    if (result.recommendations && result.recommendations.length > 0) {
+                        html += '<div class="recommendations">';
+                        result.recommendations.forEach(rec => {
+                            html += `<small><i class="fas fa-lightbulb"></i> ${rec}</small><br>`;
+                        });
+                        html += '</div>';
+                    }
 
-            resultDiv.innerHTML = html;
-        } else {
-            const testResults = result.test_results;
-            let html = `
+                    resultDiv.innerHTML = html;
+                } else {
+                    const testResults = result.test_results;
+                    let html = `
                 <div class="test-status-error">
                     <i class="fas fa-times-circle"></i> <strong>Connection Failed</strong>
                 </div>
                 <div class="test-details">
             `;
 
-            if (testResults) {
-                html += `
+                    if (testResults) {
+                        html += `
                     <div class="test-item ${testResults.ping.success ? 'success' : 'failed'}">
                         <i class="fas ${testResults.ping.success ? 'fa-check' : 'fa-times'}"></i>
                         <span>${testResults.ping.message}</span>
@@ -3349,112 +4086,112 @@
                         <span>${testResults.authentication.message}</span>
                     </div>
                 `;
+                    }
+
+                    html += '</div>';
+
+                    // Add recommendations for fixing issues
+                    if (result.recommendations && result.recommendations.length > 0) {
+                        html += '<div class="recommendations">';
+                        result.recommendations.forEach(rec => {
+                            html += `<small><i class="fas fa-exclamation-triangle"></i> ${rec}</small><br>`;
+                        });
+                        html += '</div>';
+                    }
+
+                    resultDiv.innerHTML = html;
+                }
+
+                resultDiv.className = `test-result ${type}`;
+                resultDiv.classList.remove('hidden');
             }
 
-            html += '</div>';
+            // Enhanced device connection testing for existing devices
+            async testDeviceConnection(device) {
+                if (!device.config || !device.config.ip) {
+                    alert('Please configure the device first (right-click → Configure Device)');
+                    return;
+                }
 
-            // Add recommendations for fixing issues
-            if (result.recommendations && result.recommendations.length > 0) {
-                html += '<div class="recommendations">';
-                result.recommendations.forEach(rec => {
-                    html += `<small><i class="fas fa-exclamation-triangle"></i> ${rec}</small><br>`;
-                });
-                html += '</div>';
-            }
+                this.updateStatus(`Testing connection to ${device.name}...`);
 
-            resultDiv.innerHTML = html;
-        }
+                try {
+                    // First, try to get the device ID from backend if it exists
+                    let deviceId = device.backendId;
 
-        resultDiv.className = `test-result ${type}`;
-        resultDiv.classList.remove('hidden');
-    }
+                    if (!deviceId) {
+                        // If no backend ID, test credentials directly
+                        const response = await fetch(`${this.apiBaseUrl}/devices/test-credentials`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${this.authToken}`
+                            },
+                            body: JSON.stringify({
+                                ip_address: device.config.ip,
+                                username: device.config.username,
+                                password: device.config.password,
+                                ssh_port: parseInt(device.config.port || 22),
+                                device_type: device.type
+                            })
+                        });
 
-    // Enhanced device connection testing for existing devices
-    async testDeviceConnection(device) {
-        if (!device.config || !device.config.ip) {
-            alert('Please configure the device first (right-click → Configure Device)');
-            return;
-        }
+                        const result = await response.json();
 
-        this.updateStatus(`Testing connection to ${device.name}...`);
-        
-        try {
-            // First, try to get the device ID from backend if it exists
-            let deviceId = device.backendId;
-            
-            if (!deviceId) {
-                // If no backend ID, test credentials directly
-                const response = await fetch(`${this.apiBaseUrl}/devices/test-credentials`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${this.authToken}`
-                    },
-                    body: JSON.stringify({
-                        ip_address: device.config.ip,
-                        username: device.config.username,
-                        password: device.config.password,
-                        ssh_port: parseInt(device.config.port || 22),
-                        device_type: device.type
-                    })
-                });
+                        if (response.ok) {
+                            this.showConnectionTestModal(device, result);
 
-                const result = await response.json();
-
-                if (response.ok) {
-                    this.showConnectionTestModal(device, result);
-                    
-                    if (result.credentials_valid) {
-                        this.updateStatus(`${device.name} is reachable and configured correctly`);
-                        this.updateDeviceVisualStatus(device, 'connected');
+                            if (result.credentials_valid) {
+                                this.updateStatus(`${device.name} is reachable and configured correctly`);
+                                this.updateDeviceVisualStatus(device, 'connected');
+                            } else {
+                                this.updateStatus(`${device.name} connection failed`);
+                                this.updateDeviceVisualStatus(device, 'disconnected');
+                            }
+                        } else {
+                            throw new Error(result.message || 'Connection test failed');
+                        }
                     } else {
-                        this.updateStatus(`${device.name} connection failed`);
-                        this.updateDeviceVisualStatus(device, 'disconnected');
-                    }
-                } else {
-                    throw new Error(result.message || 'Connection test failed');
-                }
-            } else {
-                // If we have a backend device ID, use the device-specific endpoint
-                const response = await fetch(`${this.apiBaseUrl}/devices/${deviceId}/test-connection`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${this.authToken}`
-                    }
-                });
+                        // If we have a backend device ID, use the device-specific endpoint
+                        const response = await fetch(`${this.apiBaseUrl}/devices/${deviceId}/test-connection`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${this.authToken}`
+                            }
+                        });
 
-                const result = await response.json();
+                        const result = await response.json();
 
-                if (response.ok) {
-                    this.showConnectionTestModal(device, result);
-                    this.updateDeviceVisualStatus(device, result.overall_success ? 'connected' : 'disconnected');
-                    this.updateStatus(result.overall_success ? 
-                        `${device.name} connection successful` : 
-                        `${device.name} connection failed`);
-                } else {
-                    throw new Error(result.message || 'Connection test failed');
+                        if (response.ok) {
+                            this.showConnectionTestModal(device, result);
+                            this.updateDeviceVisualStatus(device, result.overall_success ? 'connected' : 'disconnected');
+                            this.updateStatus(result.overall_success ?
+                                `${device.name} connection successful` :
+                                `${device.name} connection failed`);
+                        } else {
+                            throw new Error(result.message || 'Connection test failed');
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Connection test error:', error);
+                    alert(`❌ Connection test failed: ${error.message}`);
+                    this.updateStatus(`${device.name} connection test error`);
+                    this.updateDeviceVisualStatus(device, 'error');
                 }
             }
 
-        } catch (error) {
-            console.error('Connection test error:', error);
-            alert(`❌ Connection test failed: ${error.message}`);
-            this.updateStatus(`${device.name} connection test error`);
-            this.updateDeviceVisualStatus(device, 'error');
-        }
-    }
+            // Show connection test results in a modal
+            showConnectionTestModal(device, result) {
+                const modal = document.createElement('div');
+                modal.className = 'modal show';
+                modal.style.display = 'flex';
 
-    // Show connection test results in a modal
-    showConnectionTestModal(device, result) {
-        const modal = document.createElement('div');
-        modal.className = 'modal show';
-        modal.style.display = 'flex';
-        
-        const isSuccess = result.credentials_valid || result.overall_success;
-        const statusClass = isSuccess ? 'success' : 'error';
-        const statusIcon = isSuccess ? 'fa-check-circle' : 'fa-times-circle';
-        
-        modal.innerHTML = `
+                const isSuccess = result.credentials_valid || result.overall_success;
+                const statusClass = isSuccess ? 'success' : 'error';
+                const statusIcon = isSuccess ? 'fa-check-circle' : 'fa-times-circle';
+
+                modal.innerHTML = `
             <div class="modal-content" style="max-width: 600px;">
                 <div class="modal-header">
                     <h3 class="modal-title">
@@ -3481,23 +4218,23 @@
             </div>
         `;
 
-        // Close button handler
-        modal.querySelector('.modal-close').onclick = () => modal.remove();
-        
-        // Close on backdrop click
-        modal.onclick = (e) => {
-            if (e.target === modal) modal.remove();
-        };
+                // Close button handler
+                modal.querySelector('.modal-close').onclick = () => modal.remove();
 
-        document.body.appendChild(modal);
-    }
+                // Close on backdrop click
+                modal.onclick = (e) => {
+                    if (e.target === modal) modal.remove();
+                };
 
-    // Generate HTML for test results
-    generateTestResultsHTML(result) {
-        const testResults = result.test_results;
-        if (!testResults) return '';
+                document.body.appendChild(modal);
+            }
 
-        return `
+            // Generate HTML for test results
+            generateTestResultsHTML(result) {
+                const testResults = result.test_results;
+                if (!testResults) return '';
+
+                return `
             <div class="test-details-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 16px 0;">
                 <div class="test-detail-card">
                     <div class="test-icon ${testResults.ping.success ? 'success' : 'failed'}">
@@ -3544,215 +4281,338 @@
                 </div>
             ` : ''}
         `;
-    }
+            }
 
-    // Update device visual status based on connection results
-    updateDeviceVisualStatus(device, status) {
-        const deviceEl = document.querySelector(`[data-device-id="${device.id}"]`);
-        if (!deviceEl) return;
+            // Update device visual status based on connection results
+            updateDeviceVisualStatus(device, status) {
+                const deviceEl = document.querySelector(`[data-device-id="${device.id}"]`);
+                if (!deviceEl) return;
 
-        // Remove existing status classes
-        deviceEl.classList.remove('status-connected', 'status-disconnected', 'status-error');
-        
-        // Add new status class
-        deviceEl.classList.add(`status-${status}`);
-        
-        // Update device object
-        device.connectionStatus = status;
-        device.lastTested = new Date().toISOString();
-    }
+                // Remove existing status classes
+                deviceEl.classList.remove('status-connected', 'status-disconnected', 'status-error');
 
-    // Enhanced save device configuration
-    async saveDeviceConfig() {
-        const modal = document.getElementById('deviceConfigModal');
-        const deviceId = parseInt(modal.getAttribute('data-device-id'));
-        const device = this.devices.find(d => d.id === deviceId);
+                // Add new status class
+                deviceEl.classList.add(`status-${status}`);
 
-        if (!device) return;
+                // Update device object
+                device.connectionStatus = status;
+                device.lastTested = new Date().toISOString();
+            }
 
-        const config = {
-            ip: document.getElementById('configDeviceIP').value.trim(),
-            username: document.getElementById('configDeviceUsername').value.trim(),
-            password: document.getElementById('configDevicePassword').value,
-            port: document.getElementById('configDevicePort').value || '22',
-            description: document.getElementById('configDeviceDescription').value.trim()
-        };
+            // Enhanced save device configuration
+            async saveDeviceConfig() {
+                const modal = document.getElementById('deviceConfigModal');
+                const deviceId = parseInt(modal.getAttribute('data-device-id'));
+                const device = this.devices.find(d => d.id === deviceId);
 
-        const newName = document.getElementById('configDeviceName').value.trim();
-        
-        // Validate required fields
-        if (!config.ip || !config.username) {
-            this.showTestResult('error', 'IP address and username are required');
-            return;
-        }
+                if (!device) return;
 
-        // Update device locally
-        if (newName && newName !== device.name) {
-            device.name = newName;
-            const deviceEl = document.querySelector(`[data-device-id="${deviceId}"] .device-label`);
-            if (deviceEl) deviceEl.textContent = device.name;
-        }
-
-        device.config = config;
-        
-        // Try to save to backend if we have auth
-        if (this.authToken) {
-            try {
-                const deviceData = {
-                    name: device.name,
-                    device_type: device.type,
-                    ip_address: config.ip,
-                    username: config.username,
-                    password: config.password,
-                    ssh_port: parseInt(config.port),
-                    description: config.description
+                const config = {
+                    ip: document.getElementById('configDeviceIP').value.trim(),
+                    username: document.getElementById('configDeviceUsername').value.trim(),
+                    password: document.getElementById('configDevicePassword').value,
+                    port: document.getElementById('configDevicePort').value || '22',
+                    description: document.getElementById('configDeviceDescription').value.trim()
                 };
 
-                let response;
-                if (device.backendId) {
-                    // Update existing device
-                    response = await fetch(`${this.apiBaseUrl}/devices/${device.backendId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${this.authToken}`
-                        },
-                        body: JSON.stringify(deviceData)
-                    });
-                } else {
-                    // Create new device
-                    response = await fetch(`${this.apiBaseUrl}/devices/`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${this.authToken}`
-                        },
-                        body: JSON.stringify(deviceData)
-                    });
+                const newName = document.getElementById('configDeviceName').value.trim();
+
+                // Validate required fields
+                if (!config.ip || !config.username) {
+                    this.showTestResult('error', 'IP address and username are required');
+                    return;
                 }
 
-                if (response.ok) {
-                    const result = await response.json();
-                    device.backendId = result.id;
-                    this.updateStatus(`${device.name} saved to backend`);
-                } else {
-                    console.warn('Failed to save to backend:', await response.text());
-                    this.updateStatus(`${device.name} saved locally only`);
+                // Update device locally
+                if (newName && newName !== device.name) {
+                    device.name = newName;
+                    const deviceEl = document.querySelector(`[data-device-id="${deviceId}"] .device-label`);
+                    if (deviceEl) deviceEl.textContent = device.name;
                 }
-            } catch (error) {
-                console.warn('Backend save error:', error);
-                this.updateStatus(`${device.name} saved locally only`);
+
+                device.config = config;
+
+                // Try to save to backend if we have auth
+                if (this.authToken) {
+                    try {
+                        const deviceData = {
+                            name: device.name,
+                            device_type: device.type,
+                            ip_address: config.ip,
+                            username: config.username,
+                            password: config.password,
+                            ssh_port: parseInt(config.port),
+                            description: config.description
+                        };
+
+                        let response;
+                        if (device.backendId) {
+                            // Update existing device
+                            response = await fetch(`${this.apiBaseUrl}/devices/${device.backendId}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${this.authToken}`
+                                },
+                                body: JSON.stringify(deviceData)
+                            });
+                        } else {
+                            // Create new device
+                            response = await fetch(`${this.apiBaseUrl}/devices/`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${this.authToken}`
+                                },
+                                body: JSON.stringify(deviceData)
+                            });
+                        }
+
+                        if (response.ok) {
+                            const result = await response.json();
+                            device.backendId = result.id;
+                            this.updateStatus(`${device.name} saved to backend`);
+                        } else {
+                            console.warn('Failed to save to backend:', await response.text());
+                            this.updateStatus(`${device.name} saved locally only`);
+                        }
+                    } catch (error) {
+                        console.warn('Backend save error:', error);
+                        this.updateStatus(`${device.name} saved locally only`);
+                    }
+                }
+
+                // Update properties panel if this device is selected
+                if (this.selectedDevice && this.selectedDevice.id === deviceId) {
+                    this.updatePropertiesPanel();
+                }
+
+                this.hideConfigModal();
+                this.updateStatus(`${device.name} configuration saved`);
             }
-        }
-        
-        // Update properties panel if this device is selected
-        if (this.selectedDevice && this.selectedDevice.id === deviceId) {
-            this.updatePropertiesPanel();
-        }
 
-        this.hideConfigModal();
-        this.updateStatus(`${device.name} configuration saved`);
-    }
+            // Utility function to validate IP address
+            validateIPAddress(ip) {
+                const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+                return ipRegex.test(ip);
+            }
 
-    // Utility function to validate IP address
-    validateIPAddress(ip) {
-        const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-        return ipRegex.test(ip);
-    }
+            // Enhanced bulk testing functionality
+            async bulkTestAllDevices() {
+                const devicesWithConfig = this.devices.filter(d => d.config && d.config.ip);
 
-    // Enhanced bulk testing functionality
-    async bulkTestAllDevices() {
-        const devicesWithConfig = this.devices.filter(d => d.config && d.config.ip);
-        
-        if (devicesWithConfig.length === 0) {
-            alert('No devices with configuration found. Please configure devices first.');
-            return;
-        }
-
-        if (!confirm(`Test connection to ${devicesWithConfig.length} configured devices?`)) {
-            return;
-        }
-
-        this.updateStatus('Running bulk device test...');
-        
-        let successCount = 0;
-        let failCount = 0;
-
-        for (const device of devicesWithConfig) {
-            try {
-                this.updateStatus(`Testing ${device.name}...`);
-                
-                const response = await fetch(`${this.apiBaseUrl}/devices/test-credentials`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${this.authToken}`
-                    },
-                    body: JSON.stringify({
-                        ip_address: device.config.ip,
-                        username: device.config.username,
-                        password: device.config.password,
-                        ssh_port: parseInt(device.config.port || 22),
-                        device_type: device.type
-                    })
-                });
-
-                const result = await response.json();
-
-                if (response.ok && result.credentials_valid) {
-                    this.updateDeviceVisualStatus(device, 'connected');
-                    successCount++;
-                } else {
-                    this.updateDeviceVisualStatus(device, 'disconnected');
-                    failCount++;
+                if (devicesWithConfig.length === 0) {
+                    alert('No devices with configuration found. Please configure devices first.');
+                    return;
                 }
 
-                // Small delay to prevent overwhelming the backend
-                await new Promise(resolve => setTimeout(resolve, 500));
+                if (!confirm(`Test connection to ${devicesWithConfig.length} configured devices?`)) {
+                    return;
+                }
 
-            } catch (error) {
-                console.error(`Test failed for ${device.name}:`, error);
-                this.updateDeviceVisualStatus(device, 'error');
-                failCount++;
+                this.updateStatus('Running bulk device test...');
+
+                let successCount = 0;
+                let failCount = 0;
+
+                for (const device of devicesWithConfig) {
+                    try {
+                        this.updateStatus(`Testing ${device.name}...`);
+
+                        const response = await fetch(`${this.apiBaseUrl}/devices/test-credentials`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${this.authToken}`
+                            },
+                            body: JSON.stringify({
+                                ip_address: device.config.ip,
+                                username: device.config.username,
+                                password: device.config.password,
+                                ssh_port: parseInt(device.config.port || 22),
+                                device_type: device.type
+                            })
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok && result.credentials_valid) {
+                            this.updateDeviceVisualStatus(device, 'connected');
+                            successCount++;
+                        } else {
+                            this.updateDeviceVisualStatus(device, 'disconnected');
+                            failCount++;
+                        }
+
+                        // Small delay to prevent overwhelming the backend
+                        await new Promise(resolve => setTimeout(resolve, 500));
+
+                    } catch (error) {
+                        console.error(`Test failed for ${device.name}:`, error);
+                        this.updateDeviceVisualStatus(device, 'error');
+                        failCount++;
+                    }
+                }
+
+                this.updateStatus(`Bulk test complete: ${successCount} successful, ${failCount} failed`);
+
+                // Show summary
+                alert(`Bulk Test Complete\n\nSuccessful: ${successCount}\nFailed: ${failCount}\nTotal: ${devicesWithConfig.length}`);
             }
+
+            // Add method to check authentication
+            checkAuthentication() {
+                this.authToken = localStorage.getItem('auth_token');
+                //Uncomment this when authentication is implemented
+                /*if (!this.authToken) {
+                    console.warn('No authentication token found. Some features may not work.');
+                    return false;
+                }*/
+
+                return true;
+            }
+
+            setTool(tool) {
+                this.currentTool = tool;
+
+                document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById(`${tool}Tool`).classList.add('active');
+
+                const messages = {
+                    select: 'Click devices to select them',
+                    connect: 'Click ports to connect devices',
+                    delete: 'Click devices or connections to delete them'
+                };
+
+                this.updateStatus(messages[tool] || 'Tool selected');
+            }
+
+            clearCanvas() {
+                if (!confirm('Clear the entire topology? This cannot be undone.')) return;
+
+                this.devices = [];
+                this.connections = [];
+                this.selectedDevice = null;
+                this.deviceCounter = 1;
+
+                this.canvas.innerHTML = '';
+                this.svg.innerHTML = '';
+                this.updatePropertiesPanel();
+                this.updateStatus('Canvas cleared');
+            }
+
+            handleCanvasClick(e) {
+                if (e.target === this.canvas) {
+                    document.querySelectorAll('.network-device').forEach(el => el.classList.remove('selected'));
+
+                    this.selectedDevice = null;
+                    this.updatePropertiesPanel();
+                }
+            }
+
+            getDeviceIcon(type) {
+                const icons = {
+                    g31: 'fas fa-server',
+                    g32: 'fas fa-server',
+                    g34c: 'fas fa-server',
+                    g42: 'fas fa-server',
+                    router: 'fas fa-router',
+                    switch: 'fas fa-network-wired',
+                    server: 'fas fa-server'
+                };
+                return icons[type] || 'fas fa-server';
+            }
+
+
+            updateStatus(message) {
+                document.getElementById('canvasStatus').textContent = message;
+            }
+
+            saveTopology() {
+                const topology = {
+                    devices: this.devices,
+                    connections: this.connections,
+                    timestamp: new Date().toISOString()
+                };
+
+                localStorage.setItem('network_topology', JSON.stringify(topology));
+                this.updateStatus('Topology saved locally');
+            }
+
+            exportTopology() {
+                const topology = {
+                    devices: this.devices,
+                    connections: this.connections,
+                    metadata: {
+                        created: new Date().toISOString(),
+                        deviceCount: this.devices.length,
+                        connectionCount: this.connections.length
+                    }
+                };
+
+                const blob = new Blob([JSON.stringify(topology, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `network_topology_${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                this.updateStatus('Topology exported');
+            }
+
+            loadTopology() {
+                const saved = localStorage.getItem('network_topology');
+                if (saved) {
+                    try {
+                        const topology = JSON.parse(saved);
+
+                        this.clearCanvas();
+
+                        this.devices = topology.devices || [];
+                        this.devices.forEach(device => {
+                            this.renderDevice(device);
+                        });
+
+                        if (this.devices.length > 0) {
+                            const maxCounter = Math.max(...this.devices.map(d => {
+                                const match = d.name.match(/-(\d+)$/);
+                                return match ? parseInt(match[1]) : 0;
+                            }));
+                            this.deviceCounter = maxCounter + 1;
+                        }
+
+                        this.updateStatus('Topology loaded successfully');
+
+                    } catch (error) {
+                        this.updateStatus('Failed to load topology');
+                        console.error('Load error:', error);
+                    }
+                } else {
+                    this.updateStatus('No saved topology found');
+                }
+            }
+
+
         }
 
-        this.updateStatus(`Bulk test complete: ${successCount} successful, ${failCount} failed`);
-        
-        // Show summary
-        alert(`Bulk Test Complete\n\nSuccessful: ${successCount}\nFailed: ${failCount}\nTotal: ${devicesWithConfig.length}`);
-    }
+        // Enhanced device rendering with status indicators
+        TopologyBuilder.prototype.renderDevice = function (device) {
+            const deviceEl = document.createElement('div');
+            deviceEl.className = 'network-device';
+            deviceEl.style.left = device.x + 'px';
+            deviceEl.style.top = device.y + 'px';
+            deviceEl.setAttribute('data-device-id', device.id);
 
-    // Add method to check authentication
-    checkAuthentication() {
-        this.authToken = localStorage.getItem('auth_token');
-        //Uncomment this when authentication is implemented
-        /*if (!this.authToken) {
-            console.warn('No authentication token found. Some features may not work.');
-            return false;
-        }*/
-        
-        return true;
-    }
+            // Add connection status class if available
+            if (device.connectionStatus) {
+                deviceEl.classList.add(`status-${device.connectionStatus}`);
+            }
 
-  
-}
-
-// Enhanced device rendering with status indicators
-TopologyBuilder.prototype.renderDevice = function(device) {
-    const deviceEl = document.createElement('div');
-    deviceEl.className = 'network-device';
-    deviceEl.style.left = device.x + 'px';
-    deviceEl.style.top = device.y + 'px';
-    deviceEl.setAttribute('data-device-id', device.id);
-
-    // Add connection status class if available
-    if (device.connectionStatus) {
-        deviceEl.classList.add(`status-${device.connectionStatus}`);
-    }
-
-    const icon = this.getDeviceIcon(device.type);
-    deviceEl.innerHTML = `
+            const icon = this.getDeviceIcon(device.type);
+            deviceEl.innerHTML = `
         <div class="device-icon">
             <i class="${icon}"></i>
         </div>
@@ -3760,179 +4620,180 @@ TopologyBuilder.prototype.renderDevice = function(device) {
         ${device.config ? '<div class="device-status-indicator configured"></div>' : '<div class="device-status-indicator unconfigured"></div>'}
     `;
 
-    // Add event listeners
-    deviceEl.addEventListener('click', (e) => this.handleDeviceClick(device, e));
-    deviceEl.addEventListener('dblclick', (e) => this.handleDeviceDoubleClick(device, e));
-    deviceEl.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        this.showContextMenu(e, device);
-    });
-    
-    this.makeDeviceDraggable(deviceEl, device);
-    this.addDevicePorts(deviceEl, device);
+            // Add event listeners
+            deviceEl.addEventListener('click', (e) => this.handleDeviceClick(device, e));
+            deviceEl.addEventListener('dblclick', (e) => this.handleDeviceDoubleClick(device, e));
+            deviceEl.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.showContextMenu(e, device);
+            });
 
-    this.canvas.appendChild(deviceEl);
-};
+            this.makeDeviceDraggable(deviceEl, device);
+            this.addDevicePorts(deviceEl, device);
 
-// Initialize with authentication check
-document.addEventListener('DOMContentLoaded', function() {
-    const topology = new TopologyBuilder();
-    topology.checkAuthentication();
-    
-    // Make topology globally available
-    window.topology = topology;
-    
-    // Add bulk test button
-    const toolsSection = document.querySelector('.tools-section');
-    if (toolsSection) {
-        const bulkTestBtn = document.createElement('button');
-        bulkTestBtn.className = 'tool-btn';
-        bulkTestBtn.innerHTML = '<i class="fas fa-network-wired"></i> Bulk Test';
-        bulkTestBtn.onclick = () => topology.bulkTestAllDevices();
-        toolsSection.appendChild(bulkTestBtn);
-    }
+            this.canvas.appendChild(deviceEl);
+        };
 
+        // Initialize with authentication check
+        document.addEventListener('DOMContentLoaded', function () {
+            const topology = new TopologyBuilder();
+            topology.checkAuthentication();
 
-    // Password toggle functionality
-    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
-    const passwordInput = document.getElementById('configDevicePassword');
-    
-    if (togglePasswordBtn && passwordInput) {
-        togglePasswordBtn.addEventListener('click', function() {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            
-            const icon = this.querySelector('i');
-            icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
-        });
-    }
-    
-    // Real-time validation
-    const ipInput = document.getElementById('configDeviceIP');
-    const usernameInput = document.getElementById('configDeviceUsername');
-    const portInput = document.getElementById('configDevicePort');
-    
-    function validateForm() {
-        const validationDiv = document.getElementById('configValidationMessages');
-        const messages = [];
-        
-        // Validate IP
-        if (ipInput.value && !topology.validateIPAddress(ipInput.value)) {
-            messages.push('Invalid IP address format');
-        }
-        
-        // Validate port
-        if (portInput.value) {
-            const port = parseInt(portInput.value);
-            if (port < 1 || port > 65535) {
-                messages.push('SSH port must be between 1 and 65535');
+            // Make topology globally available
+            window.topology = topology;
+
+            // Add bulk test button
+            const toolsSection = document.querySelector('.tools-section');
+            if (toolsSection) {
+                const bulkTestBtn = document.createElement('button');
+                bulkTestBtn.className = 'tool-btn';
+                bulkTestBtn.innerHTML = '<i class="fas fa-network-wired"></i> Bulk Test';
+                bulkTestBtn.onclick = () => topology.bulkTestAllDevices();
+                toolsSection.appendChild(bulkTestBtn);
             }
-        }
-        
-        // Show/hide validation messages
-        if (messages.length > 0) {
-            validationDiv.innerHTML = `
+
+
+            // Password toggle functionality
+            const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+            const passwordInput = document.getElementById('configDevicePassword');
+
+            if (togglePasswordBtn && passwordInput) {
+                togglePasswordBtn.addEventListener('click', function () {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+
+                    const icon = this.querySelector('i');
+                    icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+                });
+            }
+
+            // Real-time validation
+            const ipInput = document.getElementById('configDeviceIP');
+            const usernameInput = document.getElementById('configDeviceUsername');
+            const portInput = document.getElementById('configDevicePort');
+
+            function validateForm() {
+                const validationDiv = document.getElementById('configValidationMessages');
+                const messages = [];
+
+                // Validate IP
+                if (ipInput.value && !topology.validateIPAddress(ipInput.value)) {
+                    messages.push('Invalid IP address format');
+                }
+
+                // Validate port
+                if (portInput.value) {
+                    const port = parseInt(portInput.value);
+                    if (port < 1 || port > 65535) {
+                        messages.push('SSH port must be between 1 and 65535');
+                    }
+                }
+
+                // Show/hide validation messages
+                if (messages.length > 0) {
+                    validationDiv.innerHTML = `
                 <div class="validation-error">
                     <i class="fas fa-exclamation-triangle"></i>
                     ${messages.join('<br>')}
                 </div>
             `;
-            validationDiv.classList.remove('hidden');
-        } else {
-            validationDiv.classList.add('hidden');
-        }
-        
-        // Enable/disable test button
-        const testBtn = document.getElementById('testConfigBtn');
-        const canTest = ipInput.value && usernameInput.value && passwordInput.value && messages.length === 0;
-        testBtn.disabled = !canTest;
-    }
-    
-    // Add validation listeners
-    [ipInput, usernameInput, passwordInput, portInput].forEach(input => {
-        if (input) {
-            input.addEventListener('input', validateForm);
-            input.addEventListener('blur', validateForm);
-        }
-    });
-});
+                    validationDiv.classList.remove('hidden');
+                } else {
+                    validationDiv.classList.add('hidden');
+                }
 
-// Authentication functions
-async function performAuth() {
-    const username = document.getElementById('authUsername').value;
-    const password = document.getElementById('authPassword').value;
-    const errorDiv = document.getElementById('authError');
-    
-    if (!username || !password) {
-        errorDiv.innerHTML = 'Please enter both username and password';
-        errorDiv.classList.remove('hidden');
-        return;
-    }
-    
-    try {
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, password })
+                // Enable/disable test button
+                const testBtn = document.getElementById('testConfigBtn');
+                const canTest = ipInput.value && usernameInput.value && passwordInput.value && messages.length === 0;
+                testBtn.disabled = !canTest;
+            }
+
+            // Add validation listeners
+            [ipInput, usernameInput, passwordInput, portInput].forEach(input => {
+                if (input) {
+                    input.addEventListener('input', validateForm);
+                    input.addEventListener('blur', validateForm);
+                }
+            });
         });
-        
-        const result = await response.json();
-        
-        if (response.ok) {
-            localStorage.setItem('auth_token', result.access_token);
-            topology.authToken = result.access_token;
-            hideAuthModal();
-            topology.updateStatus('Authentication successful');
-        } else {
-            throw new Error(result.message || 'Authentication failed');
+
+        // Authentication functions
+        async function performAuth() {
+            const username = document.getElementById('authUsername').value;
+            const password = document.getElementById('authPassword').value;
+            const errorDiv = document.getElementById('authError');
+
+            if (!username || !password) {
+                errorDiv.innerHTML = 'Please enter both username and password';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('auth_token', result.access_token);
+                    topology.authToken = result.access_token;
+                    hideAuthModal();
+                    topology.updateStatus('Authentication successful');
+                } else {
+                    throw new Error(result.message || 'Authentication failed');
+                }
+            } catch (error) {
+                errorDiv.innerHTML = `Authentication failed: ${error.message}`;
+                errorDiv.classList.remove('hidden');
+            }
         }
-    } catch (error) {
-        errorDiv.innerHTML = `Authentication failed: ${error.message}`;
-        errorDiv.classList.remove('hidden');
-    }
-}
 
-function hideAuthModal() {
-    document.getElementById('authModal').classList.remove('show');
-}
+        function hideAuthModal() {
+            document.getElementById('authModal').classList.remove('show');
+        }
 
-function showAuthModal() {
-    document.getElementById('authModal').classList.add('show');
-}
+        function showAuthModal() {
+            document.getElementById('authModal').classList.add('show');
+        }
 
-function hideBulkTestModal() {
-    document.getElementById('bulkTestModal').classList.remove('show');
-}
+        function hideBulkTestModal() {
+            document.getElementById('bulkTestModal').classList.remove('show');
+        }
 
-// Check if user needs to authenticate
-function checkAuthAndPrompt() {
-    if (!topology.authToken) {
-        showAuthModal();
-        return false;
-    }
-    return true;
-}
+        // Check if user needs to authenticate
+        function checkAuthAndPrompt() {
+            if (!topology.authToken) {
+                showAuthModal();
+                return false;
+            }
+            return true;
+        }
 
-// Enhanced context menu with auth check
-topology.testDeviceConnection = function(device) {
-    if (!checkAuthAndPrompt()) return;
-    
-    // Original testDeviceConnection logic here
-    // ... (use the enhanced version from the JavaScript artifact above)
-};
+        // Enhanced context menu with auth check
+        topology.testDeviceConnection = function (device) {
+            if (!checkAuthAndPrompt()) return;
 
-// Enhanced bulk test with auth check
-topology.bulkTestAllDevices = function() {
-    if (!checkAuthAndPrompt()) return;
-    
-    // Original bulkTestAllDevices logic here
-    // ... (use the enhanced version from the JavaScript artifact above)
-};
+            // Original testDeviceConnection logic here
+            // ... (use the enhanced version from the JavaScript artifact above)
+        };
+
+        // Enhanced bulk test with auth check
+        topology.bulkTestAllDevices = function () {
+            if (!checkAuthAndPrompt()) return;
+
+            // Original bulkTestAllDevices logic here
+            // ... (use the enhanced version from the JavaScript artifact above)
+        };
 
 
     </script>
 </body>
+
 </html>
